@@ -18,6 +18,7 @@ object Versions {
     const val jUnitCore = "4.13.2"
     const val jUnitTest = "1.1.2"
     const val espresso = "3.3.0"
+    const val assertJ = "3.18.1"
 
     // Android Core
     const val kotlin_version = "1.4.31"
@@ -79,6 +80,7 @@ object Dependencies {
     const val jUnitCore = "junit:junit:${Versions.jUnitCore}"
     const val jUnitTest = "androidx.test.ext:junit:${Versions.jUnitTest}"
     const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+    const val assertJ = "org.assertj:assertj-core:${Versions.assertJ}"
 
     // Android Core
     const val kotlin_lib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin_version}"

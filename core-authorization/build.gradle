@@ -33,11 +33,16 @@ android {
 }
 
 dependencies {
+    implementation project(":module-injector")
+    implementation project(":models")
 
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx
     implementation Dependencies.appCompat
+
+    // Tests
     testImplementation Dependencies.jUnitCore
     androidTestImplementation Dependencies.jUnitTest
     androidTestImplementation Dependencies.espressoCore
+    testImplementation Dependencies.assertJ
 }

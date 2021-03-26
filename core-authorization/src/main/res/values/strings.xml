@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="password_is_too_short">Password is too short</string>
+    <string name="password_is_too_long">Password is too long</string>
+    <string name="password_must_contain_at_least_one_number">The password must contain at least one number</string>
+    
+    <string name="write_your_email">Please write your email</string>
+</resources>
