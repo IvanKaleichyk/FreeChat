@@ -1,0 +1,4 @@
+include ':module-injector'
+include ':models'
+include ':app'
+rootProject.name = "Free Chat"

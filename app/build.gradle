@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion Versions.sdkVersion
+    buildToolsVersion Versions.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.koleychik.freechat"
+        minSdkVersion Versions.minSdkVersion
+        targetSdkVersion Versions.targetSdk
+        versionCode Versions.versionCode
+        versionName Versions.versionName
+
+        testInstrumentationRunner Versions.testInstrumentationRunner
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation Dependencies.kotlin_lib
+    implementation Dependencies.coreKtx
+    implementation Dependencies.appCompat
+    implementation Dependencies.material
+    implementation Dependencies.constraintLayout
+    testImplementation Dependencies.jUnitCore
+    androidTestImplementation Dependencies.jUnitTest
+    androidTestImplementation Dependencies.espressoCore
+
+    // Dagger2
+    implementation Dependencies.dagger
+    kapt Dependencies.daggerCompile
+
+    // navigation
+    implementation Dependencies.navigationFragment
+    implementation Dependencies.navigationUI
+}

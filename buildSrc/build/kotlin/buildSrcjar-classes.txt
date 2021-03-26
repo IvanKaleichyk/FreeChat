@@ -1,0 +1,1 @@
+D:\androidStudio\projects\FreeChat\buildSrc\build\classes\kotlin\main\Dependencies.class;D:\androidStudio\projects\FreeChat\buildSrc\build\classes\kotlin\main\Versions.class
