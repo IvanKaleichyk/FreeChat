@@ -1,5 +1,6 @@
 object Versions {
 
+    const val googleServiceAuth = "19.0.0"
     const val circleImageView = "3.1.0"
     const val coil = "1.1.1"
     const val navigation = "2.3.4"
@@ -38,6 +39,10 @@ object Versions {
 
 @SuppressWarnings("UnusedAssignment")
 object Dependencies {
+
+    // google service auth
+    const val googleServiceAuth =
+        "com.google.android.gms:play-services-auth:${Versions.googleServiceAuth}"
 
     // circularCardView
     const val circleImageView = "de.hdodenhof:circleimageview:${Versions.circleImageView}"

@@ -1,4 +1,4 @@
-package com.koleychik.core_database.result
+package com.koleychik.core_authorization.result
 
 sealed class CheckResult {
     object Successful : CheckResult()

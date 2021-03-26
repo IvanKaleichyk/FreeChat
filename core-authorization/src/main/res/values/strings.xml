@@ -5,4 +5,7 @@
     <string name="password_must_contain_at_least_one_number">The password must contain at least one number</string>
     
     <string name="write_your_email">Please write your email</string>
+
+    <string name="cannot_find_user">Cannot find this user</string>
+    <string name="cannot_find_information">Cannot find this information</string>
 </resources>

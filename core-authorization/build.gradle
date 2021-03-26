@@ -37,7 +37,6 @@ android {
 dependencies {
     implementation project(":module-injector")
     implementation project(":models")
-    implementation project(":core-database")
 
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx
@@ -50,6 +49,9 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-auth:20.0.3'
     implementation 'com.google.firebase:firebase-database:19.7.0'
+
+    // for sing in using google
+    implementation Dependencies.googleServiceAuth
 
     // Tests
     testImplementation Dependencies.jUnitCore

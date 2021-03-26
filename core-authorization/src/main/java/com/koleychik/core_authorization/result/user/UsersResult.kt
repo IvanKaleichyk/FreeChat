@@ -1,4 +1,4 @@
-package com.koleychik.core_database.result.user
+package com.koleychik.core_authorization.result.user
 
 import com.koleychik.models.User
 

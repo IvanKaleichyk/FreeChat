@@ -1,6 +1,7 @@
 package com.koleychik.core_files.di
 
 import android.content.Context
+import com.koleychik.module_injector.annotations.general.PerFeature
 import dagger.Module
 import dagger.Provides
 
@@ -8,6 +9,7 @@ import dagger.Provides
 class ContextModule(private val context: Context) {
 
     @Provides
+    @PerFeature
     fun provideContext() = context
 
 }

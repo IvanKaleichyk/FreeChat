@@ -1,25 +1,27 @@
-package com.koleychik.core_database
+package com.koleychik.core_authorization.impl
 
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.koleychik.core_database.PathConstants.USERS_PATH
-import com.koleychik.core_database.result.CheckResult
-import com.koleychik.core_database.result.ListDbResult
-import com.koleychik.core_database.result.SingleDbDataResult
-import com.koleychik.core_database.result.user.UserResult
-import com.koleychik.core_database.result.user.UsersResult
+import com.koleychik.core_authorization.R
+import com.koleychik.core_authorization.UserConstants.ROOT_PATH
+import com.koleychik.core_authorization.api.FirebaseDatabaseRepository
+import com.koleychik.core_authorization.result.CheckResult
+import com.koleychik.core_authorization.result.ListDbResult
+import com.koleychik.core_authorization.result.SingleDbDataResult
+import com.koleychik.core_authorization.result.user.UserResult
+import com.koleychik.core_authorization.result.user.UsersResult
 import com.koleychik.models.User
 import com.koleychik.module_injector.Constants.TAG
 
 @Suppress("UNCHECKED_CAST")
-class FirebaseDatabaseRepository {
+internal class FirebaseDatabaseRepositoryImpl : FirebaseDatabaseRepository{
 
     private val db = FirebaseDatabase.getInstance()
 
-    fun putValue(path: String, value: Any, res: (CheckResult) -> Unit) {
+    override fun putValue(path: String, value: Any, res: (CheckResult) -> Unit) {
         val ref = db.getReference(path)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -35,7 +37,7 @@ class FirebaseDatabaseRepository {
         ref.setValue(value)
     }
 
-    fun <T> listValues(path: String, res: (ListDbResult) -> Unit) {
+    override fun <T> listValues(path: String, res: (ListDbResult) -> Unit) {
         db.getReference(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = mutableListOf<T>()
@@ -59,7 +61,7 @@ class FirebaseDatabaseRepository {
         })
     }
 
-    fun <T> getValue(path: String, res: (SingleDbDataResult) -> Unit) {
+    override fun <T> getValue(path: String, res: (SingleDbDataResult) -> Unit) {
         db.getReference(path).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val model = snapshot.value
@@ -81,8 +83,8 @@ class FirebaseDatabaseRepository {
         })
     }
 
-    fun getUsers(res: (UsersResult) -> Unit) {
-        db.getReference(USERS_PATH).addListenerForSingleValueEvent(object : ValueEventListener {
+    override fun getUsers(res: (UsersResult) -> Unit) {
+        db.getReference(ROOT_PATH).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = mutableListOf<User>()
                 snapshot.children.forEach {
@@ -101,8 +103,8 @@ class FirebaseDatabaseRepository {
         })
     }
 
-    fun putUser(user: User, res: (CheckResult) -> Unit) {
-        val ref = db.getReference(USERS_PATH)
+    override fun putUser(user: User, res: (CheckResult) -> Unit) {
+        val ref = db.getReference(ROOT_PATH)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 res(CheckResult.Successful)
@@ -117,9 +119,9 @@ class FirebaseDatabaseRepository {
         ref.setValue(user)
     }
 
-    fun getUserFromDb(uid: String, res: (UserResult) -> Unit) {
+    override fun getUserFromDb(uid: String, res: (UserResult) -> Unit) {
         Log.d(TAG, "getUserFromDb uid = $uid")
-        db.getReference("$USERS_PATH/$uid")
+        db.getReference("$ROOT_PATH/$uid")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val model = snapshot.getValue(User::class.java)

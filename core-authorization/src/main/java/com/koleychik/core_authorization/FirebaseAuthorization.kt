@@ -1,7 +1,7 @@
 package com.koleychik.core_authorization
 
 import com.google.firebase.auth.FirebaseAuth
-import com.koleychik.core_database.result.CheckResult
+import com.koleychik.core_authorization.result.CheckResult
 
 class FirebaseAuthorization {
 
