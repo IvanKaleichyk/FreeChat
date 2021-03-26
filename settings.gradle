@@ -1,3 +1,4 @@
+include ':core-authorization'
 include ':module-injector'
 include ':models'
 include ':app'
