@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core-authorization" />
             <option value="$PROJECT_DIR$/core-database" />
+            <option value="$PROJECT_DIR$/core-files" />
             <option value="$PROJECT_DIR$/models" />
             <option value="$PROJECT_DIR$/module-injector" />
           </set>

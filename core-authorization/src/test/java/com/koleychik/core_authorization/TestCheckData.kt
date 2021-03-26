@@ -18,11 +18,11 @@ class TestCheckData {
         assertThat(checkPassword(passwordTrue3) is CheckResult.Successful).isTrue
 
         val res1 = checkPassword(passwordFalse1)
-        if (res1 is CheckResult.Error)
+        if (res1 is CheckResult.DataError)
             assertThat(res1.message).isEqualTo(R.string.password_is_too_short)
         val res2 = checkPassword(passwordFalse2)
-        if (res2 is Check.Error)
-            assertThat(CheckResult).isEqualTo(R.string.password_is_too_long)
+        if (res2 is CheckResult.DataError)
+            assertThat(res2.message).isEqualTo(R.string.password_is_too_long)
     }
 
     @Test
@@ -41,15 +41,15 @@ class TestCheckData {
 
 
         val res1 = checkEmail(emailFalse1)
-        if (res1 is CheckResult.Error)
+        if (res1 is CheckResult.DataError)
             assertThat(res1.message).isEqualTo(R.string.write_your_email)
 
         val res2 = checkEmail(emailFalse2)
-        if (res2 is CheckResult.Error)
+        if (res2 is CheckResult.DataError)
             assertThat(res2.message).isEqualTo(R.string.write_your_email)
 
         val res3 = checkEmail(emailFalse3)
-        if (res3 is CheckResult.Error)
+        if (res3 is CheckResult.DataError)
             assertThat(res3.message).isEqualTo(R.string.write_your_email)
     }
 }
