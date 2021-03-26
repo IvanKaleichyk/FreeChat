@@ -128,7 +128,7 @@ class FirebaseDatabaseRepository {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    res(UserResult.ServiceError(error.message))
+                    res(UserResult.ServerError(error.message))
                 }
             })
     }
