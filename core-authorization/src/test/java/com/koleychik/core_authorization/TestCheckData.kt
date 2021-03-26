@@ -1,6 +1,6 @@
 package com.koleychik.core_authorization
 
-import com.koleychik.core_authorization.results.DataResult
+import com.koleychik.core_database.result.CheckResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -13,16 +13,16 @@ class TestCheckData {
         val passwordTrue3 = "q2e2y"
         val passwordFalse1 = "qwer"
         val passwordFalse2 = "qwerjojdfvojdfovjdfovjdfovjdfojv"
-        assertThat(checkPassword(passwordTrue1) is DataResult.Successful).isTrue
-        assertThat(checkPassword(passwordTrue2) is DataResult.Successful).isTrue
-        assertThat(checkPassword(passwordTrue3) is DataResult.Successful).isTrue
+        assertThat(checkPassword(passwordTrue1) is CheckResult.Successful).isTrue
+        assertThat(checkPassword(passwordTrue2) is CheckResult.Successful).isTrue
+        assertThat(checkPassword(passwordTrue3) is CheckResult.Successful).isTrue
 
         val res1 = checkPassword(passwordFalse1)
-        if (res1 is DataResult.Error)
+        if (res1 is CheckResult.Error)
             assertThat(res1.message).isEqualTo(R.string.password_is_too_short)
         val res2 = checkPassword(passwordFalse2)
-        if (res2 is DataResult.Error)
-            assertThat(res2.message).isEqualTo(R.string.password_is_too_long)
+        if (res2 is Check.Error)
+            assertThat(CheckResult).isEqualTo(R.string.password_is_too_long)
     }
 
     @Test
@@ -35,24 +35,21 @@ class TestCheckData {
         val emailFalse2 = "34fbfbkbjk@otru"
         val emailFalse3 = "34iribotru"
 
-        assertThat(checkEmail(emailTrue1) is DataResult.Successful).isTrue
-        assertThat(checkEmail(emailTrue2) is DataResult.Successful).isTrue
-        assertThat(checkEmail(emailTrue3) is DataResult.Successful).isTrue
+        assertThat(checkEmail(emailTrue1) is CheckResult.Successful).isTrue
+        assertThat(checkEmail(emailTrue2) is CheckResult.Successful).isTrue
+        assertThat(checkEmail(emailTrue3) is CheckResult.Successful).isTrue
 
 
         val res1 = checkEmail(emailFalse1)
-        if (res1 is DataResult.Error)
+        if (res1 is CheckResult.Error)
             assertThat(res1.message).isEqualTo(R.string.write_your_email)
 
         val res2 = checkEmail(emailFalse2)
-        if (res2 is DataResult.Error)
+        if (res2 is CheckResult.Error)
             assertThat(res2.message).isEqualTo(R.string.write_your_email)
 
         val res3 = checkEmail(emailFalse3)
-        if (res3 is DataResult.Error)
+        if (res3 is CheckResult.Error)
             assertThat(res3.message).isEqualTo(R.string.write_your_email)
-
-//        assertThat(checkEmail(emailFalse2)).isEqualTo(DataResult.Error(R.string.write_your_email))
-//        assertThat(checkEmail(emailFalse3)).isEqualTo(DataResult.Error(R.string.write_your_email))
     }
 }
