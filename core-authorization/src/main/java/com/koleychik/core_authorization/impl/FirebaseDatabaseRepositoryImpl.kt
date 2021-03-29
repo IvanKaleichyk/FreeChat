@@ -6,18 +6,21 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.koleychik.core_authorization.R
-import com.koleychik.core_authorization.UserConstants.ROOT_PATH
 import com.koleychik.core_authorization.api.FirebaseDatabaseRepository
+import com.koleychik.core_authorization.constants.DialogConstants
+import com.koleychik.core_authorization.constants.MessageConstants
+import com.koleychik.core_authorization.constants.UserConstants.ROOT_PATH
 import com.koleychik.core_authorization.result.CheckResult
 import com.koleychik.core_authorization.result.ListDbResult
 import com.koleychik.core_authorization.result.SingleDbDataResult
 import com.koleychik.core_authorization.result.user.UserResult
 import com.koleychik.core_authorization.result.user.UsersResult
+import com.koleychik.models.Message
 import com.koleychik.models.User
 import com.koleychik.module_injector.Constants.TAG
 
 @Suppress("UNCHECKED_CAST")
-internal class FirebaseDatabaseRepositoryImpl : FirebaseDatabaseRepository{
+internal class FirebaseDatabaseRepositoryImpl : FirebaseDatabaseRepository {
 
     private val db = FirebaseDatabase.getInstance()
 
@@ -50,7 +53,7 @@ internal class FirebaseDatabaseRepositoryImpl : FirebaseDatabaseRepository{
 
                     if (model != null) list.add(model)
                 }
-                if (list.isNotEmpty()) res(ListDbResult.Successful<T>(list))
+                if (list.isNotEmpty()) res(ListDbResult.Successful(list))
                 else res(ListDbResult.DataError(R.string.cannot_find_information))
             }
 
@@ -81,6 +84,32 @@ internal class FirebaseDatabaseRepositoryImpl : FirebaseDatabaseRepository{
                 res(SingleDbDataResult.ServerError(error.message))
             }
         })
+    }
+
+    override fun getListMessage(
+        dialogId: String,
+        limit: Int,
+        startAt: Double,
+        res: (ListDbResult) -> Unit
+    ) {
+        db.getReference("${DialogConstants.ROOT_PATH}/$dialogId/${MessageConstants.ROOT_PATH}")
+            .orderByChild("").startAfter(startAt).limitToFirst(limit)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list = mutableListOf<Message>()
+                    snapshot.children.forEach {
+                        val message = it.getValue(Message::class.java)
+                        if (message != null) list.add(message)
+                    }
+                    if (list.isNotEmpty()) res(ListDbResult.Successful(list))
+                    else res(ListDbResult.DataError(R.string.no_messages))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    res(ListDbResult.ServerError(error.message))
+                }
+            })
+
     }
 
     override fun getUsers(res: (UsersResult) -> Unit) {

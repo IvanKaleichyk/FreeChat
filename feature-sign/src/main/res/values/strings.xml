@@ -1,0 +1,10 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_authentication">Google authentication</string>
+
+    <style name="password">Password</style>
+
+    <style name="repeat_password">Repeat Password</style>
+
+</resources>

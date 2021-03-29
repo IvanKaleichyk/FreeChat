@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Free Chat</string>
+    <string name="sing_in">Sing in</string>
+    <string name="sing_up">Sing up</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="create">Create</string>
+    <string name="forgot_password">Forgot password</string>
+
+    <string name="continue_text">Continue</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Text size  -->
+    <dimen name="basicTextSize">20sp</dimen>
+    <dimen name="smallTextSize">16sp</dimen>
+    <dimen name="bigTextSize">24sp</dimen>
+    <dimen name="logoTextSize">32sp</dimen>
+    <dimen name="dialogTitle">28sp</dimen>
+
+    <!--  Margin  -->
+    <dimen name="basicMargin">24dp</dimen>
+    <dimen name="bigMargin">32dp</dimen>
+    <dimen name="smallMargin">16dp</dimen>
+
+    <!--  Padding  -->
+    <dimen name="basicPadding">10dp</dimen>
+    <dimen name="bigPadding">16dp</dimen>
+    <dimen name="smallPadding">5dp</dimen>
+    <dimen name="edtPadding">13dp</dimen>
+    <dimen name="cardPadding">20dp</dimen>
+
+    <dimen name="cornerRadius">30dp</dimen>
+    <dimen name="shadowRadius">4</dimen>
+
+    <dimen name="card_shadow">12dp</dimen>
+
+    <dimen name="edt_width">200dp</dimen>
+
+</resources>

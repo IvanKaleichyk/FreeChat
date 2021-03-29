@@ -1,5 +1,7 @@
 object Versions {
 
+    const val activity = "1.2.2"
+    const val easyPermission = "3.0.0"
     const val googleServiceAuth = "19.0.0"
     const val circleImageView = "3.1.0"
     const val coil = "1.1.1"
@@ -39,6 +41,11 @@ object Versions {
 
 @SuppressWarnings("UnusedAssignment")
 object Dependencies {
+
+    const val activity = "androidx.activity:activity-ktx:${Versions.activity}"
+
+    // EasyPermission
+    const val easyPermission = "pub.devrel:easypermissions:${Versions.easyPermission}"
 
     // google service auth
     const val googleServiceAuth =

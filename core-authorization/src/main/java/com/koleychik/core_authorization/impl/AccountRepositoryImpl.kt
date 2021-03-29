@@ -1,12 +1,12 @@
 package com.koleychik.core_authorization.impl
 
 import com.koleychik.core_authorization.FirebaseAuthorization
-import com.koleychik.core_authorization.UserConstants.BACKGROUND
-import com.koleychik.core_authorization.UserConstants.EMAIL
-import com.koleychik.core_authorization.UserConstants.ICON
-import com.koleychik.core_authorization.UserConstants.ROOT_PATH
 import com.koleychik.core_authorization.api.AccountRepository
 import com.koleychik.core_authorization.api.FirebaseDatabaseRepository
+import com.koleychik.core_authorization.constants.UserConstants.BACKGROUND
+import com.koleychik.core_authorization.constants.UserConstants.EMAIL
+import com.koleychik.core_authorization.constants.UserConstants.ICON
+import com.koleychik.core_authorization.constants.UserConstants.ROOT_PATH
 import com.koleychik.core_authorization.result.CheckResult
 import javax.inject.Inject
 

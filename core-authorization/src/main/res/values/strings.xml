@@ -8,4 +8,5 @@
 
     <string name="cannot_find_user">Cannot find this user</string>
     <string name="cannot_find_information">Cannot find this information</string>
+    <string name="no_messages">No messages yet</string>
 </resources>

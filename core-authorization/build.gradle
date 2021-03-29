@@ -41,6 +41,7 @@ dependencies {
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx
     implementation Dependencies.appCompat
+    implementation Dependencies.activity
 
     // Dagger
     implementation Dependencies.dagger

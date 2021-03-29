@@ -1,5 +1,6 @@
+include ':basic-resources'
+include ':feature-sign'
 include ':core-files'
-include ':core-database'
 include ':core-authorization'
 include ':module-injector'
 include ':models'

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="mainTextStyle">
+        <item name="android:textSize">@dimen/basicTextSize</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">@font/rubik_regular</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="mainTextView" parent="mainTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="shadow">
+        <item name="android:shadowColor">@color/colorShadow</item>
+        <item name="android:shadowRadius">@dimen/shadowRadius</item>
+        <item name="android:shadowDx">-4</item>
+        <item name="android:shadowDy">3</item>
+    </style>
+
+    <style name="sign_text" parent="mainTextStyle">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textColor">@color/colorMain</item>
+    </style>
+
+    <style name="sign_edt" parent="sign_text">
+        <item name="android:layout_width">@dimen/edt_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/smallTextSize</item>
+        <item name="android:padding">@dimen/edtPadding</item>
+        <!--        <item name="android:paddingTop">@dimen/edtPadding</item>-->
+        <!--        <item name="android:paddingBottom">@dimen/basicPadding</item>-->
+        <!--        <item name="android:paddingStart">@dimen/bigPadding</item>-->
+        <!--        <item name="android:paddingEnd">@dimen/bigPadding</item>-->
+        <item name="android:background">@drawable/bg_edt</item>
+    </style>
+
+    <style name="sign_text_view" parent="sign_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+    <style name="sign_dialog_title" parent="sign_title">
+        <item name="android:textSize">@dimen/dialogTitle</item>
+    </style>
+
+    <style name="sign_title" parent="sign_text_view">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textColor">@color/colorMain</item>
+        <item name="android:textSize">@dimen/logoTextSize</item>
+    </style>
+
+    <style name="sign_btn" parent="mainTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/basicPadding</item>
+        <item name="android:paddingBottom">@dimen/basicPadding</item>
+        <item name="android:paddingStart">@dimen/bigPadding</item>
+        <item name="android:paddingEnd">@dimen/bigPadding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_btn</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+</resources>

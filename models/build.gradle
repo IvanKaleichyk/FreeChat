@@ -36,4 +36,6 @@ dependencies {
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx
     implementation Dependencies.appCompat
+
+    implementation Dependencies.roomRuntime
 }

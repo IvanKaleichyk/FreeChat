@@ -16,4 +16,10 @@ interface FirebaseDatabaseRepository {
     fun putUser(user: User, res: (CheckResult) -> Unit)
     fun getUserFromDb(uid: String, res: (UserResult) -> Unit)
 
+    fun getListMessage(
+        dialogId: String,
+        limit: Int,
+        startAt: Double,
+        res: (ListDbResult) -> Unit
+    )
 }
