@@ -1,11 +1,13 @@
 package com.koleychik.core_authorization.di
 
-import com.koleychik.core_authorization.api.AccountRepository
-import com.koleychik.core_authorization.api.AuthenticationRepository
-import com.koleychik.core_authorization.api.FirebaseDatabaseRepository
-import com.koleychik.core_authorization.impl.AccountRepositoryImpl
-import com.koleychik.core_authorization.impl.AuthenticationRepositoryImpl
-import com.koleychik.core_authorization.impl.FirebaseDatabaseRepositoryImpl
+import com.koleychik.core_authorization.newapi.AccountRepository
+import com.koleychik.core_authorization.newapi.AuthDbRepository
+import com.koleychik.core_authorization.newapi.AuthFirebaseRepository
+import com.koleychik.core_authorization.newapi.AuthRepository
+import com.koleychik.core_authorization.newapiimpl.AccountRepositoryImpl
+import com.koleychik.core_authorization.newapiimpl.AuthDbRepositoryImpl
+import com.koleychik.core_authorization.newapiimpl.AuthFirebaseRepositoryImpl
+import com.koleychik.core_authorization.newapiimpl.AuthRepositoryImpl
 import com.koleychik.module_injector.annotations.general.PerFeature
 import dagger.Binds
 import dagger.Module
@@ -19,10 +21,14 @@ internal abstract class CoreModule {
 
     @Binds
     @PerFeature
-    abstract fun provideAuthenticationRepository(impl: AuthenticationRepositoryImpl): AuthenticationRepository
+    abstract fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @PerFeature
-    abstract fun provideFirebaseDatabaseRepository(impl: FirebaseDatabaseRepositoryImpl): FirebaseDatabaseRepository
+    abstract fun provideAuthDbRepository(impl: AuthDbRepositoryImpl): AuthDbRepository
+
+    @Binds
+    @PerFeature
+    abstract fun provideAuthFirebaseRepository(impl: AuthFirebaseRepositoryImpl): AuthFirebaseRepository
 
 }

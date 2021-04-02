@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.koleychik.feature_sing.ui.screens.SignUpFragment">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/sign_title"
+        android:text="@string/sing_up"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineTop"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart" />
+
+    <TextView
+        android:id="@+id/textSignIn"
+        style="@style/sign_text_view"
+        android:text="@string/sing_in"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd" />
+
+    <TextView
+        android:id="@+id/textName"
+        style="@style/sign_text_view"
+        android:layout_marginTop="@dimen/basicMargin"
+        android:text="@string/name"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <EditText
+        android:id="@+id/edtName"
+        style="@style/sign_edt"
+        android:layout_marginTop="@dimen/margin_between_text_and_edt"
+        android:autofillHints="@string/name"
+        android:hint="@string/name"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textName" />
+
+    <TextView
+        android:id="@+id/textEmail"
+        style="@style/sign_text_view"
+        android:layout_marginTop="@dimen/basicMargin"
+        android:text="@string/email"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/edtName" />
+
+    <EditText
+        android:id="@+id/edtEmail"
+        style="@style/sign_edt"
+        android:layout_marginTop="@dimen/margin_between_text_and_edt"
+        android:autofillHints="@string/email"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+
+    <TextView
+        android:id="@+id/textPassword"
+        style="@style/sign_text_view"
+        android:layout_marginTop="@dimen/basicMargin"
+        android:text="@string/password"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
+
+    <EditText
+        android:id="@+id/edtPassword"
+        style="@style/sign_edt"
+        android:layout_marginTop="@dimen/margin_between_text_and_edt"
+        android:autofillHints="Password"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textPassword" />
+
+    <TextView
+        android:id="@+id/textRepeatPassword"
+        style="@style/sign_text_view"
+        android:layout_marginTop="@dimen/basicMargin"
+        android:text="@string/repeat_password"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
+
+    <EditText
+        android:id="@+id/edtRepeatPassword"
+        style="@style/sign_edt"
+        android:layout_marginTop="@dimen/margin_between_text_and_edt"
+        android:autofillHints="@string/repeat_password"
+        android:hint="@string/repeat_password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textRepeatPassword" />
+
+    <Button
+        android:id="@+id/btn"
+        style="@style/sign_btn"
+        android:text="@string/continue_text"
+        android:layout_marginBottom="@dimen/smallMargin"
+        app:layout_constraintBottom_toTopOf="@+id/googleAuth"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart" />
+
+    <ImageView
+        android:id="@+id/googleAuth"
+        style="@style/icon_google_authentication"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        android:contentDescription="@string/google_authentication" />
+    
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_begin="@dimen/guide_line"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_end="@dimen/guide_line"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_begin="@dimen/guide_line"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_end="@dimen/guide_line"
+        android:orientation="vertical"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

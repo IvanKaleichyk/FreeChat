@@ -17,7 +17,11 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core-authorization" />
             <option value="$PROJECT_DIR$/core-files" />
-            <option value="$PROJECT_DIR$/feature-sign" />
+            <option value="$PROJECT_DIR$/dialogs" />
+            <option value="$PROJECT_DIR$/feature-loading-api" />
+            <option value="$PROJECT_DIR$/feature-loading-impl" />
+            <option value="$PROJECT_DIR$/feature-sing" />
+            <option value="$PROJECT_DIR$/feature-start" />
             <option value="$PROJECT_DIR$/models" />
             <option value="$PROJECT_DIR$/module-injector" />
           </set>

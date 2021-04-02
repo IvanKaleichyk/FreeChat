@@ -7,5 +7,6 @@ sealed class UserResult {
     class DataError(val message: Int) : UserResult()
     object UserNotExists : UserResult()
     object UserNotInitialized : UserResult()
+    object UnknownError : UserResult()
     class ServerError(val message: String) : UserResult()
 }

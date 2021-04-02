@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="password_mismatch">Password mismatch</string>
     <string name="password_is_too_short">Password is too short</string>
     <string name="password_is_too_long">Password is too long</string>
     <string name="password_must_contain_at_least_one_number">The password must contain at least one number</string>
     
     <string name="write_your_email">Please write your email</string>
 
+    <string name="indicate_email">You must indicate your email!!!</string>
+    <string name="indicate_password">You must indicate your password!!!</string>
+    <string name="indicate_name">You must indicate your name!!!</string>
+
     <string name="cannot_find_user">Cannot find this user</string>
     <string name="cannot_find_information">Cannot find this information</string>
     <string name="no_messages">No messages yet</string>
+    <string name="cannot_get_information_about_user">Cannot get information about uset</string>
+    <string name="cannot_create_user">Cannot create user!!!</string>
 </resources>

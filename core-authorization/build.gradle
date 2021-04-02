@@ -1,38 +1,11 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id 'android-library-convention'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
 }
 
-android {
-    compileSdkVersion Versions.sdkVersion
-    buildToolsVersion Versions.buildToolsVersion
+android.buildFeatures.viewBinding true
 
-    defaultConfig {
-        minSdkVersion Versions.minSdkVersion
-        targetSdkVersion Versions.targetSdk
-        versionCode Versions.versionCode
-        versionName Versions.versionName
-
-        testInstrumentationRunner Versions.testInstrumentationRunner
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
 
 dependencies {
     implementation project(":module-injector")

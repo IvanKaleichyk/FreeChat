@@ -26,4 +26,7 @@
 
     <dimen name="edt_width">200dp</dimen>
 
+    <dimen name="loading_icon">110dp</dimen>
+    <dimen name="progress_bar">40dp</dimen>
+
 </resources>
