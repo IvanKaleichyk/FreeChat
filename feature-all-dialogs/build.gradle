@@ -1,0 +1,15 @@
+plugins {
+    id 'android-feature'
+}
+
+dependencies {
+
+    implementation  Dependencies.kotlin_lib
+    implementation  Dependencies.coreKtx
+    implementation  Dependencies.appCompat
+    implementation  Dependencies.material
+    implementation  Dependencies.constraintLayout
+    testImplementation Dependencies.jUnitCore
+    androidTestImplementation Dependencies.jUnitTest
+    androidTestImplementation Dependencies.espressoCore
+}

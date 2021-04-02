@@ -13,14 +13,14 @@ class TestCheckData {
         val passwordTrue3 = "q2e2y"
         val passwordFalse1 = "qwer"
         val passwordFalse2 = "qwerjojdfvojdfovjdfovjdfovjdfojv"
-        assertThat(checkPassword(passwordTrue1) is CheckResult.Successful).isTrue
-        assertThat(checkPassword(passwordTrue2) is CheckResult.Successful).isTrue
-        assertThat(checkPassword(passwordTrue3) is CheckResult.Successful).isTrue
+        assertThat(checkPassword(passwordTrue1, passwordTrue1) is CheckResult.Successful).isTrue
+        assertThat(checkPassword(passwordTrue2, passwordTrue2) is CheckResult.Successful).isTrue
+        assertThat(checkPassword(passwordTrue3, passwordTrue3) is CheckResult.Successful).isTrue
 
-        val res1 = checkPassword(passwordFalse1)
+        val res1 = checkPassword(passwordFalse1, passwordFalse1)
         if (res1 is CheckResult.DataError)
             assertThat(res1.message).isEqualTo(R.string.password_is_too_short)
-        val res2 = checkPassword(passwordFalse2)
+        val res2 = checkPassword(passwordFalse2, passwordFalse2)
         if (res2 is CheckResult.DataError)
             assertThat(res2.message).isEqualTo(R.string.password_is_too_long)
     }

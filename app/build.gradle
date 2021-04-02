@@ -10,6 +10,8 @@ dependencies {
     implementation project(":core-authorization")
     implementation project(":core-files")
     implementation project(':feature-start')
+    implementation project(':feature-loading-api')
+    implementation project(':feature-sign')
 
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx

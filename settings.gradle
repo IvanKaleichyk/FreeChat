@@ -1,6 +1,7 @@
+include ':feature-all-dialogs'
 include ':feature-loading-impl'
 include ':feature-loading-api'
-include ':feature-sing'
+include ':feature-sign'
 include ':dialogs'
 include ':feature-start'
 include ':basic-resources'

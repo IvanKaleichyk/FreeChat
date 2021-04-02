@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="guide_line">20dp</dimen>
-    <dimen name="margin_between_text_and_edt">10dp</dimen>
-</resources>

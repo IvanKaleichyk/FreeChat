@@ -5,29 +5,34 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.koleychik.module_injector.Constants
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
+    @Inject
+    internal lateinit var navigator: Navigator
+
     private val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        checkPermission()
+    private val controller by lazy { findNavController(R.id.navController) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+//        TODO -> UPDATE THEME
+
+        checkPermission()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        App.component.inject(this)
 //        TODO("inject in component")
-
-    }
-
-    private fun startActivity() {
     }
 
     @AfterPermissionGranted(123)
     private fun checkPermission() {
-        if (EasyPermissions.hasPermissions(applicationContext, *permissions)) checkUser()
+        if (EasyPermissions.hasPermissions(applicationContext, *permissions))
         else {
             EasyPermissions.requestPermissions(
                 this,
@@ -57,10 +62,5 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             .show()
         finish()
     }
-
-    private fun checkUser() {
-
-    }
-
 
 }
