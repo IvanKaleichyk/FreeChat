@@ -1,6 +1,7 @@
 package com.koleychik.freechat.di.modules
 
 import android.content.Context
+import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.api.DataStoreRepository
 import com.koleychik.core_authentication.di.AuthenticationCoreComponent
@@ -26,6 +27,8 @@ class DependenciesModule {
             val component = AuthenticationCoreComponent.get(context)
             override fun authRepository(): AuthRepository =
                 component.authRepository()
+
+            override fun accountRepository(): AccountRepository = component.accountRepository()
 
             override fun dataRepository(): DataStoreRepository = component.dataStoreRepository()
 

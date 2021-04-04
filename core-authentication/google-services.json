@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1003148994568:android:e0628dda56c221740b09bd",
         "android_client_info": {
-          "package_name": "com.koleychik.core_authorization"
+          "package_name": "com.koleychik.core_authentication"
         }
       },
       "oauth_client": [

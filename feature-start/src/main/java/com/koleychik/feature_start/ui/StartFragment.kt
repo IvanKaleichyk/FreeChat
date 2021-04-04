@@ -48,6 +48,7 @@ class StartFragment : Fragment() {
     private fun subscribe() {
         viewModel.verificationResult.observe(viewLifecycleOwner) {
             when (it) {
+                null -> { }
                 is CheckResult.Successful -> navigation.fromStartFragmentGoToMainScreen()
                 else -> navigation.fromStartFragmentGoToInfoFragment()
             }
@@ -55,7 +56,7 @@ class StartFragment : Fragment() {
         viewModel.userResult.observe(viewLifecycleOwner, {
             when (it) {
                 null -> viewModel.checkUser()
-                is UserResult.Successful -> viewModel.verificationResult
+                is UserResult.Successful -> viewModel.verifyEmail()
                 else -> navigation.fromStartFragmentGoToAuthorization()
             }
         })

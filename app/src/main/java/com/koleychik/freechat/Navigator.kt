@@ -36,33 +36,40 @@ class Navigator(
 
     override fun fromStartFragmentGoToAuthorization(bundle: Bundle?) {
         checkController()
-        if (controller!!. currentDestination?.id == R.id.startFragment){
+        if (controller!!.currentDestination?.id == R.id.startFragment) {
             controller?.navigate(R.id.action_startFragment_to_signUpFragment)
         }
     }
 
     override fun fromStartFragmentGoToMainScreen(bundle: Bundle?) {
         checkController()
-        if (controller!!. currentDestination?.id == R.id.startFragment){
+        if (controller!!.currentDestination?.id == R.id.startFragment) {
             controller?.navigate(R.id.action_startFragment_to_allDialogsFragment)
+        }
+    }
+
+    override fun fromStartFragmentGoToInfoFragment(bundle: Bundle?) {
+        checkController()
+        if (controller!!.currentDestination?.id == R.id.startFragment) {
+            controller?.navigate(R.id.action_startFragment_to_infoFragment)
         }
     }
 
     override fun fromSignUpToSignIn(bundle: Bundle?) {
         checkController()
-        if (controller!!. currentDestination?.id == R.id.signInFragment){
+        if (controller!!.currentDestination?.id == R.id.signInFragment) {
             controller?.navigate(R.id.action_signUpFragment_to_signInFragment)
         }
     }
 
     override fun fromSignUpToMainScreen(bundle: Bundle?) {
         checkController()
-        if (controller!!. currentDestination?.id == R.id.signInFragment){
+        if (controller!!.currentDestination?.id == R.id.signInFragment) {
             controller?.navigate(R.id.action_signUpFragment_to_allDialogsFragment)
         }
     }
 
-    private fun checkController(){
+    private fun checkController() {
         if (controller == null) throw NullPointerException("NavController is not binded")
     }
 

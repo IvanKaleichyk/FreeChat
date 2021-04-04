@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_startFragment_to_allDialogsFragment"
             app:destination="@id/allDialogsFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_infoFragment"
+            app:destination="@id/infoFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
@@ -57,4 +60,9 @@
         android:name="com.koleychik.feature_all_dialogs.AllDialogsFragment"
         android:label="AllDialogsFragment"
         tools:layout="@layout/fragment_all_dialogs"/>
+    <fragment
+        android:id="@+id/infoFragment"
+        android:name="com.koleychik.feature_info.InfoFragment"
+        android:label="InfoFragment"
+        tools:layout="@layout/info_dialog"/>
 </navigation>
