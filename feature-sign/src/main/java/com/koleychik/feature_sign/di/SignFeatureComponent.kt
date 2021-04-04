@@ -5,7 +5,7 @@ import com.koleychik.feature_sign.ui.screens.SignInFragment
 import com.koleychik.feature_sign.ui.screens.SignUpFragment
 import dagger.Component
 
-@Component(modules = [], dependencies = [SignFeatureDependencies::class])
+@Component(modules = [ViewModelModule::class], dependencies = [SignFeatureDependencies::class])
 interface SignFeatureComponent : SignFeatureApi {
 
     fun inject(fragment: SignInFragment)

@@ -1,11 +1,13 @@
 package com.koleychik.freechat.di.modules
 
-import com.koleychik.core_authorization.di.AuthorizationCoreComponent
-import com.koleychik.core_authorization.newapi.AuthRepository
+import android.content.Context
+import com.koleychik.core_authentication.api.AuthRepository
+import com.koleychik.core_authentication.api.DataStoreRepository
+import com.koleychik.core_authentication.di.AuthenticationCoreComponent
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_loading_api.LoadingFeatureApi
-import com.koleychik.feature_sign.SignFeatureNavigation
 import com.koleychik.feature_sign.di.SignFeatureDependencies
+import com.koleychik.feature_sign.navigation.SignUpNavigationApi
 import com.koleychik.feature_start.StartFeatureNavigation
 import com.koleychik.feature_start.di.StartFeatureDependencies
 import com.koleychik.freechat.Navigator
@@ -19,21 +21,29 @@ class DependenciesModule {
 
     @Singleton
     @Provides
-    fun provideStartDependencies(navigator: Navigator) = object : StartFeatureDependencies {
-        override fun authRepository(): AuthRepository =
-            AuthorizationCoreComponent.get().authRepository()
+    fun provideStartDependencies(navigator: Navigator, context: Context) =
+        object : StartFeatureDependencies {
+            val component = AuthenticationCoreComponent.get(context)
+            override fun authRepository(): AuthRepository =
+                component.authRepository()
 
-        override fun navigation(): StartFeatureNavigation = navigator
-    }
+            override fun dataRepository(): DataStoreRepository = component.dataStoreRepository()
+
+            override fun navigation(): StartFeatureNavigation = navigator
+        }
 
     @Singleton
     @Provides
-    fun provideSignFeatureDependencies(navigator: Navigator, loadingFeatureApi: LoadingFeatureApi) =
+    fun provideSignFeatureDependencies(
+        context: Context,
+        navigator: Navigator,
+        loadingFeatureApi: LoadingFeatureApi
+    ) =
         object : SignFeatureDependencies {
             override fun authRepository(): AuthRepository =
-                AuthorizationCoreComponent.get().authRepository()
+                AuthenticationCoreComponent.get(context).authRepository()
 
-            override fun navigation(): SignFeatureNavigation = navigator
+            override fun navigation(): SignUpNavigationApi = navigator
             override fun loadingApi(): LoadingApi = loadingFeatureApi.loadingApi()
 
         }

@@ -6,7 +6,7 @@ dependencies {
     implementation project(":basic-resources")
     implementation project(":module-injector")
     implementation project(":models")
-    implementation project(":core-authorization")
+    implementation project(':core-authentication')
     implementation project(":dialogs")
     implementation project(":feature-loading-api")
 

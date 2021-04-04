@@ -3,20 +3,20 @@ package com.koleychik.freechat
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import com.koleychik.feature_sign.SignFeatureNavigation
 import com.koleychik.feature_sign.di.SignFeatureApi
+import com.koleychik.feature_sign.navigation.SignUpNavigationApi
 import com.koleychik.feature_sign.ui.screens.SignInFragment
 import com.koleychik.feature_sign.ui.screens.SignUpFragment
 import com.koleychik.feature_start.StartFeatureNavigation
-import com.koleychik.feature_start.StartFragment
 import com.koleychik.feature_start.di.StartFeatureApi
+import com.koleychik.feature_start.ui.StartFragment
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Provider
 
 class Navigator(
     private val startFeatureApi: Provider<StartFeatureApi>,
     private val signFeatureApi: Provider<SignFeatureApi>
-) : SignFeatureNavigation,
+) : SignUpNavigationApi,
     StartFeatureNavigation {
 
     internal var controller: NavController? = null
@@ -44,7 +44,7 @@ class Navigator(
     override fun fromStartFragmentGoToMainScreen(bundle: Bundle?) {
         checkController()
         if (controller!!. currentDestination?.id == R.id.startFragment){
-            controller?.navigate(R.id.action_startFragment_to_mainActivity)
+            controller?.navigate(R.id.action_startFragment_to_allDialogsFragment)
         }
     }
 
@@ -58,7 +58,7 @@ class Navigator(
     override fun fromSignUpToMainScreen(bundle: Bundle?) {
         checkController()
         if (controller!!. currentDestination?.id == R.id.signInFragment){
-            controller?.navigate(R.id.action_signUpFragment_to_mainActivity)
+            controller?.navigate(R.id.action_signUpFragment_to_allDialogsFragment)
         }
     }
 

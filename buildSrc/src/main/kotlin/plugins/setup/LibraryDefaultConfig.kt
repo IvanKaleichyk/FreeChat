@@ -13,7 +13,7 @@ class LibraryDefaultConfig : Plugin<Project> {
                 buildToolsVersion(Versions.buildToolsVersion)
                 defaultConfig { config ->
                     config.run {
-                        applicationId = "com.koleychik.freechat"
+//                        applicationId = "com.koleychik.freechat"
                         minSdkVersion(Versions.minSdkVersion)
                         targetSdkVersion(Versions.targetSdk)
                         versionCode(Versions.versionCode)

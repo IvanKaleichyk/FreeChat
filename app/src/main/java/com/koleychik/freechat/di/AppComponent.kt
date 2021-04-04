@@ -1,5 +1,6 @@
 package com.koleychik.freechat.di
 
+import com.koleychik.freechat.App
 import com.koleychik.freechat.MainActivity
 import com.koleychik.freechat.di.modules.ApiModule
 import com.koleychik.freechat.di.modules.AppModule
@@ -19,5 +20,6 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(activity: MainActivity)
+    fun inject(app: App)
 
 }

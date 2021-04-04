@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.koleychik.core_authorization.newapi.AuthRepository
-import com.koleychik.core_authorization.result.CheckResult
-import com.koleychik.core_authorization.result.user.UserResult
+import com.koleychik.core_authentication.api.AuthRepository
+import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_sign.R
 import com.koleychik.feature_sign.databinding.FragmentSignUpBinding
 import com.koleychik.feature_sign.di.SignFeatureComponentHolder
+import com.koleychik.feature_sign.isEnabledViews
 import com.koleychik.feature_sign.navigation.SignUpNavigationApi
 import com.koleychik.feature_sign.showToast
 import com.koleychik.feature_sign.ui.viewModels.SignUpViewModel
@@ -57,7 +59,6 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.textSignIn.underlineText()
         createOnCLickListener()
         setupLoading()
@@ -67,13 +68,13 @@ class SignUpFragment : Fragment() {
     private fun subscribe() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             loadingApi.isVisible = it
+            binding.root.isEnabledViews(!it)
         }
         viewModel.checkResult.observe(viewLifecycleOwner) {
             when (it) {
                 is CheckResult.DataError -> requireContext().showToast(it.message)
                 is CheckResult.ServerError -> requireContext().showToast(it.message)
-                else -> {
-                }
+                else -> requireContext().showToast(R.string.error)
             }
         }
         viewModel.userResult.observe(viewLifecycleOwner) {
@@ -92,7 +93,7 @@ class SignUpFragment : Fragment() {
                 when (it.id) {
                     textSignIn.id -> navigationApi.fromSignUpToSignIn()
                     btn.id -> checkInformationAndCreateUser()
-                    googleAuth.id -> authRepository.googleSingIn(requireActivity()) {
+                    googleAuth.id -> authRepository.googleSingIn(requireActivity() as AppCompatActivity) {
                         viewModel.userResult.value = it
                     }
                 }

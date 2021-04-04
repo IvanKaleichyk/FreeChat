@@ -3,6 +3,7 @@ package com.koleychik.freechat
 import android.Manifest
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -21,13 +22,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private val controller by lazy { findNavController(R.id.navController) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        TODO -> UPDATE THEME
-
-        checkPermission()
+        setTheme(R.style.Theme_FreeChat)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         App.component.inject(this)
-//        TODO("inject in component")
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        checkPermission()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        navigator.controller = controller
     }
 
     @AfterPermissionGranted(123)
@@ -61,6 +66,20 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         Toast.makeText(applicationContext, R.string.cannot_without_permissions, Toast.LENGTH_LONG)
             .show()
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        navigator.controller = null
+    }
+
+    override fun onBackPressed() {
+        when (controller.currentDestination?.id) {
+            R.id.signInFragment, R.id.signUpFragment -> {
+            }
+            else -> super.onBackPressed()
+
+        }
     }
 
 }

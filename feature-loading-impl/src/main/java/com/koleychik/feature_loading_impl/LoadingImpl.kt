@@ -3,8 +3,9 @@ package com.koleychik.feature_loading_impl
 import android.view.View
 import androidx.core.view.isVisible
 import com.koleychik.feature_loading_api.LoadingApi
+import javax.inject.Inject
 
-class LoadingImpl : LoadingApi {
+class LoadingImpl @Inject constructor() : LoadingApi {
 
     private var rootView: View? = null
     private val loadingRootView: View by lazy {

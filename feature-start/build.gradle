@@ -1,12 +1,13 @@
 plugins {
     id 'android-feature'
+    id 'kotlin-android'
 }
 
 dependencies {
     implementation project(":module-injector")
     implementation project(":models")
     implementation project(":basic-resources")
-    implementation project(":core-authorization")
+    implementation project(':core-authentication')
 
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx
@@ -15,6 +16,18 @@ dependencies {
     implementation Dependencies.constraintLayout
 
     implementation Dependencies.progressBar
+
+    // Coroutines
+    implementation Dependencies.coroutinesCore
+    implementation Dependencies.coroutinesAndroid
+
+    implementation Dependencies.fragment
+
+    // lifecycle
+    implementation Dependencies.lifecycleExtension
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt Dependencies.lifecycleCommon
 
     // Dagger2
     implementation Dependencies.dagger

@@ -4,7 +4,9 @@ import com.koleychik.core_files.FilesRepository
 import com.koleychik.core_files.FilesRepositoryImpl
 import com.koleychik.module_injector.annotations.general.PerFeature
 import dagger.Binds
+import dagger.Module
 
+@Module
 abstract class CoreModule {
 
     @Binds

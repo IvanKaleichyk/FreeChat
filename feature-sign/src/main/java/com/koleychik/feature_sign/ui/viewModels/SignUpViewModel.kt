@@ -3,18 +3,20 @@ package com.koleychik.feature_sign.ui.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.koleychik.core_authorization.checkEmail
-import com.koleychik.core_authorization.checkName
-import com.koleychik.core_authorization.checkPassword
-import com.koleychik.core_authorization.newapi.AuthRepository
-import com.koleychik.core_authorization.result.CheckResult
-import com.koleychik.core_authorization.result.user.UserResult
+import com.koleychik.core_authentication.api.AuthRepository
+import com.koleychik.core_authentication.checkEmail
+import com.koleychik.core_authentication.checkName
+import com.koleychik.core_authentication.checkPassword
+import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.core_authentication.result.user.UserResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class SignUpViewModel @Inject constructor(private val authRepository: AuthRepository) :
+internal class SignUpViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) :
     ViewModel() {
 
     val isLoading = MutableLiveData(false)
@@ -27,7 +29,9 @@ internal class SignUpViewModel @Inject constructor(private val authRepository: A
         password: String,
         repeatPassword: String
     ) = viewModelScope.launch(Dispatchers.IO) {
-        isLoading.value = true
+        withContext(Dispatchers.Main) {
+            isLoading.value = true
+        }
         val listResult = listOf(
             checkName(name),
             checkEmail(email),
@@ -40,7 +44,7 @@ internal class SignUpViewModel @Inject constructor(private val authRepository: A
                     isLoading.value = false
                     checkResult.value = i
                 }
-                break
+                return@launch
             }
         }
 

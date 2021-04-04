@@ -1,0 +1,45 @@
+plugins {
+    id 'android-library-convention'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+}
+
+android.buildFeatures.viewBinding true
+
+
+dependencies {
+    implementation project(":module-injector")
+    implementation project(":models")
+
+    implementation Dependencies.kotlin_lib
+    implementation Dependencies.coreKtx
+    implementation Dependencies.appCompat
+    implementation Dependencies.material
+
+    implementation Dependencies.activity
+
+    implementation Dependencies.gson
+
+    // DataStore
+    implementation Dependencies.dataStoreCore
+    implementation Dependencies.dataStorePreferences
+
+    // Dagger
+    implementation Dependencies.dagger
+    kapt Dependencies.daggerCompile
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
+    implementation 'com.google.firebase:firebase-database:19.7.0'
+
+    // for sing in using google
+    implementation Dependencies.googleServiceAuth
+
+    // Tests
+    testImplementation Dependencies.jUnitCore
+    androidTestImplementation Dependencies.jUnitTest
+    androidTestImplementation Dependencies.espressoCore
+    testImplementation Dependencies.assertJ
+}
+
+apply plugin: 'com.google.gms.google-services'

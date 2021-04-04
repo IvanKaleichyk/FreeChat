@@ -1,6 +1,11 @@
 object Versions {
+
     //    progressBar
     const val progressBar = "2.5.0"
+
+    const val gson = "2.8.6"
+    const val dataStore = "1.0.0-alpha08"
+
     const val activity = "1.2.2"
     const val easyPermission = "3.0.0"
     const val googleServiceAuth = "19.0.0"
@@ -42,6 +47,14 @@ object Versions {
 
 @SuppressWarnings("UnusedAssignment")
 object Dependencies {
+
+    // gson
+    const val gson = "com.google.code.gson:gson:${Versions.gson}"
+
+    // DataStore
+    const val dataStoreCore = "androidx.datastore:datastore-core:${Versions.dataStore}"
+    const val dataStorePreferences =
+        "androidx.datastore:datastore-preferences:${Versions.dataStore}"
 
     const val progressBar =
         "com.github.rahatarmanahmed:circularprogressview:${Versions.progressBar}"

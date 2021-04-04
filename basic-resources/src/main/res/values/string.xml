@@ -13,4 +13,6 @@
     <string name="google_authentication">Use google account to sing in</string>
 
     <string name="continue_text">Continue</string>
+
+    <string name="error">Error</string>
 </resources>

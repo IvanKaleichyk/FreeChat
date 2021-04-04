@@ -5,6 +5,7 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="testRunner" value="PLATFORM" />
+        <option name="disableWrapperSourceDistributionNotification" value="true" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="$PROJECT_DIR$/../../../gradle/gradle-6.8.3-all/gradle-6.8.3" />
@@ -15,10 +16,11 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/basic-resources" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/core-authorization" />
+            <option value="$PROJECT_DIR$/core-authentication" />
             <option value="$PROJECT_DIR$/core-files" />
             <option value="$PROJECT_DIR$/dialogs" />
             <option value="$PROJECT_DIR$/feature-all-dialogs" />
+            <option value="$PROJECT_DIR$/feature-info" />
             <option value="$PROJECT_DIR$/feature-loading-api" />
             <option value="$PROJECT_DIR$/feature-loading-impl" />
             <option value="$PROJECT_DIR$/feature-sign" />
