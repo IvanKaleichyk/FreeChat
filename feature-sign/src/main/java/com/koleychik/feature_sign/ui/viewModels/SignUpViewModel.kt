@@ -48,11 +48,12 @@ internal class SignUpViewModel @Inject constructor(
             }
         }
 
-        withContext(Dispatchers.Main) {
-            authRepository.createAccount(name, email, password) {
+        authRepository.createAccount(name, email, password) {
+            viewModelScope.launch(Dispatchers.Main) {
                 userResult.value = it
                 isLoading.value = false
             }
         }
+
     }
 }

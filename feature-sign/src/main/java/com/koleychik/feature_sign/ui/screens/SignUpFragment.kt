@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.koleychik.basic_resource.isEnabledViews
+import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.result.CheckResult
 import com.koleychik.core_authentication.result.user.UserResult
@@ -14,9 +16,7 @@ import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_sign.R
 import com.koleychik.feature_sign.databinding.FragmentSignUpBinding
 import com.koleychik.feature_sign.di.SignFeatureComponentHolder
-import com.koleychik.feature_sign.isEnabledViews
 import com.koleychik.feature_sign.navigation.SignUpNavigationApi
-import com.koleychik.feature_sign.showToast
 import com.koleychik.feature_sign.ui.viewModels.SignUpViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
 import com.koleychik.feature_sign.underlineText
@@ -72,6 +72,8 @@ class SignUpFragment : Fragment() {
         }
         viewModel.checkResult.observe(viewLifecycleOwner) {
             when (it) {
+                null -> {
+                }
                 is CheckResult.DataError -> requireContext().showToast(it.message)
                 is CheckResult.ServerError -> requireContext().showToast(it.message)
                 else -> requireContext().showToast(R.string.error)
@@ -79,6 +81,8 @@ class SignUpFragment : Fragment() {
         }
         viewModel.userResult.observe(viewLifecycleOwner) {
             when (it) {
+                null -> {
+                }
                 is UserResult.Successful -> navigationApi.fromSignUpToMainScreen()
                 is UserResult.DataError -> requireContext().showToast(it.message)
                 is UserResult.ServerError -> requireContext().showToast(it.message)
@@ -113,10 +117,10 @@ class SignUpFragment : Fragment() {
         val password: String
         val repeatPassword: String
         with(binding) {
-            name = edtName.text.toString()
-            email = edtEmail.text.toString()
-            password = edtPassword.text.toString()
-            repeatPassword = edtRepeatPassword.text.toString()
+            name = edtName.text.toString().trim()
+            email = edtEmail.text.toString().trim()
+            password = edtPassword.text.toString().trim()
+            repeatPassword = edtRepeatPassword.text.toString().trim()
         }
         viewModel.startCreateAccount(name, email, password, repeatPassword)
     }

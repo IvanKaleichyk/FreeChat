@@ -7,7 +7,6 @@ dependencies {
     implementation project(":module-injector")
     implementation project(":models")
     implementation project(':core-authentication')
-    implementation project(":dialogs")
     implementation project(":feature-loading-api")
 
     implementation Dependencies.kotlin_lib

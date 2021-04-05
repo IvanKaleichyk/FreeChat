@@ -24,8 +24,9 @@ class StartViewModel @Inject constructor(
 
     fun checkUser() = viewModelScope.launch(Dispatchers.IO) {
         repository.checkUser {
-            userResult.value = it
+            viewModelScope.launch {
+                userResult.value = it
+            }
         }
     }
-
 }

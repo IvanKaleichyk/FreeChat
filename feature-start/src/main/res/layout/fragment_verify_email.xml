@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.screens.VerifyEmailFragment"
+    android:padding="@dimen/basicPadding"
+    tools:viewBindingIgnore="true">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/sign_text"
+        android:fontFamily="@font/rubik_medium_italic"
+        android:text="Please verify your email address"/>
+
+    <Button
+        android:id="@+id/btn"
+        style="@style/sign_btn"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="@dimen/basicMargin"
+        android:text="@string/check"/>
+
+</FrameLayout>

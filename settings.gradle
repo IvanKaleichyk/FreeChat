@@ -1,4 +1,4 @@
-include ':feature-info'
+include ':feature-password-utils'
 include ':feature-all-dialogs'
 include ':feature-loading-impl'
 include ':feature-loading-api'

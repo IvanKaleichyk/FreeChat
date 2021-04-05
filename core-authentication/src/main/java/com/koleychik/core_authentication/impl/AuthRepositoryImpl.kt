@@ -75,6 +75,10 @@ internal class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun resetPassword(email: String, res: (CheckResult) -> Unit) {
+        authFirebaseRepository.resetPassword(email, res)
+    }
+
     private fun getUser(res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start getUser")
         val uid = auth.currentUser?.uid ?: return

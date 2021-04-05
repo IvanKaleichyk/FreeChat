@@ -1,6 +1,7 @@
 package com.koleychik.freechat.di.modules
 
 import android.content.Context
+import com.koleychik.feature_password_utils.di.PasswordUtilsFeatureApi
 import com.koleychik.feature_sign.di.SignFeatureApi
 import com.koleychik.feature_start.di.StartFeatureApi
 import com.koleychik.freechat.Navigator
@@ -20,7 +21,8 @@ class AppModule(val context: Context) {
     @Provides
     fun provideNavigator(
         startFeatureApi: Provider<StartFeatureApi>,
-        signFeatureApi: Provider<SignFeatureApi>
-    ) = Navigator(startFeatureApi, signFeatureApi)
+        signFeatureApi: Provider<SignFeatureApi>,
+        passwordUtilsFeatureApi: Provider<PasswordUtilsFeatureApi>
+    ) = Navigator(startFeatureApi, signFeatureApi, passwordUtilsFeatureApi)
 
 }

@@ -9,5 +9,7 @@ internal interface AuthFirebaseRepository {
     fun login(email: String, password: String, res: (CheckResult) -> Unit)
     fun loginFirebaseUserByCredential(credential: AuthCredential, res: (CheckResult) -> Unit)
     fun checkUser(res: (CheckResult) -> Unit)
+    fun resetPassword(email: String, res: (CheckResult) -> Unit)
+
 
 }

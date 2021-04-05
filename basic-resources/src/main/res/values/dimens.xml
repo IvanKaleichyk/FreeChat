@@ -11,6 +11,7 @@
     <dimen name="basicMargin">24dp</dimen>
     <dimen name="bigMargin">32dp</dimen>
     <dimen name="smallMargin">16dp</dimen>
+    <dimen name="margin_between_text_and_edt">10dp</dimen>
 
     <!--  Padding  -->
     <dimen name="basicPadding">10dp</dimen>
@@ -30,5 +31,7 @@
 
     <dimen name="loading_icon">110dp</dimen>
     <dimen name="progress_bar">40dp</dimen>
+
+    <dimen name="guide_line">20dp</dimen>
 
 </resources>

@@ -14,7 +14,7 @@ dependencies {
     implementation project(':feature-loading-impl')
     implementation project(':feature-sign')
     implementation project(':feature-all-dialogs')
-    implementation project(':feature-info')
+    implementation project(':feature-password-utils')
 
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx

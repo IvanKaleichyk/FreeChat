@@ -16,38 +16,16 @@
         android:id="@+id/text_info"
         style="@style/sign_text_view"
         android:layout_marginTop="@dimen/basicMargin"
-        android:text="password"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <EditText
-        android:id="@+id/edt"
-        style="@style/sign_edt"
-        android:layout_marginTop="@dimen/smallMargin"
-        android:autofillHints="@string/password"
-        android:hint="password"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_info" />
 
     <Button
         android:id="@+id/btn"
         style="@style/sign_btn"
-        android:layout_marginBottom="@dimen/smallMargin"
         android:text="@string/continue_text"
-        app:layout_constraintBottom_toTopOf="@+id/googleAuth"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/googleAuth"
-        style="@style/icon_google_authentication"
-        android:contentDescription="@string/google_authentication"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,4 +46,11 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
         if (auth.currentUser != null) res(CheckResult.Successful)
         else res(CheckResult.DataError(R.string.cannot_find_user))
     }
+
+    override fun resetPassword(email: String, res: (CheckResult) -> Unit) {
+        auth.sendPasswordResetEmail(email).addOnCompleteListener {
+            if (it.isSuccessful) res(CheckResult.Successful)
+            else if (it.isCanceled) res(CheckResult.ServerError(it.exception?.message.toString()))
+        }
+    }
 }

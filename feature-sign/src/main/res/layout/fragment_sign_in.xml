@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.screens.SignInFragment">
 
     <TextView
         android:id="@+id/title"
         style="@style/sign_title"
         android:text="@string/sing_in"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineTop"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart" />
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineTop" />
 
     <TextView
         android:id="@+id/textSignUp"
@@ -63,14 +63,14 @@
     <TextView
         android:id="@+id/textForgotPassword"
         style="@style/sign_text_view"
-        android:text="@string/forgot_password"
         android:layout_marginBottom="@dimen/smallMargin"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:text="@string/forgot_password"
+        app:layout_constraintBottom_toTopOf="@+id/btn"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn"
         style="@style/sign_btn"
         android:layout_marginBottom="@dimen/smallMargin"
         android:text="@string/continue_text"
@@ -81,38 +81,44 @@
     <ImageView
         android:id="@+id/googleAuth"
         style="@style/icon_google_authentication"
+        android:contentDescription="@string/google_authentication"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-        android:contentDescription="@string/google_authentication" />
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart" />
+
+    <ViewStub
+        android:id="@+id/viewStubLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintGuide_begin="@dimen/guide_line"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/guide_line" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintGuide_end="@dimen/guide_line"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/guide_line" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintGuide_begin="@dimen/guide_line"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/guide_line" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintGuide_end="@dimen/guide_line"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/guide_line" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

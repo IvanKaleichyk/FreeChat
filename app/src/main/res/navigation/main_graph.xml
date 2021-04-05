@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.koleychik.feature_start.ui.StartFragment"
+        android:name="com.koleychik.feature_start.ui.screens.StartFragment"
         android:label="StartFragment"
         tools:layout="@layout/fragment_loading">
         <action
@@ -20,8 +20,17 @@
             android:id="@+id/action_startFragment_to_allDialogsFragment"
             app:destination="@id/allDialogsFragment" />
         <action
-            android:id="@+id/action_startFragment_to_infoFragment"
-            app:destination="@id/infoFragment" />
+            android:id="@+id/action_startFragment_to_verifyEmailFragment"
+            app:destination="@id/verifyEmailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/verifyEmailFragment"
+        android:name="com.koleychik.feature_start.ui.screens.VerifyEmailFragment"
+        android:label="VerifyEmailFragment"
+        tools:layout="@layout/fragment_verify_email">
+        <action
+            android:id="@+id/action_verifyEmailFragment_to_allDialogsFragment"
+            app:destination="@id/allDialogsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
@@ -32,11 +41,11 @@
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
         <action
-            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
-            app:destination="@id/forgotPasswordFragment" />
-        <action
             android:id="@+id/action_signInFragment_to_allDialogsFragment"
             app:destination="@id/allDialogsFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_specifyEmailFragment"
+            app:destination="@id/specifyEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -51,18 +60,19 @@
             app:destination="@id/allDialogsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/forgotPasswordFragment"
-        android:name="com.koleychik.feature_sign.ui.screens.ForgotPasswordFragment"
-        android:label="ForgotPasswordFragment"
-        tools:layout="@layout/fragment_forgot_password"/>
-    <fragment
         android:id="@+id/allDialogsFragment"
         android:name="com.koleychik.feature_all_dialogs.AllDialogsFragment"
         android:label="AllDialogsFragment"
         tools:layout="@layout/fragment_all_dialogs"/>
     <fragment
-        android:id="@+id/infoFragment"
-        android:name="com.koleychik.feature_info.InfoFragment"
-        android:label="InfoFragment"
-        tools:layout="@layout/info_dialog"/>
+        android:id="@+id/specifyEmailFragment"
+        android:name="com.koleychik.feature_password_utils.ui.SpecifyEmailFragment"
+        android:label="SpecifyEmailFragment"
+        tools:layout="@layout/fragment_specify_email">
+        <action
+            android:id="@+id/action_specifyEmailFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+
+
 </navigation>
