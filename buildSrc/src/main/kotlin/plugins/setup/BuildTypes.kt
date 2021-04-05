@@ -10,6 +10,16 @@ class BuildTypes : Plugin<Project> {
             extension.buildTypes { buildType ->
                 buildType.getByName("release") { release ->
                     release.run {
+                        isMinifyEnabled = true
+                        proguardFiles(
+                            extension.getDefaultProguardFile("proguard-android-optimize.txt"),
+                            "proguard-rules.pro"
+                        )
+                    }
+                }
+                buildType.getByName("debug") { debug ->
+                    debug.run {
+                        debuggable(true)
                         isMinifyEnabled = false
                         proguardFiles(
                             extension.getDefaultProguardFile("proguard-android-optimize.txt"),

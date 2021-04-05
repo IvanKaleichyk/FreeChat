@@ -3,7 +3,7 @@ package com.koleychik.feature_start
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.api.DataStoreRepository
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.core_authentication.result.VerificationResult
 import com.koleychik.core_authentication.result.user.UserResult
 import javax.inject.Inject
 
@@ -13,10 +13,12 @@ class StartRepository @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) {
 
-    fun checkVerifiedEmail(res: (CheckResult) -> Unit) {
-        if (accountRepository.isEmailVerified()) return
+    fun checkVerifiedEmail(res: (VerificationResult) -> Unit): Boolean {
+        return if (accountRepository.isEmailVerified())
+            true
         else {
-            accountRepository.verifyEmail { res(it) }
+            accountRepository.verifyEmail(res)
+            false
         }
     }
 

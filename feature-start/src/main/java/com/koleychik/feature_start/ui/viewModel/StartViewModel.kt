@@ -3,7 +3,7 @@ package com.koleychik.feature_start.ui.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.core_authentication.result.VerificationResult
 import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_start.StartRepository
 import kotlinx.coroutines.Dispatchers
@@ -16,10 +16,15 @@ class StartViewModel @Inject constructor(
 
     val userResult = MutableLiveData<UserResult>(null)
 
-    val verificationResult = MutableLiveData<CheckResult>(null)
+    val verificationResult = MutableLiveData<VerificationResult>(null)
 
     fun verifyEmail() {
-        repository.checkVerifiedEmail { verificationResult.value = it }
+        val checkRes = repository.checkVerifiedEmail {
+            verificationResult.value = it
+        }
+        if (checkRes) {
+            verificationResult.value = VerificationResult.Successful
+        }
     }
 
     fun checkUser() = viewModelScope.launch(Dispatchers.IO) {

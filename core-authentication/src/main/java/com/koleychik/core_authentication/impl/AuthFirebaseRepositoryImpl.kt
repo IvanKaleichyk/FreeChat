@@ -15,18 +15,26 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
 
     override fun createFirebaseUser(email: String, password: String, res: (CheckResult) -> Unit) {
         Log.d(Constants.TAG, "AuthFirebaseRepositoryImpl start createFirebaseUser")
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) res(CheckResult.Successful)
-            else if (it.isCanceled) res(CheckResult.ServerError(it.exception?.message.toString()))
-        }
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnFailureListener {
+                res(CheckResult.ServerError(it.message.toString()))
+            }
+            .addOnCompleteListener {
+                if (it.isSuccessful) res(CheckResult.Successful)
+                else res(CheckResult.ServerError(it.exception?.message.toString()))
+            }
     }
 
     override fun login(email: String, password: String, res: (CheckResult) -> Unit) {
         Log.d(Constants.TAG, "AuthFirebaseRepositoryImpl start login")
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) res(CheckResult.Successful)
-            else if (it.isCanceled) res(CheckResult.ServerError(it.exception?.message.toString()))
-        }
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnFailureListener {
+                res(CheckResult.ServerError(it.message.toString()))
+            }
+            .addOnCompleteListener {
+                if (it.isSuccessful) res(CheckResult.Successful)
+                else res(CheckResult.ServerError(it.exception?.message.toString()))
+            }
     }
 
     override fun loginFirebaseUserByCredential(
@@ -34,9 +42,13 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
         res: (CheckResult) -> Unit
     ) {
         Log.d(Constants.TAG, "AuthFirebaseRepositoryImpl start loginFirebaseUserByCredential")
-        auth.signInWithCredential(credential).addOnCompleteListener {
+        auth.signInWithCredential(credential)
+            .addOnFailureListener {
+                res(CheckResult.ServerError(it.message.toString()))
+            }
+            .addOnCompleteListener {
             if (it.isSuccessful) res(CheckResult.Successful)
-            else if (it.isCanceled) res(CheckResult.ServerError(it.exception?.message.toString()))
+            else res(CheckResult.ServerError(it.exception?.message.toString()))
         }
     }
 
@@ -50,7 +62,7 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
     override fun resetPassword(email: String, res: (CheckResult) -> Unit) {
         auth.sendPasswordResetEmail(email).addOnCompleteListener {
             if (it.isSuccessful) res(CheckResult.Successful)
-            else if (it.isCanceled) res(CheckResult.ServerError(it.exception?.message.toString()))
+            else res(CheckResult.ServerError(it.exception?.message.toString()))
         }
     }
 }

@@ -15,9 +15,11 @@ import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_sign.R
 import com.koleychik.feature_sign.databinding.FragmentSignInBinding
+import com.koleychik.feature_sign.di.SignFeatureComponentHolder
 import com.koleychik.feature_sign.navigation.SignInNavigationApi
 import com.koleychik.feature_sign.ui.viewModels.SignInViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
+import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class SignInFragment : Fragment() {
@@ -48,7 +50,9 @@ class SignInFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        NavigationSystem.onStartFeature?.let { start -> start(this) }
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
+        SignFeatureComponentHolder.getComponent().inject(this)
         return binding.root
     }
 
@@ -112,10 +116,12 @@ class SignInFragment : Fragment() {
             btn.setOnClickListener(onClickListener)
             googleAuth.setOnClickListener(onClickListener)
             textForgotPassword.setOnClickListener(onClickListener)
+            textSignUp.setOnClickListener(onClickListener)
         }
     }
 
     private fun setupLoading() {
+        loadingApi.create(requireView())
         binding.viewStubLoading.run {
             layoutResource = loadingApi.layoutRes
             inflate()

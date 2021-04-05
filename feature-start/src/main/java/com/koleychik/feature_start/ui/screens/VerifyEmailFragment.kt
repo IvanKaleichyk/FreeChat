@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.koleychik.basic_resource.showToast
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.core_authentication.result.VerificationResult
 import com.koleychik.feature_start.R
 import com.koleychik.feature_start.StartFeatureNavigation
 import com.koleychik.feature_start.StartRepository
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
+import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class VerifyEmailFragment : Fragment() {
@@ -26,6 +27,7 @@ class VerifyEmailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        NavigationSystem.onStartFeature?.let { start -> start(this) }
         val root = inflater.inflate(R.layout.fragment_verify_email, container, false)
         StartFeatureComponentHolder.getComponent().inject(this)
         root.findViewById<Button>(R.id.btn).setOnClickListener {
@@ -37,9 +39,10 @@ class VerifyEmailFragment : Fragment() {
     private fun check() {
         repository.checkVerifiedEmail {
             when (it) {
-                is CheckResult.Successful -> navigation.fromVerifyEmailFragmentToMainScreen()
-                is CheckResult.DataError -> requireContext().showToast(it.message)
-                is CheckResult.ServerError -> requireContext().showToast(it.message)
+                is VerificationResult.Successful -> navigation.fromVerifyEmailFragmentToMainScreen()
+                is VerificationResult.DataError -> requireContext().showToast(it.message)
+                is VerificationResult.ServerError -> requireContext().showToast(it.message)
+                is VerificationResult.Waiting -> requireContext().showToast(R.string.waiting)
             }
         }
     }

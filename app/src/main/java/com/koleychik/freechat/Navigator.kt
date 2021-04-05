@@ -17,6 +17,7 @@ import com.koleychik.feature_start.StartFeatureNavigation
 import com.koleychik.feature_start.di.StartFeatureApi
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.feature_start.ui.screens.StartFragment
+import com.koleychik.feature_start.ui.screens.VerifyEmailFragment
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Provider
 
@@ -38,7 +39,7 @@ class Navigator(
         when (fragment) {
             is SpecifyEmailFragment -> passwordUtilsFeatureApi.get()
             is SignUpFragment, is SignInFragment -> signFeatureApi.get()
-            is StartFragment -> startFeatureApi.get()
+            is StartFragment, is VerifyEmailFragment -> startFeatureApi.get()
         }
     }
 
@@ -67,7 +68,7 @@ class Navigator(
 
     override fun fromVerifyEmailFragmentToMainScreen(bundle: Bundle?) {
         checkController()
-        if (controller!!.currentDestination?.id == R.id.startFragment) {
+        if (controller!!.currentDestination?.id == R.id.verifyEmailFragment) {
             controller?.navigate(R.id.action_verifyEmailFragment_to_allDialogsFragment)
             StartFeatureComponentHolder.reset()
         }
@@ -75,14 +76,14 @@ class Navigator(
 
     override fun fromSignUpToSignIn(bundle: Bundle?) {
         checkController()
-        if (controller!!.currentDestination?.id == R.id.signInFragment) {
+        if (controller!!.currentDestination?.id == R.id.signUpFragment) {
             controller?.navigate(R.id.action_signUpFragment_to_signInFragment)
         }
     }
 
     override fun fromSignUpToMainScreen(bundle: Bundle?) {
         checkController()
-        if (controller!!.currentDestination?.id == R.id.signInFragment) {
+        if (controller!!.currentDestination?.id == R.id.signUpFragment) {
             controller?.navigate(R.id.action_signUpFragment_to_allDialogsFragment)
             SignFeatureComponentHolder.reset()
         }

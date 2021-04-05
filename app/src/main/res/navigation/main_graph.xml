@@ -9,7 +9,7 @@
         android:id="@+id/startFragment"
         android:name="com.koleychik.feature_start.ui.screens.StartFragment"
         android:label="StartFragment"
-        tools:layout="@layout/fragment_loading">
+        tools:layout="@layout/fragment_start">
         <action
             android:id="@+id/action_startFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />

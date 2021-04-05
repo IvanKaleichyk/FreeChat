@@ -28,7 +28,7 @@ class InfoDialog(context: Context, title: Int, text: Int, onBtnClick: (Dialog) -
         setContentView(R.layout.info_dialog)
 
         titleInfo.setText(title)
-        textInfo.setText(title)
+        textInfo.setText(text)
 
         btn.setOnClickListener {
             onBtnClick(this)

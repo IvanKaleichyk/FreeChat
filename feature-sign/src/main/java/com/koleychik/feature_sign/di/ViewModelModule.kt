@@ -1,6 +1,7 @@
 package com.koleychik.feature_sign.di
 
 import androidx.lifecycle.ViewModel
+import com.koleychik.feature_sign.ui.viewModels.SignInViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignUpViewModel
 import com.koleychik.module_injector.annotations.ViewModelKey
 import dagger.Binds
@@ -14,5 +15,10 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SignUpViewModel::class)
     abstract fun provideSignUpViewModel(impl: SignUpViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SignInViewModel::class)
+    abstract fun provideSignInViewModel(impl: SignInViewModel): ViewModel
 
 }

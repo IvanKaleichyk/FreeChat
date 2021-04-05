@@ -33,6 +33,8 @@ class SpecifyEmailFragment : Fragment() {
         ) {
             it.dismiss()
             navigationApi.fromSpecifyEmailToSignIn()
+        }.apply {
+            setBtnTextRes(R.string.ok)
         }
     }
 
@@ -89,6 +91,7 @@ class SpecifyEmailFragment : Fragment() {
     }
 
     private fun setupLoading() {
+        loadingApi.create(requireView())
         binding.viewStubLoading.run {
             layoutResource = loadingApi.layoutRes
             inflate()

@@ -16,4 +16,5 @@
     <string name="no_messages">No messages yet</string>
     <string name="cannot_get_information_about_user">Cannot get information about uset</string>
     <string name="cannot_create_user">Cannot create user!!!</string>
+    <string name="cannot_update_password">Cannot updare password!!!</string>
 </resources>

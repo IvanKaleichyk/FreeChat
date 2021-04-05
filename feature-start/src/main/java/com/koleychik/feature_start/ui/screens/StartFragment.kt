@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.core_authentication.result.VerificationResult
 import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_start.StartFeatureNavigation
-import com.koleychik.feature_start.databinding.FragmentLoadingBinding
+import com.koleychik.feature_start.databinding.FragmentStartBinding
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.feature_start.ui.viewModel.StartViewModel
 import com.koleychik.feature_start.ui.viewModel.StartViewModelFactory
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class StartFragment : Fragment() {
 
-    private var _binding: FragmentLoadingBinding? = null
+    private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
 
     @Inject
@@ -39,7 +39,7 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         NavigationSystem.onStartFeature?.let { start -> start(this) }
-        _binding = FragmentLoadingBinding.inflate(inflater, container, false)
+        _binding = FragmentStartBinding.inflate(inflater, container, false)
         StartFeatureComponentHolder.getComponent().inject(this)
         subscribe()
         return binding.root
@@ -48,8 +48,9 @@ class StartFragment : Fragment() {
     private fun subscribe() {
         viewModel.verificationResult.observe(viewLifecycleOwner) {
             when (it) {
-                null -> { }
-                is CheckResult.Successful -> navigation.fromStartFragmentToMainScreen()
+                null -> {
+                }
+                is VerificationResult.Successful -> navigation.fromStartFragmentToMainScreen()
                 else -> navigation.fromStartFragmentToVerifyEmailFragment()
             }
         }
