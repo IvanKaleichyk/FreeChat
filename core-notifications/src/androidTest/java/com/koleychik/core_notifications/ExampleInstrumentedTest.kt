@@ -1,4 +1,4 @@
-package com.koleychik.basic_resource
+package com.koleychik.core_notifications
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.koleychik.basic_resource.test", appContext.packageName)
+        assertEquals("com.koleychik.core_notifications.test", appContext.packageName)
     }
 }

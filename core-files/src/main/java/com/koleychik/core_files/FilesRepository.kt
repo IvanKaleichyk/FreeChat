@@ -4,4 +4,5 @@ import com.koleychik.models.DeviceImage
 
 interface FilesRepository {
     fun getImages(): List<DeviceImage>
+    fun downloadImage(model: DeviceImage)
 }

@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FreeChat">
+        <activity android:name=".activities.MainActivity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.AuthenticationActivity"
             android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

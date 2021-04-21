@@ -1,6 +1,7 @@
 plugins {
     id 'android-app-convention'
     id 'kotlin-kapt'
+    id 'kotlin-android'
 }
 
 dependencies {
@@ -28,6 +29,9 @@ dependencies {
 
     // Dagger2
     implementation Dependencies.dagger
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     kapt Dependencies.daggerCompile
 
     // navigation

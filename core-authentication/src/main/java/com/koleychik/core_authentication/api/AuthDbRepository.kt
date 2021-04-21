@@ -1,7 +1,7 @@
 package com.koleychik.core_authentication.api
 
 import com.koleychik.core_authentication.result.user.UserResult
-import com.koleychik.models.User
+import com.koleychik.models.users.User
 
 internal interface AuthDbRepository {
 

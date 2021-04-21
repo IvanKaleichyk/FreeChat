@@ -1,4 +1,4 @@
-package com.koleychik.freechat
+package com.koleychik.freechat.activities
 
 import android.Manifest
 import android.os.Bundle
@@ -7,12 +7,15 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.koleychik.freechat.App
+import com.koleychik.freechat.Navigator
+import com.koleychik.freechat.R
 import com.koleychik.module_injector.Constants
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class AuthenticationActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     @Inject
     internal lateinit var navigator: Navigator
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_FreeChat)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_authentication)
         App.component.inject(this)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         checkPermission()

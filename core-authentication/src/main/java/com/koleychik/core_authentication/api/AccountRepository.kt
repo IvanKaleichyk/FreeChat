@@ -1,9 +1,9 @@
 package com.koleychik.core_authentication.api
 
 import android.net.Uri
-import com.koleychik.core_authentication.result.CheckResult
 import com.koleychik.core_authentication.result.VerificationResult
-import com.koleychik.models.User
+import com.koleychik.models.results.CheckResult
+import com.koleychik.models.users.User
 
 interface AccountRepository {
 

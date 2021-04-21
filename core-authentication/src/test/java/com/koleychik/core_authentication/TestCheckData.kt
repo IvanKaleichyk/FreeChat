@@ -1,6 +1,6 @@
 package com.koleychik.core_authentication
 
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.models.results.CheckResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

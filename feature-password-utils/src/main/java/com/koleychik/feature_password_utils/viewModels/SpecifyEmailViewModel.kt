@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.checkEmail
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.models.results.CheckResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

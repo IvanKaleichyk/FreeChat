@@ -1,5 +1,15 @@
 object Versions {
 
+
+    // network
+    const val retrofit = "2.9.0"
+    const val okHttp = "4.9.0"
+
+    // firebase
+    const val firebaseAuth = "20.0.3"
+    const val firebaseDb = "19.7.0"
+    const val fireStore = "22.1.2"
+
     //    progressBar
     const val progressBar = "2.5.0"
 
@@ -47,9 +57,18 @@ object Versions {
 
 @SuppressWarnings("UnusedAssignment")
 object Dependencies {
+    // network
+    const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val retrofitGson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
+    const val okHttpInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
 
-    // gson
+    // firebase
+    const val firebaseAuth = "com.google.firebase:firebase-auth:${Versions.firebaseAuth}"
+    const val firebaseDb = "com.google.firebase:firebase-database:${Versions.firebaseDb}"
+    const val firebaseFireStore = "com.google.firebase:firebase-firestore-ktx:${Versions.fireStore}"
+
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
+
 
     // DataStore
     const val dataStoreCore = "androidx.datastore:datastore-core:${Versions.dataStore}"

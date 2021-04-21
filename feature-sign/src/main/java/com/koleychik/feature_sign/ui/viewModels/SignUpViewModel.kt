@@ -7,8 +7,8 @@ import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.checkEmail
 import com.koleychik.core_authentication.checkName
 import com.koleychik.core_authentication.checkPassword
-import com.koleychik.core_authentication.result.CheckResult
 import com.koleychik.core_authentication.result.user.UserResult
+import com.koleychik.models.results.CheckResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -1,4 +1,4 @@
-package com.koleychik.basic_resource
+package com.koleychik.core_notifications
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

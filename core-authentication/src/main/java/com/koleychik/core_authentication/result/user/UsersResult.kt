@@ -1,6 +1,6 @@
 package com.koleychik.core_authentication.result.user
 
-import com.koleychik.models.User
+import com.koleychik.models.users.User
 
 sealed class UsersResult {
     class Successful(list: List<User>) : UsersResult()

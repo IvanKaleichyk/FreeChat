@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core-authentication" />
             <option value="$PROJECT_DIR$/core-files" />
+            <option value="$PROJECT_DIR$/core-notifications" />
             <option value="$PROJECT_DIR$/dialogs" />
             <option value="$PROJECT_DIR$/feature-all-dialogs" />
             <option value="$PROJECT_DIR$/feature-loading-api" />

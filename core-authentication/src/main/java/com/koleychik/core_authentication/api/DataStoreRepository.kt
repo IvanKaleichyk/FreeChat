@@ -1,6 +1,6 @@
 package com.koleychik.core_authentication.api
 
-import com.koleychik.models.User
+import com.koleychik.models.users.User
 
 interface DataStoreRepository {
     suspend fun getUser(): User?

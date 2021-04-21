@@ -1,4 +1,4 @@
-package com.koleychik.models;
+package com.koleychik.models.users;
 
 import android.net.Uri;
 

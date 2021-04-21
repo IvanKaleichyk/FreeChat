@@ -11,10 +11,10 @@ import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.extencions.createUserFirstTime
 import com.koleychik.core_authentication.extencions.loginUsingGoogle
 import com.koleychik.core_authentication.extencions.toUser
-import com.koleychik.core_authentication.result.CheckResult
 import com.koleychik.core_authentication.result.GoogleSignInResult
 import com.koleychik.core_authentication.result.user.UserResult
-import com.koleychik.models.User
+import com.koleychik.models.results.CheckResult
+import com.koleychik.models.users.User
 import com.koleychik.module_injector.Constants
 import javax.inject.Inject
 

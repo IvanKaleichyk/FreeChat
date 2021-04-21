@@ -34,6 +34,10 @@ class FilesRepositoryImpl @Inject constructor(private val context: Context): Fil
         return listRes
     }
 
+    override fun downloadImage(model: DeviceImage) {
+        TODO("Not yet implemented")
+    }
+
     private fun queryContentResolver(
         uri: Uri,
         projections: Array<out String>,

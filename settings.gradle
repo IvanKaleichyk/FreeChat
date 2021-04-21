@@ -1,3 +1,4 @@
+include ':core-notifications'
 include ':feature-password-utils'
 include ':feature-all-dialogs'
 include ':feature-loading-impl'

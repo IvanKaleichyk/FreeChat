@@ -1,7 +1,7 @@
 package com.koleychik.core_authentication.api
 
 import com.google.firebase.auth.AuthCredential
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.models.results.CheckResult
 
 internal interface AuthFirebaseRepository {
 

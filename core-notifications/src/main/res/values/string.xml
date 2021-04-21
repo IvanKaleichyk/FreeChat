@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_notification_channel_name">FREE CHAT MESSAGE NOTIFICATION CHANNEL</string>
+
+</resources>

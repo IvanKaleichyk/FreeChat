@@ -3,22 +3,19 @@ package com.koleychik.core_authentication.impl
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.koleychik.core_authentication.R
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.constants.UserConstants
-import com.koleychik.core_authentication.result.CheckResult
 import com.koleychik.core_authentication.result.VerificationResult
-import com.koleychik.models.User
+import com.koleychik.models.results.CheckResult
+import com.koleychik.models.users.User
 import com.koleychik.module_injector.Constants.TAG
 import javax.inject.Inject
 
 internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
 
-    private val db = FirebaseDatabase.getInstance()
+    private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
     override var user: User? = null
@@ -32,9 +29,6 @@ internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
             res(VerificationResult.DataError(R.string.cannot_find_user))
         } else {
             fbUser.sendEmailVerification()
-                .addOnFailureListener {
-                    res(VerificationResult.ServerError(it.message.toString()))
-                }
                 .addOnCompleteListener {
                     if (it.isSuccessful) res(VerificationResult.Waiting)
                     else res(VerificationResult.ServerError(it.exception?.message.toString()))
@@ -46,20 +40,15 @@ internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
         Log.d(TAG, "AccountRepositoryImpl start updateEmail")
         if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
         else {
-            val ref =
-                db.getReference("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.EMAIL}")
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            db
+                .collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.EMAIL}")
+                .add(email)
+                .addOnSuccessListener {
                     auth.currentUser!!.updateEmail(email)
                     user?.email = email
                     res(CheckResult.Successful)
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    res(CheckResult.ServerError(error.message))
-                }
-            })
-            ref.setValue(email)
+                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
         }
     }
 
@@ -78,19 +67,13 @@ internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
         Log.d(TAG, "AccountRepositoryImpl start updateName")
         if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
         else {
-            val ref =
-                db.getReference("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.NAME}")
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            db.collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.NAME}")
+                .add(name)
+                .addOnSuccessListener {
                     user?.name = name
                     res(CheckResult.Successful)
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    res(CheckResult.ServerError(error.message))
-                }
-            })
-            ref.setValue(name)
+                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
         }
     }
 
@@ -98,19 +81,13 @@ internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
         Log.d(TAG, "AccountRepositoryImpl start updateIcon")
         if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
         else {
-            val ref =
-                db.getReference("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.ICON}")
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            db.collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.ICON}")
+                .add(uri)
+                .addOnSuccessListener {
                     user?.icon = uri
                     res(CheckResult.Successful)
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    res(CheckResult.ServerError(error.message))
-                }
-            })
-            ref.setValue(uri)
+                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
         }
     }
 
@@ -118,19 +95,13 @@ internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
         Log.d(TAG, "AccountRepositoryImpl start updateBackground")
         if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
         else {
-            val ref =
-                db.getReference("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.BACKGROUND}")
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            db.collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.BACKGROUND}")
+                .add(uri)
+                .addOnSuccessListener {
                     user?.background = uri
                     res(CheckResult.Successful)
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    res(CheckResult.ServerError(error.message))
-                }
-            })
-            ref.setValue(uri)
+                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
         }
     }
 

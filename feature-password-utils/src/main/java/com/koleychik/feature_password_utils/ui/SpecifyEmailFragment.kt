@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
-import com.koleychik.core_authentication.result.CheckResult
 import com.koleychik.dialogs.InfoDialog
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_password_utils.R
@@ -17,6 +16,7 @@ import com.koleychik.feature_password_utils.databinding.FragmentSpecifyEmailBind
 import com.koleychik.feature_password_utils.di.PasswordUtilsFeatureComponentHolder
 import com.koleychik.feature_password_utils.viewModels.SpecifyEmailViewModel
 import com.koleychik.feature_password_utils.viewModels.ViewModelFactory
+import com.koleychik.models.results.CheckResult
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 

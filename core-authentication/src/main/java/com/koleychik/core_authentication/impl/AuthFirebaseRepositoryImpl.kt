@@ -5,7 +5,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.koleychik.core_authentication.R
 import com.koleychik.core_authentication.api.AuthFirebaseRepository
-import com.koleychik.core_authentication.result.CheckResult
+import com.koleychik.models.results.CheckResult
 import com.koleychik.module_injector.Constants
 import javax.inject.Inject
 
@@ -16,9 +16,6 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
     override fun createFirebaseUser(email: String, password: String, res: (CheckResult) -> Unit) {
         Log.d(Constants.TAG, "AuthFirebaseRepositoryImpl start createFirebaseUser")
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
-            }
             .addOnCompleteListener {
                 if (it.isSuccessful) res(CheckResult.Successful)
                 else res(CheckResult.ServerError(it.exception?.message.toString()))
@@ -28,9 +25,6 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
     override fun login(email: String, password: String, res: (CheckResult) -> Unit) {
         Log.d(Constants.TAG, "AuthFirebaseRepositoryImpl start login")
         auth.signInWithEmailAndPassword(email, password)
-            .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
-            }
             .addOnCompleteListener {
                 if (it.isSuccessful) res(CheckResult.Successful)
                 else res(CheckResult.ServerError(it.exception?.message.toString()))
@@ -43,9 +37,6 @@ class AuthFirebaseRepositoryImpl @Inject constructor() : AuthFirebaseRepository 
     ) {
         Log.d(Constants.TAG, "AuthFirebaseRepositoryImpl start loginFirebaseUserByCredential")
         auth.signInWithCredential(credential)
-            .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
-            }
             .addOnCompleteListener {
             if (it.isSuccessful) res(CheckResult.Successful)
             else res(CheckResult.ServerError(it.exception?.message.toString()))

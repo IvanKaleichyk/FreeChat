@@ -8,17 +8,32 @@ public class Message {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private String text, authorUid, dialogId;
+    private String text, authorUid, topic;
+    private boolean isRead;
     private long dateCreated;
 
-    public Message(String text, String authorUid, String dialogId, long dateCreated) {
+    public Message(long id, String text, String authorUid, String topic, boolean isRead, long dateCreated) {
+        this.id = id;
         this.text = text;
         this.authorUid = authorUid;
-        this.dialogId = dialogId;
+        this.topic = topic;
+        this.isRead = isRead;
         this.dateCreated = dateCreated;
     }
 
     public Message() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 
     public String getText() {
@@ -37,19 +52,19 @@ public class Message {
         this.authorUid = authorUid;
     }
 
-    public String getDialogId() {
-        return dialogId;
-    }
-
-    public void setDialogId(String dialogId) {
-        this.dialogId = dialogId;
-    }
-
     public long getDateCreated() {
         return dateCreated;
     }
 
     public void setDateCreated(long dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }

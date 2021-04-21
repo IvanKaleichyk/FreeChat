@@ -7,7 +7,7 @@ import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.DataStoreRepository
 import com.koleychik.core_authentication.dataStoreUtils.PreferencesKeys
 import com.koleychik.core_authentication.dataStoreUtils.PreferencesKeys.dataStore
-import com.koleychik.models.User
+import com.koleychik.models.users.User
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
