@@ -7,13 +7,14 @@ import androidx.room.PrimaryKey;
 public class Message {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private long id, dialogId;
     private String text, authorUid, topic;
     private boolean isRead;
     private long dateCreated;
 
-    public Message(long id, String text, String authorUid, String topic, boolean isRead, long dateCreated) {
+    public Message(long id, int dialogId, String text, String authorUid, String topic, boolean isRead, long dateCreated) {
         this.id = id;
+        this.dialogId = dialogId;
         this.text = text;
         this.authorUid = authorUid;
         this.topic = topic;
@@ -26,6 +27,10 @@ public class Message {
 
     public long getId() {
         return id;
+    }
+
+    public long getDialogId() {
+        return dialogId;
     }
 
     public boolean isRead() {

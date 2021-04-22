@@ -7,7 +7,8 @@ fun createUserFirstTime(uid: String, name: String, email: String) =
     User(
         uid,
         name,
-        email
+        email,
+        listOf()
     )
 
 fun GoogleSignInAccount.toUser(uid: String) =
@@ -15,5 +16,6 @@ fun GoogleSignInAccount.toUser(uid: String) =
         uid,
         displayName.toString(),
         email.toString(),
+        listOf(),
         photoUrl
     )

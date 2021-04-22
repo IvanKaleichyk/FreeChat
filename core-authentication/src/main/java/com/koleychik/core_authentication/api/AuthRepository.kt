@@ -1,8 +1,8 @@
 package com.koleychik.core_authentication.api
 
 import androidx.appcompat.app.AppCompatActivity
-import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.models.results.CheckResult
+import com.koleychik.models.results.user.UserResult
 
 interface AuthRepository {
 

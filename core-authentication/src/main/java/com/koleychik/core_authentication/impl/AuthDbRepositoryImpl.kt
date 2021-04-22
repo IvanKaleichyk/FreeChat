@@ -3,8 +3,8 @@ package com.koleychik.core_authentication.impl
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.koleychik.core_authentication.api.AuthDbRepository
-import com.koleychik.core_authentication.constants.UserConstants
-import com.koleychik.core_authentication.result.user.UserResult
+import com.koleychik.models.constants.UserConstants
+import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.users.User
 import com.koleychik.module_injector.Constants
 import javax.inject.Inject

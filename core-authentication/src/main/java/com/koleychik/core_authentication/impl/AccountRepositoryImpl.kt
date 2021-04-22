@@ -6,8 +6,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.koleychik.core_authentication.R
 import com.koleychik.core_authentication.api.AccountRepository
-import com.koleychik.core_authentication.constants.UserConstants
 import com.koleychik.core_authentication.result.VerificationResult
+import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.users.User
 import com.koleychik.module_injector.Constants.TAG

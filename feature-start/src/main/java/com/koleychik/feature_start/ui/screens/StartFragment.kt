@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.koleychik.core_authentication.result.VerificationResult
-import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_start.StartFeatureNavigation
 import com.koleychik.feature_start.databinding.FragmentStartBinding
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.feature_start.ui.viewModel.StartViewModel
 import com.koleychik.feature_start.ui.viewModel.StartViewModelFactory
+import com.koleychik.models.results.user.UserResult
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 

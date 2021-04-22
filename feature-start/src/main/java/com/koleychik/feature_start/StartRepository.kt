@@ -4,7 +4,7 @@ import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.api.DataStoreRepository
 import com.koleychik.core_authentication.result.VerificationResult
-import com.koleychik.core_authentication.result.user.UserResult
+import com.koleychik.models.results.user.UserResult
 import javax.inject.Inject
 
 class StartRepository @Inject constructor(

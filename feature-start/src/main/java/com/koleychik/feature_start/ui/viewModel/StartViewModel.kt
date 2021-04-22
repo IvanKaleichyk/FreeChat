@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.koleychik.core_authentication.result.VerificationResult
-import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_start.StartRepository
+import com.koleychik.models.results.user.UserResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject

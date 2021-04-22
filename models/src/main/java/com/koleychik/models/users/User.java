@@ -2,29 +2,35 @@ package com.koleychik.models.users;
 
 import android.net.Uri;
 
+import java.util.List;
+
 public class User {
 
     private String id, name, email;
+    private List<Long> listDialogsIds;
     private Uri icon, background;
 
-    public User(String id, String name, String email, Uri icon, Uri background) {
+    public User(String id, String name, String email, List<Long> listDialogsIds, Uri icon, Uri background) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.listDialogsIds = listDialogsIds;
         this.icon = icon;
         this.background = background;
     }
 
-    public User(String id, String name, String email) {
+    public User(String id, String name, String email, List<Long> listDialogsIds) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.listDialogsIds = listDialogsIds;
     }
 
-    public User(String id, String name, String email, Uri icon) {
+    public User(String id, String name, String email, List<Long> listDialogsIds, Uri icon) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.listDialogsIds = listDialogsIds;
         this.icon = icon;
     }
 
@@ -65,5 +71,13 @@ public class User {
 
     public void setBackground(Uri background) {
         this.background = background;
+    }
+
+    public List<Long> getListDialogsIds() {
+        return listDialogsIds;
+    }
+
+    public void setListDialogsIds(List<Long> listDialogsIds) {
+        this.listDialogsIds = listDialogsIds;
     }
 }

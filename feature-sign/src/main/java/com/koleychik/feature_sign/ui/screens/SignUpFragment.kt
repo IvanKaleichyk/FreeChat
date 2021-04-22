@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.api.AuthRepository
-import com.koleychik.core_authentication.result.user.UserResult
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_sign.R
 import com.koleychik.feature_sign.databinding.FragmentSignUpBinding
@@ -20,6 +19,7 @@ import com.koleychik.feature_sign.ui.viewModels.SignUpViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
 import com.koleychik.feature_sign.underlineText
 import com.koleychik.models.results.CheckResult
+import com.koleychik.models.results.user.UserResult
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 

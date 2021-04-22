@@ -1,4 +1,4 @@
-package com.koleychik.core_authentication.constants
+package com.koleychik.models.constants
 
 object UserConstants {
 
