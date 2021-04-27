@@ -15,13 +15,13 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
 
     override fun getMessages(
         dialogId: String,
-        startAt: Int,
-        endAt: Int,
+        start: Int,
+        end: Long,
         res: (MessagesResult) -> Unit
     ) {
         store.collection("${DialogConstants.ROOT_PATH}/$dialogId/${MessageConstants.ROOT_PATH}")
-            .startAt(startAt)
-            .endAt(endAt)
+            .startAfter(start)
+            .limit(end)
             .get()
             .addOnSuccessListener { result ->
                 val listMessages = mutableListOf<Message>()
@@ -29,6 +29,8 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
                 res(MessagesResult.Successful(listMessages))
             }
             .addOnFailureListener {
+                if (it.localizedMessage != null) res(MessagesResult.ServerError(it.localizedMessage!!))
+                else res(MessagesResult.ServerError(it.message.toString()))
                 res(MessagesResult.ServerError(it.message.toString()))
             }
     }
@@ -40,7 +42,8 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 
@@ -51,7 +54,8 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 
@@ -62,7 +66,8 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 }

@@ -3,106 +3,82 @@ package com.koleychik.core_authentication.impl
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.kaleichyk.data.CurrentUser
 import com.koleychik.core_authentication.R
 import com.koleychik.core_authentication.api.AccountRepository
-import com.koleychik.core_authentication.result.VerificationResult
-import com.koleychik.models.constants.UserConstants
+import com.koleychik.core_authentication.api.AuthDbDataSource
+import com.koleychik.core_authentication.api.AuthFirebaseDataSource
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.users.User
 import com.koleychik.module_injector.Constants.TAG
 import javax.inject.Inject
 
-internal class AccountRepositoryImpl @Inject constructor() : AccountRepository {
+internal class AccountRepositoryImpl @Inject constructor(
+    private val dbDataSource: AuthDbDataSource,
+    private val authFirebaseDataSource: AuthFirebaseDataSource
+) : AccountRepository {
 
-    private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
-
-    override var user: User? = null
 
     override fun isEmailVerified(): Boolean = auth.currentUser?.isEmailVerified ?: false
 
-    override fun verifyEmail(res: (VerificationResult) -> Unit) {
+    override fun setOnlineStatus(isOnline: Boolean) {
+        CurrentUser.user!!.isOnline = isOnline
+        dbDataSource.isUserOnline(isOnline)
+    }
+
+    override fun sendVerificationEmail(res: (CheckResult) -> Unit) {
         Log.d(TAG, "AccountRepositoryImpl start verifyEmail")
         val fbUser = auth.currentUser
         if (fbUser == null) {
-            res(VerificationResult.DataError(R.string.cannot_find_user))
-        } else {
-            fbUser.sendEmailVerification()
-                .addOnCompleteListener {
-                    if (it.isSuccessful) res(VerificationResult.Waiting)
-                    else res(VerificationResult.ServerError(it.exception?.message.toString()))
-                }
-        }
+            res(CheckResult.DataError(R.string.cannot_find_user))
+        } else authFirebaseDataSource.sendVerificationEmail(res)
     }
 
     override fun updateEmail(email: String, res: (CheckResult) -> Unit) {
         Log.d(TAG, "AccountRepositoryImpl start updateEmail")
-        if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
-        else {
-            db
-                .collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.EMAIL}")
-                .add(email)
-                .addOnSuccessListener {
-                    auth.currentUser!!.updateEmail(email)
-                    user?.email = email
-                    res(CheckResult.Successful)
-                }
-                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
+        if (CurrentUser.user == null) res(CheckResult.DataError(R.string.cannot_find_user))
+        else dbDataSource.updateUserEmail(email) {
+            auth.currentUser!!.updateEmail(email)
+            res(it)
         }
     }
 
     override fun updatePassword(password: String, res: (CheckResult) -> Unit) {
         Log.d(TAG, "AccountRepositoryImpl start updatePassword")
         auth.currentUser!!.updatePassword(password)
+            .addOnSuccessListener {
+                res(CheckResult.Successful)
+            }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
-            }.addOnCompleteListener {
-                if (it.isSuccessful) res(CheckResult.Successful)
-                else res(CheckResult.DataError(R.string.cannot_update_password))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 
     override fun updateName(name: String, res: (CheckResult) -> Unit) {
         Log.d(TAG, "AccountRepositoryImpl start updateName")
-        if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
-        else {
-            db.collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.NAME}")
-                .add(name)
-                .addOnSuccessListener {
-                    user?.name = name
-                    res(CheckResult.Successful)
-                }
-                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
-        }
+        if (CurrentUser.user == null) res(CheckResult.DataError(R.string.cannot_find_user))
+        else dbDataSource.updateName(name, res)
     }
 
     override fun updateIcon(uri: Uri, res: (CheckResult) -> Unit) {
         Log.d(TAG, "AccountRepositoryImpl start updateIcon")
-        if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
-        else {
-            db.collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.ICON}")
-                .add(uri)
-                .addOnSuccessListener {
-                    user?.icon = uri
-                    res(CheckResult.Successful)
-                }
-                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
-        }
+        if (CurrentUser.user == null) res(CheckResult.DataError(R.string.cannot_find_user))
+        else dbDataSource.updateIcon(uri, res)
     }
 
     override fun updateBackground(uri: Uri, res: (CheckResult) -> Unit) {
         Log.d(TAG, "AccountRepositoryImpl start updateBackground")
-        if (user == null) res(CheckResult.DataError(R.string.cannot_find_user))
-        else {
-            db.collection("${UserConstants.ROOT_PATH}/${user!!.id}/${UserConstants.BACKGROUND}")
-                .add(uri)
-                .addOnSuccessListener {
-                    user?.background = uri
-                    res(CheckResult.Successful)
-                }
-                .addOnFailureListener { res(CheckResult.ServerError(it.message.toString())) }
-        }
+        if (CurrentUser.user == null) res(CheckResult.DataError(R.string.cannot_find_user))
+        else dbDataSource.updateBackground(uri, res)
+    }
+
+    override fun subscribeToUserChanges() {
+        dbDataSource.subscribeToUserChanges()
+    }
+
+    override fun unSubscribeToUserChanges() {
+        dbDataSource.unSubscribeToUserChanges()
     }
 
 }

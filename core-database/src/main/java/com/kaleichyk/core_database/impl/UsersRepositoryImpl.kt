@@ -13,8 +13,16 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
 
     private val store = FirebaseFirestore.getInstance()
 
-    override fun getUsers(startAt: Int, endAt: Int, res: (UsersResult) -> Unit) {
+    override fun getUsers(
+        orderBy: String,
+        startAfter: Int,
+        limit: Long,
+        res: (UsersResult) -> Unit
+    ) {
         store.collection(UserConstants.ROOT_PATH)
+            .orderBy(orderBy)
+            .startAfter(startAfter)
+            .limit(limit)
             .get()
             .addOnSuccessListener { result ->
                 val listUsers = mutableListOf<User>()
@@ -22,24 +30,27 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
                 res(UsersResult.Successful(listUsers))
             }
             .addOnFailureListener {
-                res(UsersResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(UsersResult.ServerError(it.localizedMessage!!))
+                else res(UsersResult.ServerError(it.message.toString()))
             }
     }
 
     override fun getUserById(id: String, res: (UserResult) -> Unit) {
-        store.collection("${UserConstants.ROOT_PATH}/$id")
+        store.collection(UserConstants.ROOT_PATH)
             .get()
             .addOnSuccessListener {
                 res(UserResult.Successful(it.toObjects(User::class.java)[0]))
             }
             .addOnFailureListener {
-                res(UserResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(UserResult.ServerError(it.localizedMessage!!))
+                else res(UserResult.ServerError(it.message.toString()))
             }
     }
 
     override fun searchByName(name: String, res: (UsersResult) -> Unit) {
         store.collection(UserConstants.ROOT_PATH)
-            .whereIn(UserConstants.NAME, name.toMutableList())
+            .orderBy(UserConstants.NAME)
+            .startAt(name).endAt(name + '\uf8ff')
             .get()
             .addOnSuccessListener { result ->
                 val listUsers = mutableListOf<User>()
@@ -47,7 +58,8 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
                 res(UsersResult.Successful(listUsers))
             }
             .addOnFailureListener {
-                res(UsersResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(UsersResult.ServerError(it.localizedMessage!!))
+                else res(UsersResult.ServerError(it.message.toString()))
             }
     }
 
@@ -58,7 +70,8 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 }

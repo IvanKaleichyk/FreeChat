@@ -9,14 +9,18 @@ public class User {
     private String id, name, email;
     private List<Long> listDialogsIds;
     private Uri icon, background;
+    private boolean isOnline = false;
+    private long created;
 
-    public User(String id, String name, String email, List<Long> listDialogsIds, Uri icon, Uri background) {
+    public User(String id, String name, String email, List<Long> listDialogsIds, Uri icon, Uri background, boolean isOnline, long created) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.listDialogsIds = listDialogsIds;
         this.icon = icon;
         this.background = background;
+        this.isOnline = isOnline;
+        this.created = created;
     }
 
     public User(String id, String name, String email, List<Long> listDialogsIds) {
@@ -79,5 +83,21 @@ public class User {
 
     public void setListDialogsIds(List<Long> listDialogsIds) {
         this.listDialogsIds = listDialogsIds;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
     }
 }

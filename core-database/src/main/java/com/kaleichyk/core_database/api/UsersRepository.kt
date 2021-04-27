@@ -6,7 +6,7 @@ import com.koleychik.models.results.user.UsersResult
 
 interface UsersRepository {
 
-    fun getUsers(startAt: Int, endAt: Int, res: (UsersResult) -> Unit)
+    fun getUsers(orderBy: String, startAfter: Int, limit: Long, res: (UsersResult) -> Unit)
     fun getUserById(id: String, res: (UserResult) -> Unit)
     fun searchByName(name: String, res: (UsersResult) -> Unit)
     fun deleteUser(id: String, res: (CheckResult) -> Unit)

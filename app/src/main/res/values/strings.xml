@@ -1,3 +1,5 @@
 <resources>
     <string name="cannot_without_permissions">The application cannot work without this permission</string>
+    <string name="verification_email">Verification Email</string>
+    <string name="please_verification_email">Please verification email!!!</string>
 </resources>

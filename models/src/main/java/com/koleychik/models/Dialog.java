@@ -1,16 +1,18 @@
 package com.koleychik.models;
 
+import com.koleychik.models.users.User;
+
 public class Dialog {
 
     private long id;
-    private String nameUser1, nameUser2;
+    private User user1, user2;
     private Message lastMessage;
     private boolean isNewMessages, isFavorite;
 
-    public Dialog(long id, String nameUser1, String nameUser2, Message lastMessage, boolean isNewMessages, boolean isFavorite) {
+    public Dialog(long id, User user1, User user2, Message lastMessage, boolean isNewMessages, boolean isFavorite) {
         this.id = id;
-        this.nameUser1 = nameUser1;
-        this.nameUser2 = nameUser2;
+        this.user1 = user1;
+        this.user2 = user2;
         this.lastMessage = lastMessage;
         this.isNewMessages = isNewMessages;
         this.isFavorite = isFavorite;
@@ -23,20 +25,20 @@ public class Dialog {
         return id;
     }
 
-    public String getNameUser1() {
-        return nameUser1;
+    public User getUser1() {
+        return user1;
     }
 
-    public void setNameUser1(String nameUser1) {
-        this.nameUser1 = nameUser1;
+    public void setUser1(User user1) {
+        this.user1 = user1;
     }
 
-    public String getNameUser2() {
-        return nameUser2;
+    public User getUser2() {
+        return user2;
     }
 
-    public void setNameUser2(String nameUser2) {
-        this.nameUser2 = nameUser2;
+    public void setNameUser2(User user2) {
+        this.user2 = user2;
     }
 
     public Message getLastMessage() {

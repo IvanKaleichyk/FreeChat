@@ -8,14 +8,15 @@ import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.DialogsResult
 import javax.inject.Inject
 
-internal class DialogsRepositoryImpl @Inject constructor(): DialogsRepository {
+internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
 
     private val store = FirebaseFirestore.getInstance()
 
-    override fun getDialogs(startAt: Int, endAt: Int?, res: (DialogsResult) -> Unit) {
+    override fun getDialogs(start: Int, end: Long, res: (DialogsResult) -> Unit) {
         store.collection(DialogConstants.ROOT_PATH)
-            .startAt(startAt)
-            .endAt(endAt)
+            .orderBy(DialogConstants.IS_FAVORITE)
+            .startAfter(start)
+            .limit(end)
             .get()
             .addOnSuccessListener { result ->
                 val listDialogs = mutableListOf<Dialog>()
@@ -23,7 +24,8 @@ internal class DialogsRepositoryImpl @Inject constructor(): DialogsRepository {
                 res(DialogsResult.Successful(listDialogs))
             }
             .addOnFailureListener {
-                res(DialogsResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(DialogsResult.ServerError(it.localizedMessage!!))
+                else res(DialogsResult.ServerError(it.message.toString()))
             }
     }
 
@@ -37,7 +39,8 @@ internal class DialogsRepositoryImpl @Inject constructor(): DialogsRepository {
                 res(DialogsResult.Successful(listDialogs))
             }
             .addOnFailureListener {
-                res(DialogsResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(DialogsResult.ServerError(it.localizedMessage!!))
+                else res(DialogsResult.ServerError(it.message.toString()))
             }
     }
 
@@ -48,7 +51,8 @@ internal class DialogsRepositoryImpl @Inject constructor(): DialogsRepository {
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 
@@ -59,7 +63,8 @@ internal class DialogsRepositoryImpl @Inject constructor(): DialogsRepository {
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
-                res(CheckResult.ServerError(it.message.toString()))
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
             }
     }
 }

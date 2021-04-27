@@ -6,7 +6,7 @@ import com.koleychik.models.results.MessagesResult
 
 interface MessagesRepository {
 
-    fun getMessages(dialogId: String, startAt: Int, endAt: Int, res: (MessagesResult) -> Unit)
+    fun getMessages(dialogId: String, start: Int, end: Long, res: (MessagesResult) -> Unit)
     fun addMessage(message: Message, res: (CheckResult) -> Unit)
     fun delete(message: Message, res: (CheckResult) -> Unit)
     fun editMessage(message: Message, res: (CheckResult) -> Unit)

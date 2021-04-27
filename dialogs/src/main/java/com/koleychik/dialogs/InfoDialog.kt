@@ -5,7 +5,7 @@ import android.content.Context
 import android.widget.Button
 import android.widget.TextView
 
-class InfoDialog(context: Context, title: Int, text: Int, onBtnClick: (Dialog) -> Unit) :
+class InfoDialog (context: Context, title: Int, text: Int, onBtnClick: (Dialog) -> Unit) :
     Dialog(context) {
 
     private val btn by lazy { findViewById<Button>(R.id.btn) }

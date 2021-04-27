@@ -3,76 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/allDialogsFragment">
 
-    <fragment
-        android:id="@+id/startFragment"
-        android:name="com.koleychik.feature_start.ui.screens.StartFragment"
-        android:label="StartFragment"
-        tools:layout="@layout/fragment_start">
-        <action
-            android:id="@+id/action_startFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_allDialogsFragment"
-            app:destination="@id/allDialogsFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_verifyEmailFragment"
-            app:destination="@id/verifyEmailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/verifyEmailFragment"
-        android:name="com.koleychik.feature_start.ui.screens.VerifyEmailFragment"
-        android:label="VerifyEmailFragment"
-        tools:layout="@layout/fragment_verify_email">
-        <action
-            android:id="@+id/action_verifyEmailFragment_to_allDialogsFragment"
-            app:destination="@id/allDialogsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signInFragment"
-        android:name="com.koleychik.feature_sign.ui.screens.SignInFragment"
-        android:label="SignInFragment"
-        tools:layout="@layout/fragment_sign_in">
-        <action
-            android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-        <action
-            android:id="@+id/action_signInFragment_to_allDialogsFragment"
-            app:destination="@id/allDialogsFragment" />
-        <action
-            android:id="@+id/action_signInFragment_to_specifyEmailFragment"
-            app:destination="@id/specifyEmailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.koleychik.feature_sign.ui.screens.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
-        <action
-            android:id="@+id/action_signUpFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_allDialogsFragment"
-            app:destination="@id/allDialogsFragment" />
-    </fragment>
     <fragment
         android:id="@+id/allDialogsFragment"
-        android:name="com.koleychik.feature_all_dialogs.AllDialogsFragment"
+        android:name="com.koleychik.feature_all_dialogs.ui.AllDialogsFragment"
         android:label="AllDialogsFragment"
-        tools:layout="@layout/fragment_all_dialogs"/>
-    <fragment
-        android:id="@+id/specifyEmailFragment"
-        android:name="com.koleychik.feature_password_utils.ui.SpecifyEmailFragment"
-        android:label="SpecifyEmailFragment"
-        tools:layout="@layout/fragment_specify_email">
+        tools:layout="@layout/fragment_all_dialogs">
         <action
-            android:id="@+id/action_specifyEmailFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            android:id="@+id/action_allDialogsFragment_to_searchingFragment"
+            app:destination="@id/searchingFragment" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/searchingFragment"
+        android:name="com.kaleichyk.feature_searching.ui.SearchingFragment"
+        android:label="SearchingFragment"
+        tools:layout="@layout/fragment_searching"/>
 </navigation>

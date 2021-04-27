@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.koleychik.core_authentication.result.VerificationResult
 import com.koleychik.feature_start.StartFeatureNavigation
 import com.koleychik.feature_start.databinding.FragmentStartBinding
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
@@ -46,18 +45,18 @@ class StartFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.verificationResult.observe(viewLifecycleOwner) {
-            when (it) {
-                null -> {
-                }
-                is VerificationResult.Successful -> navigation.fromStartFragmentToMainScreen()
-                else -> navigation.fromStartFragmentToVerifyEmailFragment()
-            }
-        }
+//        viewModel.verificationResult.observe(viewLifecycleOwner) {
+//            when (it) {
+//                null -> {
+//                }
+//                is VerificationResult.Successful -> navigation.fromStartFragmentToMainScreen()
+//                else -> navigation.fromStartFragmentToVerifyEmailFragment()
+//            }
+//        }
         viewModel.userResult.observe(viewLifecycleOwner, {
             when (it) {
                 null -> viewModel.checkUser()
-                is UserResult.Successful -> viewModel.verifyEmail()
+                is UserResult.Successful -> navigation.fromStartFragmentToMainScreen()
                 else -> navigation.fromStartFragmentToAuthorization()
             }
         })

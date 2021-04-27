@@ -20,7 +20,12 @@
         <item name="android:shadowDy">3</item>
     </style>
 
-    <style name="sign_text" parent="mainTextStyle">
+    <style name="info_text" parent="mainTextView">
+        <item name="fontFamily">@font/rubik_italic</item>
+        <item name="android:textColor">@color/colorMain</item>
+    </style>
+
+    <style name="sign_text" parent="mainTextView">
         <item name="android:fontFamily">@font/rubik_medium</item>
         <item name="android:textColor">@color/colorMain</item>
     </style>
@@ -70,6 +75,23 @@
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
         <item name="android:src">@drawable/ic_google_authentication</item>
+    </style>
+
+    <style name="card_title" parent="mainTextView">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/rubik_medium</item>
+    </style>
+
+    <style name="card_text" parent="mainTextView">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/smallTextSize</item>
+    </style>
+
+    <style name="edt_searching_text_style" parent="mainTextStyle">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
 </resources>

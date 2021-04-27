@@ -1,10 +1,16 @@
 package com.koleychik.freechat.di.modules
 
 import android.content.Context
+import com.kaleichyk.core_database.api.DialogsRepository
+import com.kaleichyk.core_database.api.UsersRepository
+import com.kaleichyk.core_database.di.DatabaseCoreComponent
+import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
+import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.AuthRepository
-import com.koleychik.core_authentication.api.DataStoreRepository
 import com.koleychik.core_authentication.di.AuthenticationCoreComponent
+import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
+import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureDependencies
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.feature_loading_api.LoadingFeatureApi
 import com.koleychik.feature_password_utils.SpecifyEmailNavigationApi
@@ -25,7 +31,36 @@ class DependenciesModule {
 
     @Singleton
     @Provides
-    fun providePasswordUtilsFeatureDependencies(context: Context, loadingFeatureApi: LoadingFeatureApi, navigator: Navigator) =
+    fun provideSearchingFeatureDependencies(navigator: Navigator) =
+        object : SearchingFeatureDependencies {
+            override fun usersRepository(): UsersRepository =
+                DatabaseCoreComponent.get().usersRepository()
+
+            override fun navigation(): SearchingFeatureNavigationApi = navigator
+        }
+
+    @Singleton
+    @Provides
+    fun provideAllDialogsFeatureDependencies(
+        navigator: Navigator,
+        loadingFeatureApi: LoadingFeatureApi
+    ) = object : AllDialogsFeatureDependencies {
+        override fun navigationApi(): AllDialogFeatureNavigationApi = navigator
+
+        override fun repository(): DialogsRepository =
+            DatabaseCoreComponent.get().dialogsRepository()
+
+        override fun loadingApi(): LoadingApi = loadingFeatureApi.loadingApi()
+
+    }
+
+    @Singleton
+    @Provides
+    fun providePasswordUtilsFeatureDependencies(
+        context: Context,
+        loadingFeatureApi: LoadingFeatureApi,
+        navigator: Navigator
+    ) =
         object : PasswordUtilsFeatureDependencies {
             override fun loadingApi(): LoadingApi = loadingFeatureApi.loadingApi()
 
@@ -45,7 +80,6 @@ class DependenciesModule {
 
             override fun accountRepository(): AccountRepository = component.accountRepository()
 
-            override fun dataRepository(): DataStoreRepository = component.dataStoreRepository()
 
             override fun navigation(): StartFeatureNavigation = navigator
         }
@@ -61,7 +95,7 @@ class DependenciesModule {
             override fun authRepository(): AuthRepository =
                 AuthenticationCoreComponent.get(context).authRepository()
 
-            override fun navigationSignUp(): SignUpNavigationApi  = navigator
+            override fun navigationSignUp(): SignUpNavigationApi = navigator
 
             override fun navigationSignIn(): SignInNavigationApi = navigator
 

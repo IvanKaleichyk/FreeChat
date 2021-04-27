@@ -7,5 +7,7 @@ object UserConstants {
     const val NAME = "name"
     const val ICON = "icon"
     const val BACKGROUND = "background"
+    const val IS_ONLINE = "online"
+    const val CREATED = "created"
 
 }

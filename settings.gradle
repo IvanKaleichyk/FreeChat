@@ -1,3 +1,5 @@
+include ':feature-searching'
+include ':data'
 include ':core-database'
 include ':core-notifications'
 include ':feature-password-utils'

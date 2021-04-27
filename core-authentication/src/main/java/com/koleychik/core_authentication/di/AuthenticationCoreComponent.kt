@@ -11,10 +11,12 @@ interface AuthenticationCoreComponent : AuthenticationCoreApi {
     companion object {
         @Volatile
         private var component: AuthenticationCoreComponent? = null
+
         fun get(context: Context): AuthenticationCoreApi {
             if (component == null) synchronized(AuthenticationCoreComponent::class.java) {
                 if (component == null) component =
-                    DaggerAuthenticationCoreComponent.builder().contextModule(ContextModule(context))
+                    DaggerAuthenticationCoreComponent.builder()
+                        .contextModule(ContextModule(context))
                         .build()
             }
             return component!!

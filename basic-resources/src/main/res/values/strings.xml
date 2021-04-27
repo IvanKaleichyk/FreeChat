@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="waiting">Waiting</string>
+    <string name="searching">Searching</string>
+    <string name="favorites">Favorites</string>
+    <string name="user_icon">User icon</string>
+    <string name="delete">Delete</string>
+    <string name="clear">Clear</string>
 </resources>

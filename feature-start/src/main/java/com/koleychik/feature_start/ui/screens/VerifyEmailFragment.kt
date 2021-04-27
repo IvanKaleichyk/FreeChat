@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.koleychik.basic_resource.showToast
-import com.koleychik.core_authentication.result.VerificationResult
 import com.koleychik.feature_start.R
 import com.koleychik.feature_start.StartFeatureNavigation
-import com.koleychik.feature_start.StartRepository
+import com.koleychik.feature_start.StartUseCase
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
@@ -18,7 +16,7 @@ import javax.inject.Inject
 class VerifyEmailFragment : Fragment() {
 
     @Inject
-    internal lateinit var repository: StartRepository
+    internal lateinit var useCase: StartUseCase
 
     @Inject
     internal lateinit var navigation: StartFeatureNavigation
@@ -31,20 +29,21 @@ class VerifyEmailFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_verify_email, container, false)
         StartFeatureComponentHolder.getComponent().inject(this)
         root.findViewById<Button>(R.id.btn).setOnClickListener {
-            check()
+            navigation.fromVerifyEmailFragmentToMainScreen()
+//            check()
         }
         return root
     }
 
     private fun check() {
-        repository.checkVerifiedEmail {
-            when (it) {
-                is VerificationResult.Successful -> navigation.fromVerifyEmailFragmentToMainScreen()
-                is VerificationResult.DataError -> requireContext().showToast(it.message)
-                is VerificationResult.ServerError -> requireContext().showToast(it.message)
-                is VerificationResult.Waiting -> requireContext().showToast(R.string.waiting)
-            }
-        }
+//        useCase.checkVerifiedEmail {
+//            when (it) {
+//                is VerificationResult.Successful -> navigation.fromVerifyEmailFragmentToMainScreen()
+//                is VerificationResult.DataError -> requireContext().showToast(it.message)
+//                is VerificationResult.ServerError -> requireContext().showToast(it.message)
+//                is VerificationResult.Waiting -> requireContext().showToast(R.string.waiting)
+//            }
+//        }
     }
 
     override fun onResume() {

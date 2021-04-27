@@ -1,5 +1,6 @@
-object Versions {
+internal object Versions {
 
+    const val swipeToRefresh = "1.1.0"
 
     // network
     const val retrofit = "2.9.0"
@@ -57,6 +58,8 @@ object Versions {
 
 @SuppressWarnings("UnusedAssignment")
 object Dependencies {
+    const val swipeToRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeToRefresh}"
+
     // network
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val retrofitGson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"

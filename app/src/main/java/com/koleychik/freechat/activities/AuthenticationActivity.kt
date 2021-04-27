@@ -28,6 +28,7 @@ class AuthenticationActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         setTheme(R.style.Theme_FreeChat)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
+
         App.component.inject(this)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         checkPermission()
@@ -69,11 +70,6 @@ class AuthenticationActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         Toast.makeText(applicationContext, R.string.cannot_without_permissions, Toast.LENGTH_LONG)
             .show()
         finish()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        navigator.controller = null
     }
 
     override fun onBackPressed() {

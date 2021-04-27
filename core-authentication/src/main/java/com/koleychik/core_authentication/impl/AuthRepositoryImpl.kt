@@ -3,10 +3,10 @@ package com.koleychik.core_authentication.impl
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.kaleichyk.data.CurrentUser
 import com.koleychik.core_authentication.R
-import com.koleychik.core_authentication.api.AccountRepository
-import com.koleychik.core_authentication.api.AuthDbRepository
-import com.koleychik.core_authentication.api.AuthFirebaseRepository
+import com.koleychik.core_authentication.api.AuthDbDataSource
+import com.koleychik.core_authentication.api.AuthFirebaseDataSource
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.extencions.createUserFirstTime
 import com.koleychik.core_authentication.extencions.loginUsingGoogle
@@ -19,9 +19,8 @@ import com.koleychik.module_injector.Constants
 import javax.inject.Inject
 
 internal class AuthRepositoryImpl @Inject constructor(
-    private val accountRepository: AccountRepository,
-    private val authFirebaseRepository: AuthFirebaseRepository,
-    private val authDbRepository: AuthDbRepository
+    private val authFirebaseDataSource: AuthFirebaseDataSource,
+    private val authDbDataSource: AuthDbDataSource
 ) : AuthRepository {
 
     private val auth = FirebaseAuth.getInstance()
@@ -33,7 +32,7 @@ internal class AuthRepositoryImpl @Inject constructor(
         res: (UserResult) -> Unit
     ) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start createAccount")
-        authFirebaseRepository.createFirebaseUser(email, password) {
+        authFirebaseDataSource.createFirebaseUser(email, password) {
             when (it) {
                 is CheckResult.Successful -> addUser(name, email, res)
                 is CheckResult.ServerError -> res(UserResult.ServerError(it.message))
@@ -44,7 +43,7 @@ internal class AuthRepositoryImpl @Inject constructor(
 
     override fun login(email: String, password: String, res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start login")
-        authFirebaseRepository.login(email, password) {
+        authFirebaseDataSource.login(email, password) {
             when (it) {
                 is CheckResult.Successful -> getUser(res)
                 is CheckResult.ServerError -> res(UserResult.ServerError(it.message))
@@ -66,7 +65,7 @@ internal class AuthRepositoryImpl @Inject constructor(
 
     override fun checkUser(res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start checkUser")
-        authFirebaseRepository.checkUser {
+        authFirebaseDataSource.checkUser {
             when (it) {
                 is CheckResult.Successful -> getUser(res)
                 is CheckResult.DataError -> res(UserResult.DataError(it.message))
@@ -76,14 +75,14 @@ internal class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun resetPassword(email: String, res: (CheckResult) -> Unit) {
-        authFirebaseRepository.resetPassword(email, res)
+        authFirebaseDataSource.resetPassword(email, res)
     }
 
     private fun getUser(res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start getUser")
         val uid = auth.currentUser?.uid ?: return
-        authDbRepository.getUserByUid(uid) {
-            if (it is UserResult.Successful) accountRepository.user = it.user
+        authDbDataSource.getUserByUid(uid) {
+            if (it is UserResult.Successful) CurrentUser.user = it.user
             res(it)
         }
     }
@@ -91,10 +90,10 @@ internal class AuthRepositoryImpl @Inject constructor(
     private fun addUser(name: String, email: String, res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start addUser")
         val user = getUser(name, email)
-        accountRepository.user = user
+        CurrentUser.user = user
         if (user == null) res(UserResult.DataError(R.string.cannot_create_user))
         else {
-            authDbRepository.addUser(user) { userResult ->
+            authDbDataSource.addUser(user) { userResult ->
                 res(userResult)
             }
         }
@@ -111,7 +110,7 @@ internal class AuthRepositoryImpl @Inject constructor(
         res: (UserResult) -> Unit
     ) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start loginOrSingUsingGoogleAccount")
-        authFirebaseRepository.loginFirebaseUserByCredential(value.credential) {
+        authFirebaseDataSource.loginFirebaseUserByCredential(value.credential) {
             val uid = auth.currentUser?.uid
             if (uid == null) res(UserResult.DataError(R.string.cannot_get_information_about_user))
             else {
@@ -126,13 +125,13 @@ internal class AuthRepositoryImpl @Inject constructor(
 
     private fun getOrPutUser(user: User, res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start getOrPutUser")
-        authDbRepository.getUserByUid(user.id) { getUserResult ->
+        authDbDataSource.getUserByUid(user.id) { getUserResult ->
             if (getUserResult is UserResult.Successful) {
-                accountRepository.user = user
+                CurrentUser.user = user
                 res(getUserResult)
             } else {
-                authDbRepository.addUser(user) { addUserResult ->
-                    accountRepository.user = user
+                authDbDataSource.addUser(user) { addUserResult ->
+                    CurrentUser.user = user
                     res(addUserResult)
                 }
             }

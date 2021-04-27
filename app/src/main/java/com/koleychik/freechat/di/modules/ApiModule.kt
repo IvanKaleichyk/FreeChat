@@ -1,5 +1,12 @@
 package com.koleychik.freechat.di.modules
 
+import com.kaleichyk.feature_searching.di.SearchingFeatureApi
+import com.kaleichyk.feature_searching.di.SearchingFeatureComponentHolder
+import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
+import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
+import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureComponentHolder
+import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureDependencies
+import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureDestroyer
 import com.koleychik.feature_loading_api.LoadingFeatureApi
 import com.koleychik.feature_loading_impl.di.LoadingFeatureComponentHolder
 import com.koleychik.feature_password_utils.di.PasswordUtilsFeatureApi
@@ -20,6 +27,24 @@ import dagger.Provides
 
 @Module
 class ApiModule {
+
+    @Provides
+    fun provideSearchingFeatureApi(
+        dependencies: SearchingFeatureDependencies,
+        destroyer: BaseDestroyer
+    ): SearchingFeatureApi {
+        SearchingFeatureComponentHolder.init(dependencies, destroyer)
+        return SearchingFeatureComponentHolder.get()
+    }
+
+    @Provides
+    fun provideAllDialogsFeatureApi(
+        dependencies: AllDialogsFeatureDependencies,
+        destroyer: AllDialogsFeatureDestroyer
+    ): AllDialogsFeatureApi {
+        AllDialogsFeatureComponentHolder.init(dependencies, destroyer)
+        return AllDialogsFeatureComponentHolder.get()
+    }
 
     @Provides
     fun providePasswordUtilsFeatureApi(

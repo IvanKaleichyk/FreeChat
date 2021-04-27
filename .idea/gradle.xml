@@ -20,11 +20,13 @@
             <option value="$PROJECT_DIR$/core-database" />
             <option value="$PROJECT_DIR$/core-files" />
             <option value="$PROJECT_DIR$/core-notifications" />
+            <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/dialogs" />
             <option value="$PROJECT_DIR$/feature-all-dialogs" />
             <option value="$PROJECT_DIR$/feature-loading-api" />
             <option value="$PROJECT_DIR$/feature-loading-impl" />
             <option value="$PROJECT_DIR$/feature-password-utils" />
+            <option value="$PROJECT_DIR$/feature-searching" />
             <option value="$PROJECT_DIR$/feature-sign" />
             <option value="$PROJECT_DIR$/feature-start" />
             <option value="$PROJECT_DIR$/models" />
