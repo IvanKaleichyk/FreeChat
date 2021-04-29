@@ -17,6 +17,8 @@ dependencies {
     implementation project(':feature-loading-impl')
     implementation project(':feature-searching')
     implementation project(':feature-sign')
+    implementation project(':feature-select-image-api')
+    implementation project(':feature-select-image-impl')
     implementation project(':feature-all-dialogs')
     implementation project(':feature-password-utils')
 

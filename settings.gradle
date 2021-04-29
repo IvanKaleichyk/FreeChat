@@ -1,3 +1,7 @@
+include ':feature-select-image-impl'
+include ':feature-select-image-api'
+include ':core-cloud-storage'
+include ':feature-user-info'
 include ':feature-searching'
 include ':data'
 include ':core-database'

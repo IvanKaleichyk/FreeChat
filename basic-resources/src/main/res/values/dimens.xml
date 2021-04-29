@@ -33,5 +33,6 @@
     <dimen name="progress_bar">40dp</dimen>
 
     <dimen name="guide_line">20dp</dimen>
+    <dimen name="margin_between_same_elements">10dp</dimen>
 
 </resources>

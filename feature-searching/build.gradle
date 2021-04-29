@@ -8,7 +8,6 @@ dependencies {
     implementation project(":module-injector")
     implementation project(":models")
     implementation project(':core-database')
-    implementation project(":feature-loading-api")
     implementation project(":data")
 
     implementation  Dependencies.kotlin_lib

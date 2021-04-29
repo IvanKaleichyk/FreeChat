@@ -11,6 +11,7 @@ import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.users.User
+import com.koleychik.models.users.UserRoot
 import com.koleychik.module_injector.Constants
 import javax.inject.Inject
 
@@ -128,7 +129,7 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
             }
             showLog("subscribeToUserChanges successful")
 
-            if (value != null) CurrentUser.user = value.toObject(User::class.java)
+            if (value != null) CurrentUser.user = value.toObject(UserRoot::class.java)
             else showLog("subscribeToUserChanges value == null")
         }
     }

@@ -73,6 +73,10 @@ internal class AccountRepositoryImpl @Inject constructor(
         else dbDataSource.updateBackground(uri, res)
     }
 
+    override fun signOut() {
+        auth.signOut()
+    }
+
     override fun subscribeToUserChanges() {
         dbDataSource.subscribeToUserChanges()
     }

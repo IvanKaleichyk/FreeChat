@@ -13,6 +13,7 @@ interface AccountRepository {
     fun updateName(name: String, res: (CheckResult) -> Unit)
     fun updateIcon(uri: Uri, res: (CheckResult) -> Unit)
     fun updateBackground(uri: Uri, res: (CheckResult) -> Unit)
+    fun signOut()
 
     fun subscribeToUserChanges()
     fun unSubscribeToUserChanges()

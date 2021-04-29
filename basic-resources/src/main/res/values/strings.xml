@@ -6,4 +6,11 @@
     <string name="user_icon">User icon</string>
     <string name="delete">Delete</string>
     <string name="clear">Clear</string>
+    <string name="set_email">Set Email</string>
+    <string name="set_name">Set Name</string>
+    <string name="set_password">Set Password</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="image">Image</string>
+    <string name="upload">Upload</string>
 </resources>

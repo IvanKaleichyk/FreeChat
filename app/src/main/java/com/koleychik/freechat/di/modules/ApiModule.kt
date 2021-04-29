@@ -3,6 +3,8 @@ package com.koleychik.freechat.di.modules
 import com.kaleichyk.feature_searching.di.SearchingFeatureApi
 import com.kaleichyk.feature_searching.di.SearchingFeatureComponentHolder
 import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
+import com.kaleichyk.feature_select_image_impl.di.SelectImageFeatureApi
+import com.kaleichyk.feature_select_image_impl.di.SelectImageFeatureComponentHolder
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureComponentHolder
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureDependencies
@@ -80,6 +82,15 @@ class ApiModule {
     ): LoadingFeatureApi {
         LoadingFeatureComponentHolder.init(dependencies, destroyer)
         return LoadingFeatureComponentHolder.get()
+    }
+
+    @Provides
+    fun provideSelectImageFeatureApi(
+        dependencies: BaseDependencies,
+        destroyer: BaseDestroyer
+    ): SelectImageFeatureApi {
+        SelectImageFeatureComponentHolder.init(dependencies, destroyer)
+        return SelectImageFeatureComponentHolder.get()
     }
 
 }

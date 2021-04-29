@@ -9,5 +9,6 @@ object UserConstants {
     const val BACKGROUND = "background"
     const val IS_ONLINE = "online"
     const val CREATED = "created"
+    const val LIST_DIALOGS_IDS = "listDialogsId"
 
 }

@@ -1,9 +1,9 @@
 package com.kaleichyk.data
 
-import com.koleychik.models.users.User
+import com.koleychik.models.users.UserRoot
 
 object CurrentUser {
 
-    var user: User? = null
+    var user: UserRoot? = null
 
 }

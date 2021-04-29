@@ -67,7 +67,7 @@ internal class AllDialogsAdapter @Inject constructor(
         fun bind(dialog: Dialog) {
             val interlocutor = getInterlocutor(dialog)
             with(binding) {
-                loadIcon(imageView, interlocutor.icon)
+                interlocutor.icon?.let { loadIcon(imageView, it) }
                 title.text = interlocutor.name
                 message.text = dialog.lastMessage.text
                 if (!dialog.lastMessage.isRead) card.setBackgroundResource(R.drawable.card_background_un_read_message)

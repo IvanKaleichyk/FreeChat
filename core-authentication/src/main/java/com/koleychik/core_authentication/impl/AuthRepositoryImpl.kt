@@ -15,6 +15,7 @@ import com.koleychik.core_authentication.result.GoogleSignInResult
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.users.User
+import com.koleychik.models.users.UserRoot
 import com.koleychik.module_injector.Constants
 import javax.inject.Inject
 
@@ -82,7 +83,7 @@ internal class AuthRepositoryImpl @Inject constructor(
         Log.d(Constants.TAG, "AuthRepositoryImpl start getUser")
         val uid = auth.currentUser?.uid ?: return
         authDbDataSource.getUserByUid(uid) {
-            if (it is UserResult.Successful) CurrentUser.user = it.user
+            if (it is UserResult.Successful) CurrentUser.user = it.user as UserRoot
             res(it)
         }
     }
@@ -90,9 +91,10 @@ internal class AuthRepositoryImpl @Inject constructor(
     private fun addUser(name: String, email: String, res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start addUser")
         val user = getUser(name, email)
-        CurrentUser.user = user
+
         if (user == null) res(UserResult.DataError(R.string.cannot_create_user))
         else {
+            CurrentUser.user = user as UserRoot
             authDbDataSource.addUser(user) { userResult ->
                 res(userResult)
             }
@@ -127,11 +129,11 @@ internal class AuthRepositoryImpl @Inject constructor(
         Log.d(Constants.TAG, "AuthRepositoryImpl start getOrPutUser")
         authDbDataSource.getUserByUid(user.id) { getUserResult ->
             if (getUserResult is UserResult.Successful) {
-                CurrentUser.user = user
+                CurrentUser.user = user as UserRoot
                 res(getUserResult)
             } else {
                 authDbDataSource.addUser(user) { addUserResult ->
-                    CurrentUser.user = user
+                    CurrentUser.user = user as UserRoot
                     res(addUserResult)
                 }
             }

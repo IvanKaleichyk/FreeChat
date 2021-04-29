@@ -1,0 +1,11 @@
+plugins {
+    id 'android-library-convention'
+}
+
+dependencies {
+    implementation project(":models")
+
+    implementation Dependencies.kotlin_lib
+    implementation Dependencies.coreKtx
+    implementation Dependencies.appCompat
+}

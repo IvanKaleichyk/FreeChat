@@ -23,7 +23,6 @@ dependencies {
     // Tests
     testImplementation Dependencies.jUnitCore
     androidTestImplementation Dependencies.jUnitTest
-    androidTestImplementation Dependencies.espressoCore
     testImplementation Dependencies.assertJ
 }
 

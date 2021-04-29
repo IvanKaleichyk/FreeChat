@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         alertDialog.apply {
             setTitle(R.string.please_verification_email)
-            setPositiveButton(R.string.ok) { dialogInterface, _ -> dialogInterface.cancel() }
+            setPositiveButton(R.string.ok) { dialogInterface, _ -> dialogInterface.dismiss() }
         }
         alertDialog.create()
     }

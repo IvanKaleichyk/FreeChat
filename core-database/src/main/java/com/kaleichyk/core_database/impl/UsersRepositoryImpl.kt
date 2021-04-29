@@ -1,6 +1,7 @@
 package com.kaleichyk.core_database.impl
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.kaleichyk.core_database.api.UsersRepository
 import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.CheckResult
@@ -37,9 +38,18 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
 
     override fun getUserById(id: String, res: (UserResult) -> Unit) {
         store.collection(UserConstants.ROOT_PATH)
+            .document(id)
             .get()
             .addOnSuccessListener {
-                res(UserResult.Successful(it.toObjects(User::class.java)[0]))
+                val user: User? = try {
+                    it.toObject(User::class.java)
+                } catch (e: NullPointerException) {
+                    null
+                }
+                if (user != null) res(UserResult.Successful(user))
+                else {
+                    res(UserResult.UserNotExists)
+                }
             }
             .addOnFailureListener {
                 if (it.localizedMessage != null) res(UserResult.ServerError(it.localizedMessage!!))
@@ -68,6 +78,35 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
             .document(id).delete()
             .addOnSuccessListener {
                 res(CheckResult.Successful)
+            }
+            .addOnFailureListener {
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
+            }
+    }
+
+    override fun bindDialogIdToUser(userId: String, dialogId: Long, res: (CheckResult) -> Unit) {
+        val document = store.collection(UserConstants.ROOT_PATH).document(userId)
+            .collection(userId).document(UserConstants.LIST_DIALOGS_IDS)
+
+        document.get()
+            .addOnSuccessListener { documentSnapshot ->
+                var list: MutableList<Long>? = try {
+                    documentSnapshot.toObject() as MutableList<Long>?
+                } catch (e: java.lang.NullPointerException) {
+                    null
+                }
+                if (list == null) list = mutableListOf()
+                list.add(dialogId)
+
+                document.set(list)
+                    .addOnSuccessListener {
+                        res(CheckResult.Successful)
+                    }
+                    .addOnFailureListener {
+                        if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                        else res(CheckResult.ServerError(it.message.toString()))
+                    }
             }
             .addOnFailureListener {
                 if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))

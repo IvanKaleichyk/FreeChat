@@ -1,6 +1,5 @@
 plugins {
     id 'android-feature'
-    id 'kotlin-android'
 }
 
 dependencies {
@@ -25,7 +24,6 @@ dependencies {
 
     // lifecycle
     implementation Dependencies.lifecycleExtension
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     kapt Dependencies.lifecycleCommon
 
     // Dagger2

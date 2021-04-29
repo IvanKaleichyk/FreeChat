@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.kaleichyk.data.NavigationConstants.USER_ID
+import com.kaleichyk.data.NavigationConstants.USER
 import com.kaleichyk.feature_searching.R
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.databinding.SearchingItemRvBinding
@@ -44,13 +44,13 @@ internal class SearchingAdapter @Inject constructor(
             with(binding) {
                 model.icon?.let { uri -> loadIcon(imageView, uri) }
                 title.text = model.name
-                card.setOnClickListener { goToUserInfo(model.id) }
+                card.setOnClickListener { goToUserInfo(model) }
             }
         }
 
-        private fun goToUserInfo(userId: String) {
+        private fun goToUserInfo(user: User) {
             navigationApi.fromSearchingFeatureToUserInfoFeature(Bundle().apply {
-                putString(USER_ID, userId)
+                putParcelable(USER, user)
             })
         }
 
@@ -59,6 +59,5 @@ internal class SearchingAdapter @Inject constructor(
                 placeholder(R.drawable.account_icon_48)
             }
         }
-
     }
 }

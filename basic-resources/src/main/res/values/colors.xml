@@ -9,4 +9,8 @@
     <color name="colorMain50">#800072FF</color>
 
     <color name="colorShadow">#7F000000</color>
+
+    <color name="colorGrayDark">#4E4343</color>
+    <color name="colorGrayLight">#FCF8F8</color>
+    <color name="colorOfLine">#C1B9B9</color>
 </resources>

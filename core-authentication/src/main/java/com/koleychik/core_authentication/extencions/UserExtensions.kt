@@ -2,13 +2,15 @@ package com.koleychik.core_authentication.extencions
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.koleychik.models.users.User
+import java.util.*
 
 fun createUserFirstTime(uid: String, name: String, email: String) =
     User(
         uid,
         name,
         email,
-        listOf()
+        Date().time,
+        false
     )
 
 fun GoogleSignInAccount.toUser(uid: String) =
@@ -16,6 +18,8 @@ fun GoogleSignInAccount.toUser(uid: String) =
         uid,
         displayName.toString(),
         email.toString(),
+        Date().time,
+        false,
         listOf(),
         photoUrl
     )

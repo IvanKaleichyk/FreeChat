@@ -1,0 +1,27 @@
+plugins {
+    id 'android-feature'
+}
+
+dependencies {
+
+    implementation project(":basic-resources")
+    implementation project(":module-injector")
+    implementation project(":models")
+    implementation project(":feature-select-image-api")
+
+    implementation Dependencies.kotlin_lib
+    implementation Dependencies.coreKtx
+    implementation Dependencies.appCompat
+    implementation Dependencies.material
+
+    implementation Dependencies.coil
+
+    // Dagger
+    implementation Dependencies.dagger
+    kapt Dependencies.daggerCompile
+
+    // Tests
+    testImplementation Dependencies.jUnitCore
+    androidTestImplementation Dependencies.jUnitTest
+    androidTestImplementation Dependencies.espressoCore
+}

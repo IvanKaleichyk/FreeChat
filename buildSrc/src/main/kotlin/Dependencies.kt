@@ -1,5 +1,7 @@
 internal object Versions {
 
+    const val shimmerLayout = "0.5.0"
+
     const val swipeToRefresh = "1.1.0"
 
     // network
@@ -58,6 +60,8 @@ internal object Versions {
 
 @SuppressWarnings("UnusedAssignment")
 object Dependencies {
+    const val shimmerLayout = "com.facebook.shimmer:shimmer:${Versions.shimmerLayout}"
+
     const val swipeToRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeToRefresh}"
 
     // network

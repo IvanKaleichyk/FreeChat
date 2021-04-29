@@ -13,7 +13,7 @@ interface FilesCoreComponent : FilesCoreApi{
         @Volatile
         private var component: FilesCoreComponent? = null
 
-        fun get(context: Context): FilesCoreComponent {
+        fun get(context: Context): FilesCoreApi {
             if (component == null) synchronized(FilesCoreComponent::class.java) {
                 if (component == null) component =
                     DaggerFilesCoreComponent.builder().contextModule(ContextModule(context)).build()

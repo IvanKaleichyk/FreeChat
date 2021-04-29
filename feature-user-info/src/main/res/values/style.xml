@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="user_info" parent="mainTextView">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="name" parent="mainTextView">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textSize">@dimen/bigTextSize</item>
+    </style>
+
+    <style name="email" parent="user_info">
+        <item name="android:textColor">@color/colorGrayDark</item>
+        <item name="android:textSize">@dimen/smallTextSize</item>
+    </style>
+
+    <style name="action_name" parent="user_info">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+    </style>
+
+    <style name="careful_action_name" parent="user_info">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+
+</resources>

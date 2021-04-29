@@ -1,6 +1,5 @@
 plugins {
     id 'android-feature'
-    id 'kotlin-android'
 }
 
 dependencies {

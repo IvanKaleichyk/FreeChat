@@ -1,0 +1,25 @@
+plugins {
+    id 'android-library-convention'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+}
+
+dependencies {
+    implementation project(":module-injector")
+    implementation project(":models")
+
+    implementation Dependencies.kotlin_lib
+    implementation Dependencies.coreKtx
+    implementation Dependencies.appCompat
+    implementation Dependencies.material
+
+    // Dagger
+    implementation Dependencies.dagger
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.2'
+    kapt Dependencies.daggerCompile
+
+    // Tests
+    testImplementation Dependencies.jUnitCore
+    androidTestImplementation Dependencies.jUnitTest
+    testImplementation Dependencies.assertJ
+}

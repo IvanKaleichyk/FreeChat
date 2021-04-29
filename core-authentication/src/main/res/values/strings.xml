@@ -13,6 +13,7 @@
 
     <string name="cannot_find_user">Cannot find this user</string>
     <string name="cannot_find_information">Cannot find this information</string>
+
     <string name="no_messages">No messages yet</string>
     <string name="cannot_get_information_about_user">Cannot get information about uset</string>
     <string name="cannot_create_user">Cannot create user!!!</string>

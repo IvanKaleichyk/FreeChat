@@ -10,4 +10,5 @@ interface UsersRepository {
     fun getUserById(id: String, res: (UserResult) -> Unit)
     fun searchByName(name: String, res: (UsersResult) -> Unit)
     fun deleteUser(id: String, res: (CheckResult) -> Unit)
+    fun bindDialogIdToUser(userId: String, dialogId : Long, res: (CheckResult) -> Unit)
 }
