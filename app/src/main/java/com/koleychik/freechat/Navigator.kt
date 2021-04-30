@@ -9,6 +9,9 @@ import androidx.navigation.NavController
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.di.SearchingFeatureApi
 import com.kaleichyk.feature_searching.ui.SearchingFragment
+import com.kaleichyk.feature_user_info.UserInfoNavigationApi
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureApi
+import com.kaleichyk.feature_user_info.ui.UserInfoFragment
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
 import com.koleychik.feature_all_dialogs.ui.AllDialogsFragment
@@ -27,6 +30,7 @@ import com.koleychik.feature_start.di.StartFeatureApi
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.feature_start.ui.screens.StartFragment
 import com.koleychik.feature_start.ui.screens.VerifyEmailFragment
+import com.koleychik.freechat.activities.AuthenticationActivity
 import com.koleychik.freechat.activities.MainActivity
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Provider
@@ -37,9 +41,10 @@ class Navigator(
     private val signFeatureApi: Provider<SignFeatureApi>,
     private val passwordUtilsFeatureApi: Provider<PasswordUtilsFeatureApi>,
     private val allDialogsFeatureApi: Provider<AllDialogsFeatureApi>,
-    private val searchingFeatureApi: Provider<SearchingFeatureApi>
+    private val searchingFeatureApi: Provider<SearchingFeatureApi>,
+    private val userInfoFeatureApi: Provider<UserInfoFeatureApi>
 ) : SignInNavigationApi, SignUpNavigationApi, StartFeatureNavigation, SpecifyEmailNavigationApi,
-    AllDialogFeatureNavigationApi, SearchingFeatureNavigationApi {
+    AllDialogFeatureNavigationApi, SearchingFeatureNavigationApi, UserInfoNavigationApi {
 
     internal var controller: NavController? = null
 
@@ -56,13 +61,14 @@ class Navigator(
             is StartFragment, is VerifyEmailFragment -> startFeatureApi.get()
             is AllDialogsFragment -> allDialogsFeatureApi.get()
             is SearchingFragment -> searchingFeatureApi.get()
+            is UserInfoFragment -> userInfoFeatureApi.get()
         }
     }
 
     override fun fromStartFragmentToAuthorization(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.startFragment) {
-            controller?.navigate(R.id.action_startFragment_to_signUpFragment)
+            controller?.navigate(R.id.action_startFragment_to_signUpFragment, bundle)
             StartFeatureComponentHolder.reset()
         }
     }
@@ -77,7 +83,7 @@ class Navigator(
     override fun fromStartFragmentToVerifyEmailFragment(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.startFragment) {
-            controller?.navigate(R.id.action_startFragment_to_verifyEmailFragment)
+            controller?.navigate(R.id.action_startFragment_to_verifyEmailFragment, bundle)
         }
     }
 
@@ -91,7 +97,7 @@ class Navigator(
     override fun fromSignUpToSignIn(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.signUpFragment) {
-            controller?.navigate(R.id.action_signUpFragment_to_signInFragment)
+            controller?.navigate(R.id.action_signUpFragment_to_signInFragment, bundle)
         }
     }
 
@@ -103,14 +109,15 @@ class Navigator(
     }
 
     override fun fromSignInFragmentToMainScreen(bundle: Bundle?) {
-        checkController()
-
+        val intent = Intent(context, MainActivity::class.java)
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 
     override fun fromSignInFragmentToPasswordRecovery(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.signInFragment) {
-            controller?.navigate(R.id.action_signInFragment_to_specifyEmailFragment)
+            controller?.navigate(R.id.action_signInFragment_to_specifyEmailFragment, bundle)
             SignFeatureComponentHolder.reset()
         }
     }
@@ -118,14 +125,14 @@ class Navigator(
     override fun fromSignInFragmentToSignUp(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.signInFragment) {
-            controller?.navigate(R.id.action_signInFragment_to_signUpFragment)
+            controller?.navigate(R.id.action_signInFragment_to_signUpFragment, bundle)
         }
     }
 
     override fun fromSpecifyEmailToSignIn(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.specifyEmailFragment) {
-            controller?.navigate(R.id.action_specifyEmailFragment_to_signInFragment)
+            controller?.navigate(R.id.action_specifyEmailFragment_to_signInFragment, bundle)
             PasswordUtilsFeatureComponentHolder.reset()
         }
     }
@@ -137,7 +144,7 @@ class Navigator(
     override fun fromDialogsFeatureGoToMessagesFeature(bundle: Bundle) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.allDialogsFragment) {
-            TODO("GO TO MESSAGES FEATURE")
+            controller?.navigate(R.id.action_allDialogsFragment_to_messagesFragment, bundle)
         }
     }
 
@@ -151,12 +158,28 @@ class Navigator(
     override fun fromDialogsFeatureGoToUserInfoFeature(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.allDialogsFragment) {
-            TODO("GO TO USER INFO FEATURE")
+            controller!!.navigate(R.id.action_allDialogsFragment_to_userInfoFragment, bundle)
         }
     }
 
     override fun fromSearchingFeatureToUserInfoFeature(bundle: Bundle) {
-        TODO("Not yet implemented")
+        checkController()
+        if (controller!!.currentDestination?.id == R.id.searchingFragment) {
+            controller!!.navigate(R.id.action_searchingFragment_to_userInfoFragment, bundle)
+        }
+    }
+
+    override fun fromUserInfoFeatureToSignFeature() {
+        val intent = Intent(context, AuthenticationActivity::class.java)
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
+
+    override fun fromUserInfoFeatureToMessagesFeature(bundle: Bundle) {
+        checkController()
+        if (controller!!.currentDestination?.id == R.id.allDialogsFragment) {
+            controller!!.navigate(R.id.action_userInfoFragment_to_messagesFragment, bundle)
+        }
     }
 
 }

@@ -7,32 +7,47 @@ import com.kaleichyk.core_database.api.DialogsRepository
 import com.kaleichyk.core_database.api.UsersRepository
 import com.kaleichyk.data.CurrentUser
 import com.koleychik.core_authentication.api.AccountRepository
-import com.koleychik.core_files.FilesRepository
-import com.koleychik.models.DeviceImage
 import com.koleychik.models.Dialog
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.user.UserResult
+import com.koleychik.models.results.dialog.DialogResult
 import javax.inject.Inject
 
-class UserInfoDataSource @Inject constructor(
+internal class UserInfoDataSource @Inject constructor(
     private val usersRepository: UsersRepository,
     private val dialogsRepository: DialogsRepository,
     private val accountRepository: AccountRepository,
     private val cloudStorageRepository: CloudStorageRepository,
-    private val filesRepository: FilesRepository
 ) {
 
-    fun getUser(id: String, res: (UserResult) -> Unit) {
-        usersRepository.getUserById(id, res)
-    }
-
     fun deleteUser(id: String, res: (CheckResult) -> Unit) {
+        accountRepository.deleteUser()
         usersRepository.deleteUser(id, res)
     }
 
-    fun createNewDialog(userId: String, dialog: Dialog, res: (CheckResult) -> Unit) {
-        dialogsRepository.addDialog(dialog) {
-            usersRepository.bindDialogIdToUser(userId, dialog.id, res)
+    fun createNewDialog(
+        dialog: Dialog,
+        res: (DialogResult) -> Unit
+    ) {
+        dialogsRepository.addDialog(dialog) { dialogResult ->
+            if (dialogResult !is DialogResult.Successful) res(dialogResult)
+            else usersRepository.bindDialogIdToUser(dialog.users[0].id, dialog.id) { user1Res ->
+                if (user1Res !is CheckResult.Successful) holderCheckResultToDialog(dialog, user1Res, res)
+                else usersRepository.bindDialogIdToUser(dialog.users[1].id, dialog.id){ user2Res ->
+                    holderCheckResultToDialog(dialog, user2Res, res)
+                }
+            }
+        }
+    }
+
+    private fun holderCheckResultToDialog(
+        dialog: Dialog,
+        value: CheckResult,
+        res: (DialogResult) -> Unit
+    ) {
+        when (value) {
+            is CheckResult.Successful -> res(DialogResult.Successful(dialog))
+            is CheckResult.DataError -> res(DialogResult.DataError(value.message))
+            is CheckResult.ServerError -> res(DialogResult.ServerError(value.message))
         }
     }
 
@@ -56,7 +71,7 @@ class UserInfoDataSource @Inject constructor(
         cloudStorageRepository.addImage(userId, uri, contextType) {
             when (it) {
                 is UploadResult.Successful -> {
-                    if (CurrentUser.user?.id == userId) CurrentUser.user?.icon = it.uri
+                    if (CurrentUser.user?.id == userId) CurrentUser.user?.icon = it.uri.toString()
                     accountRepository.updateIcon(it.uri, res)
                 }
                 is UploadResult.Error -> res(CheckResult.ServerError(it.message))
@@ -68,15 +83,14 @@ class UserInfoDataSource @Inject constructor(
         cloudStorageRepository.addImage(userId, uri, contextType) {
             when (it) {
                 is UploadResult.Successful -> {
-                    if (CurrentUser.user?.id == userId) CurrentUser.user?.background = it.uri
+                    if (CurrentUser.user?.id == userId) CurrentUser.user?.background =
+                        it.uri.toString()
                     accountRepository.updateBackground(it.uri, res)
                 }
                 is UploadResult.Error -> res(CheckResult.ServerError(it.message))
             }
         }
     }
-
-    fun getImagesOnDevice(): List<DeviceImage> = filesRepository.getImages()
 
 
 }

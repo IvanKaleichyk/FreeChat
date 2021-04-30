@@ -5,6 +5,10 @@ import com.kaleichyk.feature_searching.di.SearchingFeatureComponentHolder
 import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
 import com.kaleichyk.feature_select_image_impl.di.SelectImageFeatureApi
 import com.kaleichyk.feature_select_image_impl.di.SelectImageFeatureComponentHolder
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureApi
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureComponentHolder
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureDependencies
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureDestroyer
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureComponentHolder
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureDependencies
@@ -29,6 +33,15 @@ import dagger.Provides
 
 @Module
 class ApiModule {
+
+    @Provides
+    fun provideUserInfoFeatureApi(
+        dependencies: UserInfoFeatureDependencies,
+        destroyer: UserInfoFeatureDestroyer,
+    ): UserInfoFeatureApi {
+        UserInfoFeatureComponentHolder.init(dependencies, destroyer)
+       return  UserInfoFeatureComponentHolder.get()
+    }
 
     @Provides
     fun provideSearchingFeatureApi(

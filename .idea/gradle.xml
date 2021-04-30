@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/feature-all-dialogs" />
             <option value="$PROJECT_DIR$/feature-loading-api" />
             <option value="$PROJECT_DIR$/feature-loading-impl" />
+            <option value="$PROJECT_DIR$/feature-messages" />
             <option value="$PROJECT_DIR$/feature-password-utils" />
             <option value="$PROJECT_DIR$/feature-searching" />
             <option value="$PROJECT_DIR$/feature-select-image-api" />

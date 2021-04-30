@@ -39,6 +39,8 @@ dependencies {
     androidTestImplementation Dependencies.jUnitTest
     androidTestImplementation Dependencies.espressoCore
     testImplementation Dependencies.assertJ
+    testImplementation Dependencies.mockitoCore
+    androidTestImplementation Dependencies.mockitoAndroid
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -17,8 +17,11 @@ dependencies {
     implementation  Dependencies.constraintLayout
 
     implementation Dependencies.coil
+    implementation Dependencies.circleImageView
 
     implementation Dependencies.progressBar
+
+    implementation Dependencies.shimmerLayout
 
     // Coroutines
     implementation Dependencies.coroutinesCore

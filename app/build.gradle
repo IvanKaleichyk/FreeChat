@@ -11,8 +11,10 @@ dependencies {
     implementation project(":basic-resources")
     implementation project(':core-authentication')
     implementation project(':core-database')
+    implementation project(':core-cloud-storage')
     implementation project(":core-files")
     implementation project(':feature-start')
+    implementation project(':feature-messages')
     implementation project(':feature-loading-api')
     implementation project(':feature-loading-impl')
     implementation project(':feature-searching')
@@ -21,6 +23,7 @@ dependencies {
     implementation project(':feature-select-image-impl')
     implementation project(':feature-all-dialogs')
     implementation project(':feature-password-utils')
+    implementation project(':feature-user-info')
 
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx

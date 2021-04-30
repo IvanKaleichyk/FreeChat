@@ -1,6 +1,5 @@
 package com.koleychik.models.users
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -11,9 +10,9 @@ open class User(
     open val email: String,
     open val createdAt: Long,
     open val isOnline: Boolean,
-    open val listDialogsId: List<Long> = emptyList(),
-    open val icon: Uri? = null,
-    open val background: Uri? = null,
+    open val listDialogsId: List<Long> = listOf(),
+    open val icon: String? = null,
+    open val background: String? = null,
 ) : Parcelable {
 
     constructor(id: String, name: String, email: String, createdAt: Long, isOnline: Boolean) : this(
@@ -22,7 +21,7 @@ open class User(
         email = email,
         createdAt = createdAt,
         isOnline = isOnline,
-        listDialogsId = emptyList()
+        listDialogsId = listOf()
     )
 
     constructor() : this(
@@ -31,7 +30,7 @@ open class User(
         email = "null",
         createdAt = 0,
         isOnline = false,
-        listDialogsId = emptyList()
+        listDialogsId = listOf()
     )
 
 }

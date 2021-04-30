@@ -1,6 +1,5 @@
 package com.kaleichyk.feature_searching.ui.adapter
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -54,7 +53,7 @@ internal class SearchingAdapter @Inject constructor(
             })
         }
 
-        private fun loadIcon(view: ImageView, uri: Uri) {
+        private fun loadIcon(view: ImageView, uri: String) {
             view.load(uri) {
                 placeholder(R.drawable.account_icon_48)
             }

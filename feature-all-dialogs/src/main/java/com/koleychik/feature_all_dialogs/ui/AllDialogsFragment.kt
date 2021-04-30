@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import coil.load
 import com.kaleichyk.data.CurrentUser
+import com.kaleichyk.data.NavigationConstants
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.FragmentAllDialogsBinding
@@ -16,7 +17,7 @@ import com.koleychik.feature_all_dialogs.ui.viewModels.AllDialogsViewModel
 import com.koleychik.feature_all_dialogs.ui.viewModels.ViewModelFactory
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.models.Dialog
-import com.koleychik.models.results.DialogsResult
+import com.koleychik.models.results.dialog.DialogsResult
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
@@ -101,8 +102,8 @@ class AllDialogsFragment : Fragment() {
 
     private fun loadingDialogs(isOnlyFavorites: Boolean, startAt: Int, end: Long) {
         loading()
-        if (isOnlyFavorites) viewModel.getFavoritesDialogs()
-        else viewModel.getDialogs(startAt, end)
+        if (isOnlyFavorites) viewModel.getFavoritesDialogs(CurrentUser.user!!.listDialogsId)
+        else viewModel.getDialogs(CurrentUser.user!!.listDialogsId, startAt, end)
     }
 
     private fun error(message: String) {
@@ -128,7 +129,9 @@ class AllDialogsFragment : Fragment() {
         val onClickListener = View.OnClickListener {
             when (it.id) {
                 binding.searchIcon.id -> navigationApi.fromDialogsFeatureGoToSearchingFeature()
-                binding.userIcon.id -> navigationApi.fromDialogsFeatureGoToUserInfoFeature()
+                binding.userIcon.id -> navigationApi.fromDialogsFeatureGoToUserInfoFeature(Bundle().apply {
+                   putParcelable(NavigationConstants.USER, CurrentUser.user!!)
+                })
             }
         }
         with(binding) {
@@ -160,6 +163,7 @@ class AllDialogsFragment : Fragment() {
             layoutResource = loadingApi.layoutRes
             inflate()
         }
+        loadingApi.isVisible = false
     }
 
     private fun loadUserIcon() {

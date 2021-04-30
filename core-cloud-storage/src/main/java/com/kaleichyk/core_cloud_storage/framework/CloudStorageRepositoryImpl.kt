@@ -1,5 +1,6 @@
 package com.kaleichyk.core_cloud_storage.framework
 
+import android.content.Context
 import android.net.Uri
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.storage.FirebaseStorage
@@ -8,7 +9,8 @@ import com.kaleichyk.core_cloud_storage.framework.results.DeleteResult
 import com.kaleichyk.core_cloud_storage.framework.results.UploadResult
 import javax.inject.Inject
 
-internal class CloudStorageRepositoryImpl @Inject constructor(): CloudStorageRepository {
+internal class CloudStorageRepositoryImpl @Inject constructor(private val context: Context) :
+    CloudStorageRepository {
 
     private val storage = FirebaseStorage.getInstance()
 
@@ -33,7 +35,7 @@ internal class CloudStorageRepositoryImpl @Inject constructor(): CloudStorageRep
         val ref = storage.getReference(path)
         ref.delete().addOnSuccessListener {
             res(DeleteResult.Successful)
-        }.addOnFailureListener {exception ->
+        }.addOnFailureListener { exception ->
             if (exception.localizedMessage != null) res(DeleteResult.Error(exception.localizedMessage!!))
             else res(DeleteResult.Error(exception.message.toString()))
         }

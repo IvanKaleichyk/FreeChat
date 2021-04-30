@@ -1,11 +1,15 @@
 package com.koleychik.freechat.di.modules
 
 import android.content.Context
+import com.kaleichyk.core_cloud_storage.di.CloudStorageCoreComponent
+import com.kaleichyk.core_cloud_storage.framework.CloudStorageRepository
 import com.kaleichyk.core_database.api.DialogsRepository
 import com.kaleichyk.core_database.api.UsersRepository
 import com.kaleichyk.core_database.di.DatabaseCoreComponent
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
+import com.kaleichyk.feature_user_info.UserInfoNavigationApi
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureDependencies
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.di.AuthenticationCoreComponent
@@ -28,6 +32,27 @@ import javax.inject.Singleton
 
 @Module
 class DependenciesModule {
+
+    @Singleton
+    @Provides
+    fun provide(context: Context, loadingFeatureApi: LoadingFeatureApi, navigator: Navigator) =
+        object : UserInfoFeatureDependencies {
+            val databaseCore = DatabaseCoreComponent.get()
+            override fun usersRepository(): UsersRepository = databaseCore.usersRepository()
+
+            override fun dialogsRepository(): DialogsRepository = databaseCore.dialogsRepository()
+
+            override fun accountRepository(): AccountRepository =
+                AuthenticationCoreComponent.get(context).accountRepository()
+
+            override fun cloudStorageRepository(): CloudStorageRepository =
+                CloudStorageCoreComponent.get(context).cloudStorageRepository()
+
+            override fun loadingApi(): LoadingApi = loadingFeatureApi.loadingApi()
+
+            override fun userInfoNavigationApi(): UserInfoNavigationApi = navigator
+
+        }
 
     @Singleton
     @Provides

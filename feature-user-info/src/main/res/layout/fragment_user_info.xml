@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGrayLight"
-    tools:context=".UserInfoFragment">
+    tools:context=".ui.UserInfoFragment">
 
     <View
         android:id="@+id/background"
@@ -23,7 +22,7 @@
         android:background="@color/colorWhite"
         app:cardCornerRadius="16dp"
         app:cardElevation="16dp"
-        app:layout_constraintVertical_bias=""
+        android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +38,7 @@
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:contentDescription="@string/user_icon"
-                android:elevation="1000dp"
+                android:elevation="10dp"
                 android:src="@drawable/account_icon_128"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +111,7 @@
                 android:id="@+id/group_root_user"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:constraint_referenced_ids="iconSetName, textSetName, nextSetName, iconSetEmail, textSetEmail, nextSetEmail, iconSetPassword, textSetPassword, nextSetPassword, lineDivideActionsAndCarefulAction, iconDeleteAccount, textDeleteAccount, nextDeleteAccount"/>
+                app:constraint_referenced_ids="iconSetName, textSetName, nextSetName, iconSetEmail, textSetEmail, nextSetEmail, iconSetPassword, textSetPassword, nextSetPassword, lineDivideActionsAndCarefulAction, iconDeleteAccount, textDeleteAccount, nextDeleteAccount, iconSignOut, textSignOut, nextSignOut"/>
 
             <ImageView
                 android:id="@+id/iconSetName"
@@ -141,9 +140,9 @@
                 android:layout_height="@dimen/size_action_icon"
                 android:contentDescription="@string/continue_text"
                 android:src="@drawable/next_icon_32_black"
-                app:layout_constraintBottom_toBottomOf="@+id/iconStartDialog"
+                app:layout_constraintBottom_toBottomOf="@+id/iconSetName"
                 app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconStartDialog" />
+                app:layout_constraintTop_toTopOf="@+id/iconSetName" />
 
             <ImageView
                 android:id="@+id/iconSetEmail"
@@ -301,20 +300,7 @@
     <ViewStub
         android:id="@+id/viewStubLoading"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/selectImageLayout"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ViewStub
-            android:id="@+id/viewStubSelectImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:elevation="1000dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

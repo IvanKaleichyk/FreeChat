@@ -1,0 +1,43 @@
+plugins {
+    id 'android-feature'
+    id 'kotlin-android'
+}
+
+dependencies {
+    implementation project(":basic-resources")
+    implementation project(":module-injector")
+    implementation project(":models")
+    implementation project(':core-database')
+    implementation project(":feature-loading-api")
+    implementation project(":data")
+
+    implementation  Dependencies.kotlin_lib
+    implementation  Dependencies.coreKtx
+    implementation  Dependencies.appCompat
+    implementation  Dependencies.material
+    implementation  Dependencies.constraintLayout
+
+    implementation Dependencies.coil
+    implementation Dependencies.circleImageView
+
+    // Coroutines
+    implementation Dependencies.coroutinesCore
+    implementation Dependencies.coroutinesAndroid
+
+    // lifecycle
+    implementation Dependencies.lifecycleExtension
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt Dependencies.lifecycleCommon
+
+    implementation Dependencies.fragment
+
+    // Dagger
+    implementation Dependencies.dagger
+    kapt Dependencies.daggerCompile
+
+    // Tests
+    testImplementation Dependencies.jUnitCore
+    androidTestImplementation Dependencies.jUnitTest
+    androidTestImplementation Dependencies.espressoCore
+}

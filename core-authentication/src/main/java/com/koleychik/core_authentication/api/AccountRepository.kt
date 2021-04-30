@@ -14,6 +14,7 @@ interface AccountRepository {
     fun updateIcon(uri: Uri, res: (CheckResult) -> Unit)
     fun updateBackground(uri: Uri, res: (CheckResult) -> Unit)
     fun signOut()
+    fun deleteUser()
 
     fun subscribeToUserChanges()
     fun unSubscribeToUserChanges()

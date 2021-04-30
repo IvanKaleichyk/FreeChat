@@ -77,6 +77,11 @@ internal class AccountRepositoryImpl @Inject constructor(
         auth.signOut()
     }
 
+    override fun deleteUser() {
+        auth.currentUser?.delete()
+        CurrentUser.user = null
+    }
+
     override fun subscribeToUserChanges() {
         dbDataSource.subscribeToUserChanges()
     }

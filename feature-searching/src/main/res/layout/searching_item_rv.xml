@@ -13,7 +13,7 @@
         android:background="@drawable/card_background"
         android:padding="@dimen/cardPadding">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView"
             android:layout_width="48dp"
             android:layout_height="48dp"

@@ -13,4 +13,5 @@
     <color name="colorGrayDark">#4E4343</color>
     <color name="colorGrayLight">#FCF8F8</color>
     <color name="colorOfLine">#C1B9B9</color>
+    <color name="colorShimmer">#dddddd</color>
 </resources>

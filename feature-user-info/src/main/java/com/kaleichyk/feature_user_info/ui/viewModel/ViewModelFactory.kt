@@ -1,11 +1,12 @@
-package com.kaleichyk.feature_user_info
+package com.kaleichyk.feature_user_info.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import javax.inject.Provider
 
-class ViewModelFactory(
-    private val viewModels: Map<Class<out ViewModel>, Provider<ViewModel>>
+internal class ViewModelFactory @Inject constructor(
+    private val viewModels: MutableMap<Class<out ViewModel>, Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.AllDialogsFragment">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"

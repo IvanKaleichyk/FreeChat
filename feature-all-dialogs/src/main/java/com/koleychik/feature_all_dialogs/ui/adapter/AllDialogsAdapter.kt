@@ -1,6 +1,5 @@
 package com.koleychik.feature_all_dialogs.ui.adapter
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -69,13 +68,13 @@ internal class AllDialogsAdapter @Inject constructor(
             with(binding) {
                 interlocutor.icon?.let { loadIcon(imageView, it) }
                 title.text = interlocutor.name
-                message.text = dialog.lastMessage.text
-                if (!dialog.lastMessage.isRead) card.setBackgroundResource(R.drawable.card_background_un_read_message)
+                dialog.lastMessage?.text?.let { lastMessage -> message.text = lastMessage }
+                if (dialog.lastMessage?.isRead != true) card.setBackgroundResource(R.drawable.card_background_un_read_message)
             }
             createOnClickListener(dialog.id)
         }
 
-        private fun loadIcon(view: ImageView, uri: Uri) {
+        private fun loadIcon(view: ImageView, uri: String) {
             view.load(uri) {
                 placeholder(R.drawable.account_icon_48)
             }
@@ -94,8 +93,8 @@ internal class AllDialogsAdapter @Inject constructor(
         }
 
         private fun getInterlocutor(dialog: Dialog) =
-            if (CurrentUser.user!!.id == dialog.user1.id) dialog.user1
-            else dialog.user2
+            if (CurrentUser.user!!.id == dialog.users[0].id) dialog.users[0]
+            else dialog.users[1]
     }
 
 }

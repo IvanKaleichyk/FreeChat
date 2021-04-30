@@ -14,6 +14,7 @@ dependencies {
     implementation project(":feature-loading-api")
     implementation project(":feature-select-image-api")
     implementation project(":data")
+    implementation project(":dialogs")
 
     implementation  Dependencies.kotlin_lib
     implementation  Dependencies.coreKtx
@@ -28,6 +29,8 @@ dependencies {
     implementation Dependencies.shimmerLayout
 
     implementation Dependencies.circleImageView
+
+    implementation Dependencies.activity
 
     // Coroutines
     implementation Dependencies.coroutinesCore

@@ -1,7 +1,5 @@
 package com.koleychik.models.users
 
-import android.net.Uri
-
 data class UserRoot(
     override val id: String,
     override var name: String,
@@ -9,8 +7,8 @@ data class UserRoot(
     override val createdAt: Long,
     override var isOnline: Boolean,
     override val listDialogsId: MutableList<Long> = mutableListOf(),
-    override var icon: Uri? = null,
-    override var background: Uri? = null,
+    override var icon: String? = null,
+    override var background: String? = null,
 ) : User() {
 
     constructor(id: String, name: String, email: String, createdAt: Long, isOnline: Boolean) : this(

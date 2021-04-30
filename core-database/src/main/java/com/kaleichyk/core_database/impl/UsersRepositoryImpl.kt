@@ -99,7 +99,7 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
                 if (list == null) list = mutableListOf()
                 list.add(dialogId)
 
-                document.set(list)
+                document.update(UserConstants.LIST_DIALOGS_IDS, list)
                     .addOnSuccessListener {
                         res(CheckResult.Successful)
                     }

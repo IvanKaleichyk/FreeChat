@@ -1,4 +1,4 @@
-package com.koleychik.models.results
+package com.koleychik.models.results.dialog
 
 import com.koleychik.models.Dialog
 

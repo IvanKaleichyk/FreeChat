@@ -52,9 +52,7 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
     override fun updateUserEmail(email: String, res: (CheckResult) -> Unit) {
         db.collection(UserConstants.ROOT_PATH)
             .document(CurrentUser.user!!.id)
-            .collection(CurrentUser.user!!.id)
-            .document(UserConstants.EMAIL)
-            .set(email)
+            .update(UserConstants.EMAIL, email)
             .addOnSuccessListener {
                 CurrentUser.user?.email = email
                 res(CheckResult.Successful)
@@ -68,9 +66,7 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
     override fun updateName(name: String, res: (CheckResult) -> Unit) {
         db.collection(UserConstants.ROOT_PATH)
             .document(CurrentUser.user!!.id)
-            .collection(CurrentUser.user!!.id)
-            .document(UserConstants.NAME)
-            .set(name)
+            .update(UserConstants.NAME, name)
             .addOnSuccessListener {
                 CurrentUser.user?.name = name
                 res(CheckResult.Successful)
@@ -84,11 +80,9 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
     override fun updateIcon(uri: Uri, res: (CheckResult) -> Unit) {
         db.collection(UserConstants.ROOT_PATH)
             .document(CurrentUser.user!!.id)
-            .collection(CurrentUser.user!!.id)
-            .document(UserConstants.ICON)
-            .set(uri)
+            .update(UserConstants.ICON, uri.toString())
             .addOnSuccessListener {
-                CurrentUser.user?.icon = uri
+                CurrentUser.user?.icon = uri.toString()
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
@@ -100,11 +94,9 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
     override fun updateBackground(uri: Uri, res: (CheckResult) -> Unit) {
         db.collection(UserConstants.ROOT_PATH)
             .document(CurrentUser.user!!.id)
-            .collection(CurrentUser.user!!.id)
-            .document(UserConstants.BACKGROUND)
-            .set(uri)
+            .update(UserConstants.BACKGROUND, uri.toString())
             .addOnSuccessListener {
-                CurrentUser.user?.background = uri
+                CurrentUser.user?.background = uri.toString()
                 res(CheckResult.Successful)
             }
             .addOnFailureListener {
@@ -114,10 +106,9 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
     }
 
     override fun isUserOnline(isOnline: Boolean) {
-        val map = mapOf(UserConstants.IS_ONLINE to isOnline)
         db.collection(UserConstants.ROOT_PATH)
             .document(CurrentUser.user!!.id)
-            .update(map)
+            .update(UserConstants.IS_ONLINE, isOnline)
     }
 
     override fun subscribeToUserChanges() {
@@ -125,6 +116,7 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
         userListener = query.addSnapshotListener { value, error ->
             if (error != null) {
                 showLog("subscribeToUserChanges ${error.message}")
+                CurrentUser.user = value?.toObject(UserRoot::class.java)
                 return@addSnapshotListener
             }
             showLog("subscribeToUserChanges successful")

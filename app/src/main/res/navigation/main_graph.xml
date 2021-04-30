@@ -13,10 +13,34 @@
         <action
             android:id="@+id/action_allDialogsFragment_to_searchingFragment"
             app:destination="@id/searchingFragment" />
+        <action
+            android:id="@+id/action_allDialogsFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+        <action
+            android:id="@+id/action_allDialogsFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchingFragment"
         android:name="com.kaleichyk.feature_searching.ui.SearchingFragment"
         android:label="SearchingFragment"
-        tools:layout="@layout/fragment_searching"/>
+        tools:layout="@layout/fragment_searching">
+        <action
+            android:id="@+id/action_searchingFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.kaleichyk.feature_user_info.ui.UserInfoFragment"
+        android:label="UserInfoFragment"
+        tools:layout="@layout/fragment_user_info">
+        <action
+            android:id="@+id/action_userInfoFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.kaleichyk.feature_messages.MessagesFragment"
+        android:label="MessagesFragment"
+        tools:layout="@layout/fragment_messages"/>
 </navigation>

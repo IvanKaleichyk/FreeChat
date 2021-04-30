@@ -2,6 +2,7 @@ package com.koleychik.freechat.di.modules
 
 import android.content.Context
 import com.kaleichyk.feature_searching.di.SearchingFeatureApi
+import com.kaleichyk.feature_user_info.di.UserInfoFeatureApi
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.di.AuthenticationCoreComponent
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
@@ -39,14 +40,16 @@ class AppModule(val context: Context) {
         signFeatureApi: Provider<SignFeatureApi>,
         passwordUtilsFeatureApi: Provider<PasswordUtilsFeatureApi>,
         allDialogsFeatureApi: Provider<AllDialogsFeatureApi>,
-        searchingFeatureApi: Provider<SearchingFeatureApi>
+        searchingFeatureApi: Provider<SearchingFeatureApi>,
+        userInfoFeatureApi: Provider<UserInfoFeatureApi>
     ) = Navigator(
         context,
         startFeatureApi,
         signFeatureApi,
         passwordUtilsFeatureApi,
         allDialogsFeatureApi,
-        searchingFeatureApi
+        searchingFeatureApi,
+        userInfoFeatureApi
     )
 
 }
