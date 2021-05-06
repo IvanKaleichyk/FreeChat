@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
 import coil.load
 import com.kaleichyk.data.NavigationConstants.USER
 import com.kaleichyk.feature_searching.R
@@ -36,6 +37,11 @@ internal class SearchingAdapter @Inject constructor(
 
     override fun getItemCount(): Int = list.size
 
+    override fun onViewRecycled(holder: MainViewHolder) {
+        super.onViewRecycled(holder)
+        holder.clear()
+    }
+
     inner class MainViewHolder(private val binding: SearchingItemRvBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -57,6 +63,10 @@ internal class SearchingAdapter @Inject constructor(
             view.load(uri) {
                 placeholder(R.drawable.account_icon_48)
             }
+        }
+
+        fun clear() {
+            binding.imageView.clear()
         }
     }
 }

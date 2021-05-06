@@ -30,15 +30,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/basicPadding">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/icon"
-                style="@style/shadow"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:contentDescription="@string/user_icon"
-                android:elevation="10dp"
                 android:src="@drawable/account_icon_128"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
