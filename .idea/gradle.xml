@@ -36,6 +36,7 @@
             <option value="$PROJECT_DIR$/feature-user-info" />
             <option value="$PROJECT_DIR$/models" />
             <option value="$PROJECT_DIR$/module-injector" />
+            <option value="$PROJECT_DIR$/pagination" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -8,6 +8,8 @@ dependencies {
     implementation project(":module-injector")
     implementation project(":models")
     implementation project(':core-database')
+    implementation project(':core-cloud-storage')
+    implementation project(':core-notifications')
     implementation project(":feature-loading-api")
     implementation project(":data")
 

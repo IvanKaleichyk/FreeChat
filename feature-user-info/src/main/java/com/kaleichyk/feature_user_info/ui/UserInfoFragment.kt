@@ -32,6 +32,7 @@ import com.koleychik.dialogs.DialogGetDataListener
 import com.koleychik.dialogs.DialogInfo
 import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.feature_loading_api.LoadingApi
+import com.koleychik.models.asRoot
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
 import com.koleychik.models.users.User
@@ -50,7 +51,7 @@ class UserInfoFragment : Fragment() {
 
     private val user: User by lazy {
         val us = requireArguments().getParcelable<User>(USER)!!
-        if (us.id == CurrentUser.user?.id) us as UserRoot
+        if (us.id == CurrentUser.user?.id) us.asRoot()
         else us
     }
 

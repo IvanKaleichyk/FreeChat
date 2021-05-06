@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.kaleichyk.core_database.R
 import com.kaleichyk.core_database.api.DialogsRepository
 import com.koleychik.models.Dialog
+import com.koleychik.models.Message
 import com.koleychik.models.constants.DialogConstants
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
@@ -22,6 +23,10 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
         end: Long,
         res: (DialogsResult) -> Unit
     ) {
+        if (listIds.isEmpty()) {
+            res(DialogsResult.Successful(listOf()))
+            return
+        }
         store.collection(DialogConstants.ROOT_PATH)
             .whereIn(DialogConstants.ID, listIds)
             .orderBy(DialogConstants.IS_FAVORITE)
@@ -40,6 +45,10 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
     }
 
     override fun getFavoritesDialogs(listIds: List<Long>, res: (DialogsResult) -> Unit) {
+        if (listIds.isEmpty()) {
+            res(DialogsResult.Successful(listOf()))
+            return
+        }
         store.collection(DialogConstants.ROOT_PATH)
             .whereIn(DialogConstants.ID, listIds)
             .whereEqualTo(DialogConstants.IS_FAVORITE, true)
@@ -57,7 +66,7 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
 
     override fun addDialog(dialog: Dialog, res: (DialogResult) -> Unit) {
         val collection = store.collection(DialogConstants.ROOT_PATH)
-        checkIfDialogExists(collection, dialog.users[0], dialog.users[1]) { isSuccessful ->
+        checkIfDialogExists(collection, dialog.users) { isSuccessful ->
             if (isSuccessful) res(DialogResult.DataError(R.string.dialog_exits))
             else collection.document(dialog.id.toString()).set(dialog)
                 .addOnSuccessListener {
@@ -72,15 +81,14 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
 
     private fun checkIfDialogExists(
         collection: CollectionReference,
-        user1: User,
-        user2: User,
+        users: List<User>,
         res: (isSuccessful: Boolean) -> Unit
     ) {
         collection
-            .whereArrayContains(DialogConstants.USERS, user1)
-            .whereArrayContains(DialogConstants.USERS, user2)
+            .whereIn(DialogConstants.USERS, users)
             .get()
             .addOnSuccessListener {
+                if (it.isEmpty) res(false)
                 for (i in it) {
                     val dialog = try {
                         i.toObject(Dialog::class.java)
@@ -102,6 +110,19 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
     override fun delete(dialog: Dialog, res: (CheckResult) -> Unit) {
         store.collection(DialogConstants.ROOT_PATH)
             .document(dialog.id.toString()).delete()
+            .addOnSuccessListener {
+                res(CheckResult.Successful)
+            }
+            .addOnFailureListener {
+                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
+                else res(CheckResult.ServerError(it.message.toString()))
+            }
+    }
+
+    override fun addLastMessage(dialogId: Long, message: Message, res: (CheckResult) -> Unit) {
+        store.collection(DialogConstants.ROOT_PATH)
+            .document(dialogId.toString())
+            .update(DialogConstants.LAST_MESSAGE, message)
             .addOnSuccessListener {
                 res(CheckResult.Successful)
             }

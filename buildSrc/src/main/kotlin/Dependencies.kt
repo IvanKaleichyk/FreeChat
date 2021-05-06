@@ -3,6 +3,7 @@ internal object Versions {
     const val shimmerLayout = "0.5.0"
 
     const val swipeToRefresh = "1.1.0"
+    const val recyclerView = "1.2.0"
 
     // network
     const val retrofit = "2.9.0"
@@ -64,6 +65,7 @@ object Dependencies {
     const val shimmerLayout = "com.facebook.shimmer:shimmer:${Versions.shimmerLayout}"
 
     const val swipeToRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeToRefresh}"
+    const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     // network
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"

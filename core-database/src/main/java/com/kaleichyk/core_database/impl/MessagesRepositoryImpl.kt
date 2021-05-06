@@ -14,12 +14,14 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
     private val store = FirebaseFirestore.getInstance()
 
     override fun getMessages(
-        dialogId: String,
+        dialogId: Long,
         start: Int,
         end: Long,
         res: (MessagesResult) -> Unit
     ) {
-        store.collection("${DialogConstants.ROOT_PATH}/$dialogId/${MessageConstants.ROOT_PATH}")
+        store.collection(MessageConstants.ROOT_PATH)
+            .document()
+            .collection(dialogId.toString())
             .startAfter(start)
             .limit(end)
             .get()
@@ -36,8 +38,11 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
     }
 
     override fun addMessage(message: Message, res: (CheckResult) -> Unit) {
-        store.collection("${DialogConstants.ROOT_PATH}/${message.dialogId}/${MessageConstants.ROOT_PATH}/${message.id}")
-            .add(message)
+        store.collection(DialogConstants.ROOT_PATH)
+            .document()
+            .collection(message.dialogId.toString())
+            .document(message.id.toString())
+            .set(message)
             .addOnSuccessListener {
                 res(CheckResult.Successful)
             }
@@ -48,8 +53,11 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
     }
 
     override fun delete(message: Message, res: (CheckResult) -> Unit) {
-        store.collection("${DialogConstants.ROOT_PATH}/${message.dialogId}/${MessageConstants.ROOT_PATH}")
-            .document(message.id.toString()).delete()
+        store.collection(DialogConstants.ROOT_PATH)
+            .document()
+            .collection(message.dialogId.toString())
+            .document(message.id.toString())
+            .delete()
             .addOnSuccessListener {
                 res(CheckResult.Successful)
             }

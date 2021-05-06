@@ -9,9 +9,5 @@ fun createDialog(listUsers: List<User>) = Dialog(
     listUsers
 )
 
-private fun getDialogId(userId1: String, userId2: String): Long =
-    StringBuilder().apply {
-        append(Date().time)
-        append(userId1.hashCode() + userId2.hashCode())
-    }.toString().toLong()
+private fun getDialogId(userId1: String, userId2: String): Long = Date().time
 

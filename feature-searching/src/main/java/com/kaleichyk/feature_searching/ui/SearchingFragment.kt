@@ -93,7 +93,10 @@ class SearchingFragment : Fragment() {
     }
 
     private fun loading(name: CharSequence?) {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.shimmerFrameLayout.run {
+            visibility = View.VISIBLE
+            startShimmer()
+        }
         if (name == null || name.isEmpty()) viewModel.get50LastUsers()
         else viewModel.searchUsersByName(name.toString())
     }
@@ -134,8 +137,13 @@ class SearchingFragment : Fragment() {
     }
 
     private fun resetViews() {
+        binding.shimmerFrameLayout.run {
+            visibility = View.GONE
+            stopShimmer()
+        }
+
         with(binding) {
-            progressBar.visibility = View.GONE
+//            progressBar.visibility = View.GONE
             textInfo.visibility = View.GONE
             rv.visibility = View.INVISIBLE
         }
