@@ -5,7 +5,7 @@ import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.user.UsersResult
 import javax.inject.Inject
 
-internal class SearchingDataSource @Inject constructor(private val usersRepository: UsersRepository) {
+internal class SearchingManager @Inject constructor(private val usersRepository: UsersRepository) {
 
     fun get50LastUsers(res: (UsersResult) -> Unit) {
         usersRepository.getUsers(UserConstants.CREATED, 0, 50, res)

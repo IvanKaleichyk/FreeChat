@@ -8,7 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.koleychik.feature_start.R
 import com.koleychik.feature_start.StartFeatureNavigation
-import com.koleychik.feature_start.StartUseCase
+import com.koleychik.feature_start.StartManager
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class VerifyEmailFragment : Fragment() {
 
     @Inject
-    internal lateinit var useCase: StartUseCase
+    internal lateinit var manager: StartManager
 
     @Inject
     internal lateinit var navigation: StartFeatureNavigation
@@ -36,7 +36,7 @@ class VerifyEmailFragment : Fragment() {
     }
 
     private fun check() {
-//        useCase.checkVerifiedEmail {
+//        manager.checkVerifiedEmail {
 //            when (it) {
 //                is VerificationResult.Successful -> navigation.fromVerifyEmailFragmentToMainScreen()
 //                is VerificationResult.DataError -> requireContext().showToast(it.message)

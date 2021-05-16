@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MessageDataSource @Inject constructor(
+class MessageManager @Inject constructor(
     private val context: Context,
     private val notificationRepository: MessageNotificationRepository,
     private val messagesRepository: MessagesRepository,

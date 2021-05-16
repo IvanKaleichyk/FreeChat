@@ -10,8 +10,8 @@ internal class AllDialogsViewModel @Inject constructor(
     private val repository: DialogsRepository
 ) : ViewModel() {
 
+    private
     val serverResponse = MutableLiveData<DialogsResult>(null)
-
 
     fun getDialogs(listIds: List<Long>, start: Int, end: Long) {
         repository.getDialogs(listIds, start, end) {

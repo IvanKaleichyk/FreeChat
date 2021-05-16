@@ -4,7 +4,7 @@ apply plugin: 'kotlin'
 
 buildscript {
     ext.kotlin_version = "1.4.32"
-    ext.gradle_version = '4.2.0'
+    ext.gradle_version = '4.2.1'
     repositories {
         google()
         jcenter()
@@ -12,7 +12,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath 'com.android.tools.build:gradle:4.2.1'
     }
 }
 

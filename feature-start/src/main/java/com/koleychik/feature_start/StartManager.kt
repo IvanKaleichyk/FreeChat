@@ -6,7 +6,7 @@ import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
 import javax.inject.Inject
 
-class StartUseCase @Inject constructor(
+class StartManager @Inject constructor(
     private val authRepository: AuthRepository,
     private val accountRepository: AccountRepository,
 ) {

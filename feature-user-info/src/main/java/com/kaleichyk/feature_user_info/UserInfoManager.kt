@@ -12,7 +12,7 @@ import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
 import javax.inject.Inject
 
-internal class UserInfoDataSource @Inject constructor(
+internal class UserInfoManager @Inject constructor(
     private val usersRepository: UsersRepository,
     private val dialogsRepository: DialogsRepository,
     private val accountRepository: AccountRepository,

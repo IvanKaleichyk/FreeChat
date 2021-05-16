@@ -3,7 +3,7 @@ package com.koleychik.feature_start.ui.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.koleychik.feature_start.StartUseCase
+import com.koleychik.feature_start.StartManager
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class StartViewModel @Inject constructor(
-    private val useCase: StartUseCase,
+    private val manager: StartManager,
 ) : ViewModel() {
 
     val userResult = MutableLiveData<UserResult>(null)
@@ -19,7 +19,7 @@ class StartViewModel @Inject constructor(
     val verificationResult = MutableLiveData<CheckResult>(null)
 
 //    fun verifyEmail() {
-//        val checkRes = useCase.checkVerifiedEmail {
+//        val checkRes = manager.checkVerifiedEmail {
 //            verificationResult.value = it
 //        }
 //        if (checkRes) {
@@ -28,7 +28,7 @@ class StartViewModel @Inject constructor(
 //    }
 
     fun checkUser() = viewModelScope.launch(Dispatchers.IO) {
-        useCase.checkUser {
+        manager.checkUser {
             viewModelScope.launch {
                 userResult.value = it
             }

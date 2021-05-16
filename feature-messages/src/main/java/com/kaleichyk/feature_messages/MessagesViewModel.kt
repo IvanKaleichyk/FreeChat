@@ -9,7 +9,7 @@ import com.koleychik.models.results.MessagesResult
 import javax.inject.Inject
 
 class MessagesViewModel @Inject constructor(
-    private val dataSource: MessageDataSource
+    private val manager: MessageManager
 ) : ViewModel() {
 
     private val messagesRequest = MutableLiveData<MessagesResult>(null)
@@ -25,25 +25,25 @@ class MessagesViewModel @Inject constructor(
 
 
     fun getMessages(dialogId: Long, startAt: Int, endAt: Long) {
-        dataSource.getMessages(dialogId, startAt, endAt) {
+        manager.getMessages(dialogId, startAt, endAt) {
 
         }
     }
 
     fun sendMessage(message: Message) {
-        dataSource.sendMessage(message) {
+        manager.sendMessage(message) {
             _serverRequest.value = it
         }
     }
 
     fun deleteMessage(message: Message) {
-        dataSource.deleteMessage(message) {
+        manager.deleteMessage(message) {
             _serverRequest.value = it
         }
     }
 
     fun editMessage(message: Message) {
-        dataSource.editMessage(message) {
+        manager.editMessage(message) {
             _serverRequest.value = it
         }
     }
