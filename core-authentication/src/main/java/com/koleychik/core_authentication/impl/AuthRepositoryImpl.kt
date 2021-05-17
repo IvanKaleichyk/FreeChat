@@ -14,10 +14,15 @@ import com.koleychik.core_authentication.extencions.toUser
 import com.koleychik.core_authentication.result.GoogleSignInResult
 import com.koleychik.models.asRoot
 import com.koleychik.models.results.CheckResult
+import com.koleychik.models.results.toUserResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.users.User
 import com.koleychik.models.users.UserRoot
 import com.koleychik.module_injector.Constants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class AuthRepositoryImpl @Inject constructor(
@@ -27,30 +32,20 @@ internal class AuthRepositoryImpl @Inject constructor(
 
     private val auth = FirebaseAuth.getInstance()
 
-    override fun createAccount(
-        name: String,
-        email: String,
-        password: String,
-        res: (UserResult) -> Unit
-    ) {
-        Log.d(Constants.TAG, "AuthRepositoryImpl start createAccount")
-        authFirebaseDataSource.createFirebaseUser(email, password) {
-            when (it) {
-                is CheckResult.Successful -> addUser(name, email, res)
-                is CheckResult.ServerError -> res(UserResult.ServerError(it.message))
-                is CheckResult.DataError -> res(UserResult.DataError(it.message))
-            }
+    override suspend fun createAccount(name: String, email: String, password: String): UserResult {
+        val result = authFirebaseDataSource.createFirebaseUser(email, password)
+
+        return when (result) {
+            is CheckResult.Successful -> addUser(name, email)
+            is CheckResult.Error -> result.toUserResult()
         }
     }
 
-    override fun login(email: String, password: String, res: (UserResult) -> Unit) {
-        Log.d(Constants.TAG, "AuthRepositoryImpl start login")
-        authFirebaseDataSource.login(email, password) {
-            when (it) {
-                is CheckResult.Successful -> getUser(res)
-                is CheckResult.ServerError -> res(UserResult.ServerError(it.message))
-                is CheckResult.DataError -> res(UserResult.DataError(it.message))
-            }
+    override suspend fun login(email: String, password: String): UserResult {
+        val result = authFirebaseDataSource.login(email, password)
+        return when (result) {
+            is CheckResult.Successful -> getUser()
+            is CheckResult.Error -> result.toUserResult()
         }
     }
 
@@ -65,40 +60,36 @@ internal class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun checkUser(res: (UserResult) -> Unit) {
-        Log.d(Constants.TAG, "AuthRepositoryImpl start checkUser")
-        authFirebaseDataSource.checkUser {
-            when (it) {
-                is CheckResult.Successful -> getUser(res)
-                is CheckResult.DataError -> res(UserResult.DataError(it.message))
-                is CheckResult.ServerError -> res(UserResult.ServerError(it.message))
-            }
+    override suspend fun checkUser(): UserResult {
+        val result = authFirebaseDataSource.checkUser()
+        return when (result) {
+            is CheckResult.Successful -> getUser()
+            is CheckResult.Error -> return result.toUserResult()
         }
     }
 
-    override fun resetPassword(email: String, res: (CheckResult) -> Unit) {
-        authFirebaseDataSource.resetPassword(email, res)
+
+    override suspend fun resetPassword(email: String): CheckResult {
+        return authFirebaseDataSource.resetPassword(email)
     }
 
-    private fun getUser(res: (UserResult) -> Unit) {
+    private suspend fun getUser(): UserResult {
         Log.d(Constants.TAG, "AuthRepositoryImpl start getUser")
-        val uid = auth.currentUser?.uid ?: return
-        authDbDataSource.getUserByUid(uid) {
-            if (it is UserResult.Successful) CurrentUser.user = it.user.asRoot()
-            res(it)
-        }
+        val uid = auth.currentUser?.uid ?: return UserResult.DataError(R.string.cannot_find_user)
+        val result = authDbDataSource.getUserByUid(uid)
+        if (result is UserResult.Successful) CurrentUser.user = result.user.asRoot()
+        return result
     }
 
-    private fun addUser(name: String, email: String, res: (UserResult) -> Unit) {
+
+    private suspend fun addUser(name: String, email: String): UserResult {
         Log.d(Constants.TAG, "AuthRepositoryImpl start addUser")
         val user = getUser(name, email)
 
-        if (user == null) res(UserResult.DataError(R.string.cannot_create_user))
+        return if (user == null) UserResult.DataError(R.string.cannot_create_user)
         else {
             CurrentUser.user = user.asRoot()
-            authDbDataSource.addUser(user) { userResult ->
-                res(userResult)
-            }
+            authDbDataSource.addUser(user)
         }
     }
 
@@ -112,15 +103,13 @@ internal class AuthRepositoryImpl @Inject constructor(
         value: GoogleSignInResult.Successful,
         res: (UserResult) -> Unit
     ) {
-        Log.d(Constants.TAG, "AuthRepositoryImpl start loginOrSingUsingGoogleAccount")
         authFirebaseDataSource.loginFirebaseUserByCredential(value.credential) {
             val uid = auth.currentUser?.uid
             if (uid == null) res(UserResult.DataError(R.string.cannot_get_information_about_user))
             else {
                 when (it) {
                     is CheckResult.Successful -> getOrPutUser(value.account.toUser(uid), res)
-                    is CheckResult.DataError -> res(UserResult.DataError(it.message))
-                    is CheckResult.ServerError -> res(UserResult.ServerError(it.message))
+                    is CheckResult.Error -> res(it.toUserResult())
                 }
             }
         }
@@ -128,17 +117,18 @@ internal class AuthRepositoryImpl @Inject constructor(
 
     private fun getOrPutUser(user: User, res: (UserResult) -> Unit) {
         Log.d(Constants.TAG, "AuthRepositoryImpl start getOrPutUser")
-        authDbDataSource.getUserByUid(user.id) { getUserResult ->
-            if (getUserResult is UserResult.Successful) {
-                CurrentUser.user = user as UserRoot
-                res(getUserResult)
-            } else {
-                authDbDataSource.addUser(user) { addUserResult ->
-                    CurrentUser.user = user as UserRoot
-                    res(addUserResult)
-                }
+        CoroutineScope(Dispatchers.IO).launch {
+            var result = authDbDataSource.getUserByUid(user.id)
+
+            if (result is UserResult.Successful) CurrentUser.user = user as UserRoot
+            else {
+                result = authDbDataSource.addUser(user)
+                if (result is UserResult.Successful) CurrentUser.user = user as UserRoot
+            }
+
+            withContext(Dispatchers.Main) {
+                res(result)
             }
         }
     }
-
 }

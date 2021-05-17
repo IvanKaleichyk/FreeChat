@@ -18,6 +18,8 @@ dependencies {
 
     implementation Dependencies.gson
 
+    implementation Dependencies.coroutinesPlayService
+
     // DataStore
     implementation Dependencies.dataStoreCore
     implementation Dependencies.dataStorePreferences
@@ -28,7 +30,7 @@ dependencies {
 
     // Firebase
     implementation Dependencies.firebaseAuth
-    implementation Dependencies.firebaseFireStore
+    implementation Dependencies.firebaseFirestore
 //    implementation Dependencies.firebaseDb
 
     // for sing in using google

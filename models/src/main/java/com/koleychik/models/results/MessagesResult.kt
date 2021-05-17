@@ -3,7 +3,8 @@ package com.koleychik.models.results
 import com.koleychik.models.Message
 
 sealed class MessagesResult {
-    class Successful(list: List<Message>) : MessagesResult()
-    class DataError(message: Int) : MessagesResult()
-    class ServerError(message: String) : MessagesResult()
+    class Successful(val list: List<Message>) : MessagesResult()
+    abstract class Error : MessagesResult()
+    class DataError(val message: Int) : Error()
+    class ServerError(val message: String) : Error()
 }

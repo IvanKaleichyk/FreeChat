@@ -19,28 +19,24 @@ class MessageManager @Inject constructor(
     private val dialogsRepository: DialogsRepository
 ) {
 
-    fun getMessages(dialogId: Long, startAt: Int, endAt: Long, res: (MessagesResult) -> Unit) {
-        messagesRepository.getMessages(dialogId, startAt, endAt, res)
-    }
+    suspend fun getMessages(dialogId: Long, startAt: Int, endAt: Long): MessagesResult =
+        messagesRepository.getMessages(dialogId, startAt, endAt)
 
-    fun sendMessage(message: Message, res: (CheckResult) -> Unit) {
-        messagesRepository.addMessage(message) { addMessageResult ->
-            if (addMessageResult !is CheckResult.Successful) res(addMessageResult)
-            else dialogsRepository.addLastMessage(message.dialogId, message) {
-                res(it)
-                sendMessageNotification(message)
-            }
 
+    suspend fun sendMessage(message: Message): CheckResult {
+        var result = messagesRepository.addMessage(message)
+        if (result is CheckResult.Successful) {
+            result = dialogsRepository.addLastMessage(message.dialogId, message)
+            sendMessageNotification(message)
         }
+        return result
     }
 
-    fun deleteMessage(message: Message, res: (CheckResult) -> Unit) {
-        messagesRepository.delete(message, res)
-    }
+    suspend fun deleteMessage(message: Message): CheckResult = messagesRepository.delete(message)
 
-    fun editMessage(message: Message, res: (CheckResult) -> Unit) {
-        messagesRepository.editMessage(message, res)
-    }
+//    fun editMessage(message: Message): CheckResult {
+//        messagesRepository.editMessage(message, res)
+
 
     private fun sendMessageNotification(message: Message) = CoroutineScope(Dispatchers.IO).launch {
         notificationRepository.sendMessageNotification(

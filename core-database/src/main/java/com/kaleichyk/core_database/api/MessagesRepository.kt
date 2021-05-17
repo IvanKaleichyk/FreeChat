@@ -6,9 +6,9 @@ import com.koleychik.models.results.MessagesResult
 
 interface MessagesRepository {
 
-    fun getMessages(dialogId: Long, start: Int, end: Long, res: (MessagesResult) -> Unit)
-    fun addMessage(message: Message, res: (CheckResult) -> Unit)
-    fun delete(message: Message, res: (CheckResult) -> Unit)
-    fun editMessage(message: Message, res: (CheckResult) -> Unit)
+    suspend fun getMessages(dialogId: Long, start: Int, end: Long): MessagesResult
+    suspend fun addMessage(message: Message): CheckResult
+    suspend fun delete(message: Message): CheckResult
+//    suspend fun editMessage(message: Message): CheckResult
 
 }

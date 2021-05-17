@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dialog_exits">Dialog already exists</string>
+    <string name="cannot_find_user">Cannot find User</string>
 </resources>

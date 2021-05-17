@@ -35,11 +35,12 @@ internal class SignInViewModel @Inject constructor(
                 }
                 return@launch
             }
-            authRepository.login(email, password) {
-                viewModelScope.launch(Dispatchers.Main) {
-                    userResult.value = it
-                    isLoading.value = false
-                }
+
+            val result = authRepository.login(email, password)
+
+            withContext(Dispatchers.Main) {
+                userResult.value = result
+                isLoading.value = false
             }
         }
 }

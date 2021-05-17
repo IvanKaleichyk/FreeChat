@@ -3,6 +3,7 @@ package com.kaleichyk.feature_user_info
 import android.net.Uri
 import com.kaleichyk.core_cloud_storage.framework.CloudStorageRepository
 import com.kaleichyk.core_cloud_storage.framework.results.UploadResult
+import com.kaleichyk.core_cloud_storage.framework.results.toCheckResult
 import com.kaleichyk.core_database.api.DialogsRepository
 import com.kaleichyk.core_database.api.UsersRepository
 import com.kaleichyk.data.CurrentUser
@@ -10,6 +11,7 @@ import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.models.Dialog
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
+import com.koleychik.models.results.toDialogResult
 import javax.inject.Inject
 
 internal class UserInfoManager @Inject constructor(
@@ -19,35 +21,29 @@ internal class UserInfoManager @Inject constructor(
     private val cloudStorageRepository: CloudStorageRepository,
 ) {
 
-    fun deleteUser(id: String, res: (CheckResult) -> Unit) {
-        accountRepository.deleteUser()
-        usersRepository.deleteUser(id, res)
+    suspend fun deleteUser(id: String): CheckResult {
+        val result = accountRepository.deleteUser()
+        if (result !is CheckResult.Successful) return result
+        return usersRepository.deleteUser(id)
     }
 
-    fun createNewDialog(
-        dialog: Dialog,
-        res: (DialogResult) -> Unit
-    ) {
-        dialogsRepository.addDialog(dialog) { dialogResult ->
-            if (dialogResult !is DialogResult.Successful) res(dialogResult)
-            else usersRepository.bindDialogIdToUser(dialog.users[0].id, dialog.id) { user1Res ->
-                if (user1Res !is CheckResult.Successful) holderCheckResultToDialog(dialog, user1Res, res)
-                else usersRepository.bindDialogIdToUser(dialog.users[1].id, dialog.id){ user2Res ->
-                    holderCheckResultToDialog(dialog, user2Res, res)
-                }
-            }
-        }
-    }
+    suspend fun createNewDialog(dialog: Dialog): DialogResult {
+        val addDialogresult = dialogsRepository.addDialog(dialog)
+        if (addDialogresult !is DialogResult.Successful) return addDialogresult
 
-    private fun holderCheckResultToDialog(
-        dialog: Dialog,
-        value: CheckResult,
-        res: (DialogResult) -> Unit
-    ) {
-        when (value) {
-            is CheckResult.Successful -> res(DialogResult.Successful(dialog))
-            is CheckResult.DataError -> res(DialogResult.DataError(value.message))
-            is CheckResult.ServerError -> res(DialogResult.ServerError(value.message))
+        // bind dialog id to first user
+        var bindDialogIdToUserResult =
+            usersRepository.bindDialogIdToUser(dialog.users[0].id, dialog.id)
+
+        if (bindDialogIdToUserResult is CheckResult.Error) return bindDialogIdToUserResult.toDialogResult()
+
+        // bind dialog id to second user
+        bindDialogIdToUserResult =
+            usersRepository.bindDialogIdToUser(dialog.users[1].id, dialog.id)
+
+        return when (bindDialogIdToUserResult) {
+            is CheckResult.Successful -> DialogResult.Successful(dialog)
+            is CheckResult.Error -> bindDialogIdToUserResult.toDialogResult()
         }
     }
 
@@ -55,41 +51,42 @@ internal class UserInfoManager @Inject constructor(
         accountRepository.signOut()
     }
 
-    fun setName(name: String, res: (CheckResult) -> Unit) {
-        accountRepository.updateName(name, res)
-    }
+    suspend fun setName(name: String): CheckResult = accountRepository.updateName(name)
 
-    fun setEmail(email: String, res: (CheckResult) -> Unit) {
-        accountRepository.updateEmail(email, res)
-    }
 
-    fun setPassword(password: String, res: (CheckResult) -> Unit) {
-        accountRepository.updatePassword(password, res)
-    }
+    suspend fun setEmail(email: String) = accountRepository.updateEmail(email)
 
-    fun setIcon(userId: String, uri: Uri, contextType: String?, res: (CheckResult) -> Unit) {
-        cloudStorageRepository.addImage(userId, uri, contextType) {
-            when (it) {
-                is UploadResult.Successful -> {
-                    if (CurrentUser.user?.id == userId) CurrentUser.user?.icon = it.uri.toString()
-                    accountRepository.updateIcon(it.uri, res)
-                }
-                is UploadResult.Error -> res(CheckResult.ServerError(it.message))
-            }
+
+    suspend fun setPassword(password: String) = accountRepository.updatePassword(password)
+
+
+    suspend fun setIcon(userId: String, uri: Uri, contextType: String?): CheckResult {
+
+        val uploadImageResult = cloudStorageRepository.addImage(userId, uri, contextType)
+
+        if (uploadImageResult is UploadResult.Successful) {
+            val updateIconResult = accountRepository.updateIcon(uploadImageResult.uri)
+            return if (updateIconResult is CheckResult.Successful) {
+                CurrentUser.user?.icon = uploadImageResult.uri.toString()
+                updateIconResult
+            } else updateIconResult
         }
+        return uploadImageResult.toCheckResult()
     }
 
-    fun setBackground(userId: String, uri: Uri, contextType: String?, res: (CheckResult) -> Unit) {
-        cloudStorageRepository.addImage(userId, uri, contextType) {
-            when (it) {
-                is UploadResult.Successful -> {
-                    if (CurrentUser.user?.id == userId) CurrentUser.user?.background =
-                        it.uri.toString()
-                    accountRepository.updateBackground(it.uri, res)
-                }
-                is UploadResult.Error -> res(CheckResult.ServerError(it.message))
-            }
+    suspend fun setBackground(userId: String, uri: Uri, contextType: String?): CheckResult {
+        val uploadImageResult = cloudStorageRepository.addImage(userId, uri, contextType)
+
+        if (uploadImageResult is UploadResult.Successful) {
+            val uploadUri = uploadImageResult.uri
+            val updateBackgroundResult = accountRepository.updateBackground(uploadUri)
+            return if (updateBackgroundResult is CheckResult.Successful) {
+                CurrentUser.user?.background = uploadUri.toString()
+                updateBackgroundResult
+            } else updateBackgroundResult
         }
+
+        return uploadImageResult.toCheckResult()
     }
 
 

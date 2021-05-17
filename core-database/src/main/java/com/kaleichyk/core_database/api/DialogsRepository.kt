@@ -8,9 +8,9 @@ import com.koleychik.models.results.dialog.DialogsResult
 
 interface DialogsRepository {
 
-    fun getDialogs(listIds: List<Long>, start: Int, end: Long, res: (DialogsResult) -> Unit)
-    fun getFavoritesDialogs(listIds: List<Long>, res: (DialogsResult) -> Unit)
-    fun addDialog(dialog: Dialog, res: (DialogResult) -> Unit)
-    fun delete(dialog: Dialog, res: (CheckResult) -> Unit)
-    fun addLastMessage(dialogId: Long, message: Message, res: (CheckResult) -> Unit)
+    suspend fun getDialogs(listIds: List<Long>, start: Int, end: Long): DialogsResult
+    suspend fun getFavoritesDialogs(listIds: List<Long>): DialogsResult
+    suspend fun addDialog(dialog: Dialog): DialogResult
+    suspend fun delete(dialog: Dialog): CheckResult
+    suspend fun addLastMessage(dialogId: Long, message: Message): CheckResult
 }

@@ -4,5 +4,5 @@ import com.koleychik.models.results.CheckResult
 
 interface CloudMessagingRepository {
 
-    fun subscribeToTopic(topic: String, res: (CheckResult) -> Unit)
+    suspend fun subscribeToTopic(topic: String): CheckResult
 }

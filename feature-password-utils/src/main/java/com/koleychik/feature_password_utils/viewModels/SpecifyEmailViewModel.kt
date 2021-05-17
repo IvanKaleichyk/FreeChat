@@ -32,11 +32,11 @@ class SpecifyEmailViewModel @Inject constructor(
             return@launch
         }
 
-        repository.resetPassword(email) {
-            viewModelScope.launch(Dispatchers.Main) {
-                checkRes.value = it
-                isLoading.value = false
-            }
+        val result = repository.resetPassword(email)
+
+        withContext(Dispatchers.Main){
+            checkRes.value = result
+            isLoading.value = false
         }
     }
 

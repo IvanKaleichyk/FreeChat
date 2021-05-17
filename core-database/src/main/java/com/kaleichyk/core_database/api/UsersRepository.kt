@@ -6,9 +6,9 @@ import com.koleychik.models.results.user.UsersResult
 
 interface UsersRepository {
 
-    fun getUsers(orderBy: String, startAfter: Int, limit: Long, res: (UsersResult) -> Unit)
-    fun getUserById(id: String, res: (UserResult) -> Unit)
-    fun searchByName(name: String, res: (UsersResult) -> Unit)
-    fun deleteUser(id: String, res: (CheckResult) -> Unit)
-    fun bindDialogIdToUser(userId: String, dialogId : Long, res: (CheckResult) -> Unit)
+    suspend fun getUsers(orderBy: String, startAfter: Int, limit: Long): UsersResult
+    suspend fun getUserById(id: String): UserResult
+    suspend fun searchByName(name: String): UsersResult
+    suspend fun deleteUser(id: String): CheckResult
+    suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult
 }

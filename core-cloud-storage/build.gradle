@@ -13,10 +13,13 @@ dependencies {
     implementation Dependencies.appCompat
     implementation Dependencies.material
 
+    implementation Dependencies.firebaseCloudStore
+
     // Dagger
     implementation Dependencies.dagger
-    implementation 'com.google.firebase:firebase-storage-ktx:19.2.2'
     kapt Dependencies.daggerCompile
+
+    implementation Dependencies.coroutinesPlayService
 
     // Tests
     testImplementation Dependencies.jUnitCore

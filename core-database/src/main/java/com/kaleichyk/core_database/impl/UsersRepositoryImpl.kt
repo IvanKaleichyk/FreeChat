@@ -1,116 +1,91 @@
 package com.kaleichyk.core_database.impl
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.toObject
+import com.kaleichyk.core_database.*
 import com.kaleichyk.core_database.api.UsersRepository
 import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.results.user.UsersResult
 import com.koleychik.models.users.User
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
 
     private val store = FirebaseFirestore.getInstance()
 
-    override fun getUsers(
-        orderBy: String,
-        startAfter: Int,
-        limit: Long,
-        res: (UsersResult) -> Unit
-    ) {
-        store.collection(UserConstants.ROOT_PATH)
+    override suspend fun getUsers(orderBy: String, startAfter: Int, limit: Long): UsersResult {
+        val collection = store.collection(UserConstants.ROOT_PATH)
             .orderBy(orderBy)
             .startAfter(startAfter)
             .limit(limit)
-            .get()
-            .addOnSuccessListener { result ->
-                val listUsers = mutableListOf<User>()
-                for (i in result) listUsers.add(i.toObject(User::class.java))
-                res(UsersResult.Successful(listUsers))
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(UsersResult.ServerError(it.localizedMessage!!))
-                else res(UsersResult.ServerError(it.message.toString()))
-            }
+        return try {
+            val result = collection.get().await()
+            UsersResult.Successful(result.getListFromQuerySnapshot(User::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toUsersResultError()
+        }
     }
 
-    override fun getUserById(id: String, res: (UserResult) -> Unit) {
-        store.collection(UserConstants.ROOT_PATH)
-            .document(id)
-            .get()
-            .addOnSuccessListener {
-                val user: User? = try {
-                    it.toObject(User::class.java)
-                } catch (e: NullPointerException) {
-                    null
-                }
-                if (user != null) res(UserResult.Successful(user))
-                else {
-                    res(UserResult.UserNotExists)
-                }
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(UserResult.ServerError(it.localizedMessage!!))
-                else res(UserResult.ServerError(it.message.toString()))
-            }
+    override suspend fun getUserById(id: String): UserResult {
+        val document = store.collection(UserConstants.ROOT_PATH).document(id)
+
+        (return try {
+            val result = document.get().await()
+            UserResult.Successful(result.getObject(User::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toUserResultError()
+        })
     }
 
-    override fun searchByName(name: String, res: (UsersResult) -> Unit) {
-        store.collection(UserConstants.ROOT_PATH)
+    override suspend fun searchByName(name: String): UsersResult {
+        val collection = store.collection(UserConstants.ROOT_PATH)
             .orderBy(UserConstants.NAME)
             .startAt(name).endAt(name + '\uf8ff')
-            .get()
-            .addOnSuccessListener { result ->
-                val listUsers = mutableListOf<User>()
-                for (i in result) listUsers.add(i.toObject(User::class.java))
-                res(UsersResult.Successful(listUsers))
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(UsersResult.ServerError(it.localizedMessage!!))
-                else res(UsersResult.ServerError(it.message.toString()))
-            }
+
+        return try {
+            val result = collection.get().await()
+            UsersResult.Successful(result.getListFromQuerySnapshot(User::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toUsersResultError()
+        }
     }
 
-    override fun deleteUser(id: String, res: (CheckResult) -> Unit) {
-        store.collection(UserConstants.ROOT_PATH)
-            .document(id).delete()
-            .addOnSuccessListener {
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun deleteUser(id: String): CheckResult {
+        val document = store.collection(UserConstants.ROOT_PATH).document(id)
+
+        return try {
+            document.delete()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 
-    override fun bindDialogIdToUser(userId: String, dialogId: Long, res: (CheckResult) -> Unit) {
+    override suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult {
         val document = store.collection(UserConstants.ROOT_PATH).document(userId)
             .collection(userId).document(UserConstants.LIST_DIALOGS_IDS)
 
-        document.get()
-            .addOnSuccessListener { documentSnapshot ->
-                var list: MutableList<Long>? = try {
-                    documentSnapshot.toObject() as MutableList<Long>?
-                } catch (e: java.lang.NullPointerException) {
-                    null
-                }
-                if (list == null) list = mutableListOf()
-                list.add(dialogId)
+        val listDialogsIds: MutableList<Long> = try {
+            document.get().await().toObject<MutableList<Long>>() ?: mutableListOf()
+        } catch (e: NullPointerException) {
+            mutableListOf()
+        } catch (e: FirebaseFirestoreException) {
+            if (e.code != FirebaseFirestoreException.Code.NOT_FOUND) return e.toCheckResultError()
+            else mutableListOf()
+        }
 
-                document.update(UserConstants.LIST_DIALOGS_IDS, list)
-                    .addOnSuccessListener {
-                        res(CheckResult.Successful)
-                    }
-                    .addOnFailureListener {
-                        if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                        else res(CheckResult.ServerError(it.message.toString()))
-                    }
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+        listDialogsIds.add(dialogId)
+
+        return try {
+            document.update(UserConstants.LIST_DIALOGS_IDS, listDialogsIds).await()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
+
     }
 }

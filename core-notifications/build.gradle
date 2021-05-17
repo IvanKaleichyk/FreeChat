@@ -14,12 +14,13 @@ dependencies {
 
     // Dagger
     implementation Dependencies.dagger
-    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
     kapt Dependencies.daggerCompile
 
     // coroutines
     implementation Dependencies.coroutinesCore
     implementation Dependencies.coroutinesAndroid
+    implementation Dependencies.coroutinesPlayService
 
     // network
     implementation Dependencies.retrofit

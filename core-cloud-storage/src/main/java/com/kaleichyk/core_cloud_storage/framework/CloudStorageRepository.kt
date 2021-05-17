@@ -6,7 +6,7 @@ import com.kaleichyk.core_cloud_storage.framework.results.UploadResult
 
 interface CloudStorageRepository {
 
-    fun addImage(userId: String, uri: Uri, contentType: String?, res: (UploadResult) -> Unit)
-    fun delete(path: String, res: (DeleteResult) -> Unit)
+    suspend fun addImage(userId: String, uri: Uri, contentType: String?): UploadResult
+    suspend fun delete(path: String): DeleteResult
 
 }

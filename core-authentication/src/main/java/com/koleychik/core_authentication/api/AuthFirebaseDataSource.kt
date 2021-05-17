@@ -5,12 +5,12 @@ import com.koleychik.models.results.CheckResult
 
 internal interface AuthFirebaseDataSource {
 
-    fun sendVerificationEmail(res: (CheckResult) -> Unit)
-    fun createFirebaseUser(email: String, password: String, res: (CheckResult) -> Unit)
-    fun login(email: String, password: String, res: (CheckResult) -> Unit)
+    suspend fun sendVerificationEmail(): CheckResult
+    suspend fun createFirebaseUser(email: String, password: String): CheckResult
+    suspend fun login(email: String, password: String): CheckResult
     fun loginFirebaseUserByCredential(credential: AuthCredential, res: (CheckResult) -> Unit)
-    fun checkUser(res: (CheckResult) -> Unit)
-    fun resetPassword(email: String, res: (CheckResult) -> Unit)
+    suspend fun checkUser(): CheckResult
+    suspend fun resetPassword(email: String): CheckResult
 
 
 }

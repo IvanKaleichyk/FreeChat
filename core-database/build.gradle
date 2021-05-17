@@ -17,8 +17,10 @@ dependencies {
     implementation Dependencies.dagger
     kapt Dependencies.daggerCompile
 
+    implementation Dependencies.coroutinesPlayService
+
     // Firebase
-    implementation Dependencies.firebaseFireStore
+    implementation Dependencies.firebaseFirestore
 
     // Tests
     testImplementation Dependencies.jUnitCore

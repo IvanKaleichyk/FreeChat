@@ -1,18 +1,22 @@
 package com.koleychik.core_authentication.impl
 
 import android.net.Uri
-import android.util.Log
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.kaleichyk.data.CurrentUser
 import com.kaleichyk.data.showLog
 import com.koleychik.core_authentication.api.AuthDbDataSource
+import com.koleychik.core_authentication.getObject
+import com.koleychik.core_authentication.toCheckResultError
+import com.koleychik.core_authentication.toUserResultError
 import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.users.User
 import com.koleychik.models.users.UserRoot
-import com.koleychik.module_injector.Constants
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
@@ -21,88 +25,67 @@ internal class AuthDbDataSourceImpl @Inject constructor() : AuthDbDataSource {
 
     private lateinit var userListener: ListenerRegistration
 
-    override fun addUser(user: User, res: (UserResult) -> Unit) {
-        Log.d(Constants.TAG, "AuthDbDataSourceImpl start addUser")
-        db.collection(UserConstants.ROOT_PATH)
-            .document(user.id)
-            .set(user)
-            .addOnSuccessListener { res(UserResult.Successful(user)) }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(UserResult.ServerError(it.localizedMessage!!))
-                else res(UserResult.ServerError(it.message.toString()))
-            }
+    override suspend fun addUser(user: User): UserResult {
+        val document = db.collection(UserConstants.ROOT_PATH).document(user.id)
+
+        return try {
+            document.set(user).await()
+            UserResult.Successful(user)
+        } catch (e: FirebaseAuthException) {
+            e.toUserResultError()
+        }
     }
 
-    override fun getUserByUid(uid: String, res: (UserResult) -> Unit) {
-        Log.d(Constants.TAG, "AuthDbDataSourceImpl start getUserByUid")
-        db.collection(UserConstants.ROOT_PATH)
-            .document(uid)
-            .get()
-            .addOnSuccessListener {
-                val user = it.toObject(User::class.java)
-                if (user == null) res(UserResult.UserNotExists)
-                else res(UserResult.Successful(user))
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(UserResult.ServerError(it.localizedMessage!!))
-                else res(UserResult.ServerError(it.message.toString()))
-            }
+    override suspend fun getUserByUid(uid: String): UserResult {
+        val document = db.collection(UserConstants.ROOT_PATH).document(uid)
+
+        return try {
+            val result = document.get().await()
+            UserResult.Successful(result.getObject(User::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toUserResultError()
+        }
     }
 
-    override fun updateUserEmail(email: String, res: (CheckResult) -> Unit) {
-        db.collection(UserConstants.ROOT_PATH)
-            .document(CurrentUser.user!!.id)
-            .update(UserConstants.EMAIL, email)
-            .addOnSuccessListener {
-                CurrentUser.user?.email = email
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun updateUserEmail(email: String): CheckResult {
+        val document = db.collection(UserConstants.ROOT_PATH).document(CurrentUser.user!!.id)
+
+        return try {
+            document.update(UserConstants.EMAIL, email).await()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 
-    override fun updateName(name: String, res: (CheckResult) -> Unit) {
-        db.collection(UserConstants.ROOT_PATH)
-            .document(CurrentUser.user!!.id)
-            .update(UserConstants.NAME, name)
-            .addOnSuccessListener {
-                CurrentUser.user?.name = name
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun updateName(name: String): CheckResult {
+        val document = db.collection(UserConstants.ROOT_PATH).document(CurrentUser.user!!.id)
+        return try {
+            document.update(UserConstants.NAME, name).await()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 
-    override fun updateIcon(uri: Uri, res: (CheckResult) -> Unit) {
-        db.collection(UserConstants.ROOT_PATH)
-            .document(CurrentUser.user!!.id)
-            .update(UserConstants.ICON, uri.toString())
-            .addOnSuccessListener {
-                CurrentUser.user?.icon = uri.toString()
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun updateIcon(uri: Uri): CheckResult {
+        val document = db.collection(UserConstants.ROOT_PATH).document(CurrentUser.user!!.id)
+        return try {
+            document.update(UserConstants.ICON, uri.toString()).await()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 
-    override fun updateBackground(uri: Uri, res: (CheckResult) -> Unit) {
-        db.collection(UserConstants.ROOT_PATH)
-            .document(CurrentUser.user!!.id)
-            .update(UserConstants.BACKGROUND, uri.toString())
-            .addOnSuccessListener {
-                CurrentUser.user?.background = uri.toString()
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun updateBackground(uri: Uri): CheckResult {
+        val document = db.collection(UserConstants.ROOT_PATH).document(CurrentUser.user!!.id)
+        return try {
+            document.update(UserConstants.BACKGROUND, uri.toString()).await()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 
     override fun isUserOnline(isOnline: Boolean) {

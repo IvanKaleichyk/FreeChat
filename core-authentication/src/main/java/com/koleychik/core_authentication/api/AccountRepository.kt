@@ -7,14 +7,14 @@ interface AccountRepository {
 
     fun isEmailVerified(): Boolean
     fun setOnlineStatus(isOnline: Boolean)
-    fun sendVerificationEmail(res: (CheckResult) -> Unit)
-    fun updateEmail(email: String, res: (CheckResult) -> Unit)
-    fun updatePassword(password: String, res: (CheckResult) -> Unit)
-    fun updateName(name: String, res: (CheckResult) -> Unit)
-    fun updateIcon(uri: Uri, res: (CheckResult) -> Unit)
-    fun updateBackground(uri: Uri, res: (CheckResult) -> Unit)
+    suspend fun sendVerificationEmail(): CheckResult
+    suspend fun updateEmail(email: String): CheckResult
+    suspend fun updatePassword(password: String): CheckResult
+    suspend fun updateName(name: String): CheckResult
+    suspend fun updateIcon(uri: Uri): CheckResult
+    suspend fun updateBackground(uri: Uri): CheckResult
     fun signOut()
-    fun deleteUser()
+    suspend fun deleteUser(): CheckResult
 
     fun subscribeToUserChanges()
     fun unSubscribeToUserChanges()

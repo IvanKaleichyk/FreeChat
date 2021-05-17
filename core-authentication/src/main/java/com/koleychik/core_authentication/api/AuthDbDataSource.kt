@@ -7,13 +7,13 @@ import com.koleychik.models.users.User
 
 internal interface AuthDbDataSource {
 
-    fun addUser(user: User, res: (UserResult) -> Unit)
-    fun getUserByUid(uid: String, res: (UserResult) -> Unit)
+    suspend fun addUser(user: User): UserResult
+    suspend fun getUserByUid(uid: String): UserResult
 
-    fun updateUserEmail(email: String, res: (CheckResult) -> Unit)
-    fun updateName(name: String, res: (CheckResult) -> Unit)
-    fun updateIcon(uri: Uri, res: (CheckResult) -> Unit)
-    fun updateBackground(uri: Uri, res: (CheckResult) -> Unit)
+    suspend fun updateUserEmail(email: String): CheckResult
+    suspend fun updateName(name: String): CheckResult
+    suspend fun updateIcon(uri: Uri): CheckResult
+    suspend fun updateBackground(uri: Uri): CheckResult
     fun isUserOnline(isOnline: Boolean)
 
     fun subscribeToUserChanges()

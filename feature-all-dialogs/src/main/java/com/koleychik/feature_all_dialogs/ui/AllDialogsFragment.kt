@@ -64,7 +64,7 @@ class AllDialogsFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.serverResponse.observe(viewLifecycleOwner) {
+        viewModel.dialogsResponse.observe(viewLifecycleOwner) {
             resetViews()
             when (it) {
                 null -> {
@@ -76,8 +76,7 @@ class AllDialogsFragment : Fragment() {
                     )
                 }
                 is DialogsResult.Successful -> mapList(it.list)
-                is DialogsResult.ServerError -> error(it.message)
-                is DialogsResult.DataError -> error(requireContext().getString(it.message))
+                is DialogsResult.Error -> error(it.message)
             }
         }
     }
@@ -143,7 +142,7 @@ class AllDialogsFragment : Fragment() {
     private fun createOnSwipeListener() {
         binding.switchFavorites.setOnCheckedChangeListener { _, _ ->
             adapter.list = mutableListOf()
-            viewModel.serverResponse.value = null
+            viewModel.resetListDialogs()
         }
     }
 

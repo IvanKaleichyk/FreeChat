@@ -2,8 +2,13 @@ package com.kaleichyk.core_database.impl
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kaleichyk.core_database.R
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 import com.kaleichyk.core_database.api.DialogsRepository
+import com.kaleichyk.core_database.getListFromQuerySnapshot
+import com.kaleichyk.core_database.toCheckResultError
+import com.kaleichyk.core_database.toDialogResultError
+import com.kaleichyk.core_database.toDialogsResultError
 import com.koleychik.models.Dialog
 import com.koleychik.models.Message
 import com.koleychik.models.constants.DialogConstants
@@ -11,124 +16,102 @@ import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
 import com.koleychik.models.results.dialog.DialogsResult
 import com.koleychik.models.users.User
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
 
     private val store = FirebaseFirestore.getInstance()
 
-    override fun getDialogs(
-        listIds: List<Long>,
-        start: Int,
-        end: Long,
-        res: (DialogsResult) -> Unit
-    ) {
+    override suspend fun getDialogs(listIds: List<Long>, start: Int, end: Long): DialogsResult {
         if (listIds.isEmpty()) {
-            res(DialogsResult.Successful(listOf()))
-            return
+            return DialogsResult.Successful(listOf())
         }
-        store.collection(DialogConstants.ROOT_PATH)
-            .whereIn(DialogConstants.ID, listIds)
-            .orderBy(DialogConstants.IS_FAVORITE)
-            .startAfter(start)
-            .limit(end)
-            .get()
-            .addOnSuccessListener { result ->
-                val listDialogs = mutableListOf<Dialog>()
-                for (i in result) listDialogs.add(i.toObject(Dialog::class.java))
-                res(DialogsResult.Successful(listDialogs))
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(DialogsResult.ServerError(it.localizedMessage!!))
-                else res(DialogsResult.ServerError(it.message.toString()))
-            }
-    }
+        return try {
+            val result = store.collection(DialogConstants.ROOT_PATH)
+                .whereIn(DialogConstants.ID, listIds)
+                .orderBy(DialogConstants.IS_FAVORITE)
+                .startAfter(start)
+                .limit(end)
+                .get()
+                .await()
 
-    override fun getFavoritesDialogs(listIds: List<Long>, res: (DialogsResult) -> Unit) {
-        if (listIds.isEmpty()) {
-            res(DialogsResult.Successful(listOf()))
-            return
-        }
-        store.collection(DialogConstants.ROOT_PATH)
-            .whereIn(DialogConstants.ID, listIds)
-            .whereEqualTo(DialogConstants.IS_FAVORITE, true)
-            .get()
-            .addOnSuccessListener { result ->
-                val listDialogs = mutableListOf<Dialog>()
-                for (i in result) listDialogs.add(i.toObject(Dialog::class.java))
-                res(DialogsResult.Successful(listDialogs))
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(DialogsResult.ServerError(it.localizedMessage!!))
-                else res(DialogsResult.ServerError(it.message.toString()))
-            }
-    }
-
-    override fun addDialog(dialog: Dialog, res: (DialogResult) -> Unit) {
-        val collection = store.collection(DialogConstants.ROOT_PATH)
-        checkIfDialogExists(collection, dialog.users) { isSuccessful ->
-            if (isSuccessful) res(DialogResult.DataError(R.string.dialog_exits))
-            else collection.document(dialog.id.toString()).set(dialog)
-                .addOnSuccessListener {
-                    res(DialogResult.Successful(dialog))
-                }
-                .addOnFailureListener {
-                    if (it.localizedMessage != null) res(DialogResult.ServerError(it.localizedMessage!!))
-                    else res(DialogResult.ServerError(it.message.toString()))
-                }
+            DialogsResult.Successful(result.getListFromQuerySnapshot(Dialog::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toDialogsResultError()
         }
     }
 
-    private fun checkIfDialogExists(
+    override suspend fun getFavoritesDialogs(listIds: List<Long>): DialogsResult {
+        if (listIds.isEmpty()) return DialogsResult.Successful(listOf())
+
+        return try {
+            val result = store.collection(DialogConstants.ROOT_PATH)
+                .whereIn(DialogConstants.ID, listIds)
+                .whereEqualTo(DialogConstants.IS_FAVORITE, true)
+                .get()
+                .await()
+
+            DialogsResult.Successful(result.getListFromQuerySnapshot(Dialog::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toDialogsResultError()
+        }
+    }
+
+    override suspend fun addDialog(dialog: Dialog): DialogResult {
+        val document = store.collection(DialogConstants.ROOT_PATH).document(dialog.id.toString())
+
+        return try {
+            document.set(dialog).await()
+            DialogResult.Successful(dialog)
+        } catch (e: FirebaseFirestoreException) {
+            e.toDialogResultError()
+        }
+    }
+
+    private suspend fun checkIfDialogExists(
         collection: CollectionReference,
-        users: List<User>,
-        res: (isSuccessful: Boolean) -> Unit
-    ) {
-        collection
-            .whereIn(DialogConstants.USERS, users)
-            .get()
-            .addOnSuccessListener {
-                if (it.isEmpty) res(false)
-                for (i in it) {
-                    val dialog = try {
-                        i.toObject(Dialog::class.java)
-                    } catch (e: Exception) {
-                        null
-                    }
-                    if (dialog != null) {
-                        res(true)
-                        return@addOnSuccessListener
-                    }
-                }
-                res(false)
-            }
-            .addOnFailureListener {
-                res(false)
-            }
+        users: List<User>
+    ): Boolean {
+
+        val query = collection.whereIn(DialogConstants.USERS, users)
+
+        val result: QuerySnapshot
+        try {
+            result = query.get().await()
+        } catch (e: FirebaseFirestoreException) {
+            if (e.code == FirebaseFirestoreException.Code.NOT_FOUND) return false
+            else throw e
+        }
+
+        return try {
+            result.toObjects(Dialog::class.java)
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
-    override fun delete(dialog: Dialog, res: (CheckResult) -> Unit) {
-        store.collection(DialogConstants.ROOT_PATH)
-            .document(dialog.id.toString()).delete()
-            .addOnSuccessListener {
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun delete(dialog: Dialog): CheckResult {
+        val document = store.collection(DialogConstants.ROOT_PATH)
+            .document(dialog.id.toString())
+
+        return try {
+            document.delete().await()
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 
-    override fun addLastMessage(dialogId: Long, message: Message, res: (CheckResult) -> Unit) {
-        store.collection(DialogConstants.ROOT_PATH)
-            .document(dialogId.toString())
-            .update(DialogConstants.LAST_MESSAGE, message)
-            .addOnSuccessListener {
-                res(CheckResult.Successful)
-            }
-            .addOnFailureListener {
-                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-                else res(CheckResult.ServerError(it.message.toString()))
-            }
+    override suspend fun addLastMessage(dialogId: Long, message: Message): CheckResult {
+        val document = store.collection(DialogConstants.ROOT_PATH).document(dialogId.toString())
+
+        return try {
+            document.update(DialogConstants.LAST_MESSAGE, message)
+            CheckResult.Successful
+        } catch (e: FirebaseFirestoreException) {
+            e.toCheckResultError()
+        }
     }
 }

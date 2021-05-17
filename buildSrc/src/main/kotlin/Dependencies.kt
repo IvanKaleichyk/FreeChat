@@ -10,9 +10,10 @@ internal object Versions {
     const val okHttp = "4.9.0"
 
     // firebase
-    const val firebaseAuth = "20.0.3"
-    const val firebaseDb = "19.7.0"
-    const val fireStore = "22.1.2"
+    const val firebaseAuth = "21.0.1"
+    const val firebaseDb = "20.0.0"
+    const val firebaseFirestore = "23.0.0"
+    const val firebaseCloudStorage = "20.0.0"
 
     //    progressBar
     const val progressBar = "2.5.0"
@@ -46,7 +47,7 @@ internal object Versions {
 
     // Android Core
     const val kotlin_version = "1.4.31"
-    const val gradle = "4.1.3"
+    const val gradle = "4.2.1"
     const val core = "1.3.2"
     const val appcompat = "1.2.0"
     const val material = "1.3.0"
@@ -64,7 +65,8 @@ internal object Versions {
 object Dependencies {
     const val shimmerLayout = "com.facebook.shimmer:shimmer:${Versions.shimmerLayout}"
 
-    const val swipeToRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeToRefresh}"
+    const val swipeToRefresh =
+        "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeToRefresh}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     // network
@@ -75,7 +77,8 @@ object Dependencies {
     // firebase
     const val firebaseAuth = "com.google.firebase:firebase-auth:${Versions.firebaseAuth}"
     const val firebaseDb = "com.google.firebase:firebase-database:${Versions.firebaseDb}"
-    const val firebaseFireStore = "com.google.firebase:firebase-firestore-ktx:${Versions.fireStore}"
+    const val firebaseFirestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firebaseFirestore}"
+    const val firebaseCloudStore = "com.google.firebase:firebase-storage-ktx:${Versions.firebaseCloudStorage}"
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
@@ -113,6 +116,8 @@ object Dependencies {
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val coroutinesAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val coroutinesPlayService =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
 
     // lifecycle
     const val lifecycleExtension =
@@ -146,6 +151,7 @@ object Dependencies {
     const val kotlin_lib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin_version}"
     const val kotlin_plugin =
         "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}"
+
     const val gradleTools = "com.android.tools.build:gradle:${Versions.gradle}"
     const val coreKtx = "androidx.core:core-ktx:${Versions.core}"
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appcompat}"

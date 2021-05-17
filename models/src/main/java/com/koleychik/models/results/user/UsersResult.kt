@@ -4,6 +4,7 @@ import com.koleychik.models.users.User
 
 sealed class UsersResult {
     class Successful(val list: List<User>) : UsersResult()
-    class DataError(val message: Int) : UsersResult()
-    class ServerError(val message: String) : UsersResult()
+    abstract class Error : UsersResult()
+    class DataError(val message: Int) : Error()
+    class ServerError(val message: String) : Error()
 }
