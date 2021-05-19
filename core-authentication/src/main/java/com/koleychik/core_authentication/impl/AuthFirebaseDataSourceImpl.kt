@@ -3,6 +3,7 @@ package com.koleychik.core_authentication.impl
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
+import com.kaleichyk.utils.getCheckResultError
 import com.koleychik.core_authentication.R
 import com.koleychik.core_authentication.api.AuthFirebaseDataSource
 import com.koleychik.core_authentication.toCheckResultError
@@ -57,7 +58,7 @@ class AuthFirebaseDataSourceImpl @Inject constructor() : AuthFirebaseDataSource 
 
     override suspend fun checkUser(): CheckResult {
         return if (auth.currentUser != null) CheckResult.Successful
-        else CheckResult.DataError(R.string.cannot_find_user)
+        else getCheckResultError(R.string.cannot_find_user)
     }
 
     override suspend fun resetPassword(email: String): CheckResult {

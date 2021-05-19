@@ -11,15 +11,13 @@ import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.feature_loading_api.LoadingApi
-import com.koleychik.feature_sign.R
 import com.koleychik.feature_sign.databinding.FragmentSignUpBinding
 import com.koleychik.feature_sign.di.SignFeatureComponentHolder
 import com.koleychik.feature_sign.navigation.SignUpNavigationApi
 import com.koleychik.feature_sign.ui.viewModels.SignUpViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
 import com.koleychik.feature_sign.underlineText
-import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.user.UserResult
+import com.koleychik.models.states.CheckDataState
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
@@ -66,30 +64,25 @@ class SignUpFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            loadingApi.isVisible = it
-            binding.root.isEnabledViews(!it)
-        }
-        viewModel.checkResult.observe(viewLifecycleOwner) {
+        viewModel.createAccountState.observe(viewLifecycleOwner) {
+            loading(false)
             when (it) {
-                null -> {
-                }
-                is CheckResult.DataError -> requireContext().showToast(it.message)
-                is CheckResult.ServerError -> requireContext().showToast(it.message)
-                else -> requireContext().showToast(R.string.error)
-            }
-        }
-        viewModel.userResult.observe(viewLifecycleOwner) {
-            when (it) {
-                null -> {
-                }
-                is UserResult.Successful -> navigationApi.fromSignUpToMainScreen()
-                is UserResult.DataError -> requireContext().showToast(it.message)
-                is UserResult.ServerError -> requireContext().showToast(it.message)
-                else -> requireContext().showToast(R.string.cannot_create_user)
+                is CheckDataState.Checking -> loading(true)
+                is CheckDataState.Error -> error(it.message)
+                is CheckDataState.Successful -> navigationApi.fromSignUpToMainScreen()
             }
         }
     }
+
+    private fun loading(start: Boolean = true) {
+        loadingApi.isVisible = start
+        binding.root.isEnabledViews(!start)
+    }
+
+    private fun error(message: String) {
+        requireContext().showToast(message)
+    }
+
 
     private fun createOnCLickListener() {
         val onClickListener = View.OnClickListener {
@@ -98,7 +91,7 @@ class SignUpFragment : Fragment() {
                     textSignIn.id -> navigationApi.fromSignUpToSignIn()
                     btn.id -> checkInformationAndCreateUser()
                     googleAuth.id -> authRepository.googleSingIn(requireActivity() as AppCompatActivity) {
-                        viewModel.userResult.value = it
+                        viewModel.googleSignInUserResult(it)
                     }
                 }
             }
@@ -124,6 +117,7 @@ class SignUpFragment : Fragment() {
         }
         viewModel.startCreateAccount(name, email, password, repeatPassword)
     }
+
 
     private fun setupLoading() {
         loadingApi.create(requireView())

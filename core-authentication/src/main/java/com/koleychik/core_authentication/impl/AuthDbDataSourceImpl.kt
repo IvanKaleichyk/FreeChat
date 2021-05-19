@@ -5,8 +5,8 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
-import com.kaleichyk.data.CurrentUser
-import com.kaleichyk.data.showLog
+import com.kaleichyk.utils.CurrentUser
+import com.kaleichyk.utils.showLog
 import com.koleychik.core_authentication.api.AuthDbDataSource
 import com.koleychik.core_authentication.getObject
 import com.koleychik.core_authentication.toCheckResultError

@@ -1,4 +1,4 @@
-package com.kaleichyk.data
+package com.kaleichyk.utils
 
 object MimeTypes {
 

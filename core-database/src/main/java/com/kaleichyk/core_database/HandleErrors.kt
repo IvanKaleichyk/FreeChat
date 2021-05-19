@@ -1,6 +1,8 @@
 package com.kaleichyk.core_database
 
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.kaleichyk.utils.getDialogResultError
+import com.kaleichyk.utils.getUserResultError
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.MessagesResult
 import com.koleychik.models.results.dialog.DialogResult
@@ -10,21 +12,22 @@ import com.koleychik.models.results.user.UsersResult
 
 fun FirebaseFirestoreException.toUserResultError(): UserResult.Error {
     val message: String
-    when(code){
-        FirebaseFirestoreException.Code.NOT_FOUND -> return UserResult.DataError(R.string.cannot_find_user)
+    when (code) {
+        FirebaseFirestoreException.Code.NOT_FOUND -> return getUserResultError(R.string.cannot_find_user)
+
         else -> message = localizedMessage ?: this.message.toString()
     }
-    return UserResult.ServerError(message)
+    return UserResult.Error(message)
 }
 
 fun FirebaseFirestoreException.toUsersResultError(): UsersResult.Error {
     val message = localizedMessage ?: message.toString()
-    return UsersResult.ServerError(message)
+    return UsersResult.Error(message)
 }
 
 fun FirebaseFirestoreException.toMessagesResultError(): MessagesResult.Error {
     val message = localizedMessage ?: message.toString()
-    return MessagesResult.ServerError(message)
+    return MessagesResult.Error(message)
 }
 
 fun FirebaseFirestoreException.toDialogsResultError(): DialogsResult.Error {
@@ -35,13 +38,13 @@ fun FirebaseFirestoreException.toDialogsResultError(): DialogsResult.Error {
 fun FirebaseFirestoreException.toDialogResultError(): DialogResult.Error {
     val message: String
     when (code) {
-        FirebaseFirestoreException.Code.ALREADY_EXISTS -> return DialogResult.DataError(R.string.dialog_exits)
+        FirebaseFirestoreException.Code.ALREADY_EXISTS -> return getDialogResultError(R.string.dialog_exits)
         else -> message = localizedMessage ?: this.message.toString()
     }
-    return DialogResult.ServerError(message)
+    return DialogResult.Error(message)
 }
 
 fun FirebaseFirestoreException.toCheckResultError(): CheckResult.Error {
     val message = localizedMessage ?: message.toString()
-    return CheckResult.ServerError(message)
+    return CheckResult.Error(message)
 }

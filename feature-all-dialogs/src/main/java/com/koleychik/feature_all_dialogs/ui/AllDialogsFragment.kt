@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import coil.load
-import com.kaleichyk.data.CurrentUser
-import com.kaleichyk.data.NavigationConstants
+import com.kaleichyk.utils.CurrentUser
+import com.kaleichyk.utils.NavigationConstants
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.FragmentAllDialogsBinding
@@ -17,7 +17,7 @@ import com.koleychik.feature_all_dialogs.ui.viewModels.AllDialogsViewModel
 import com.koleychik.feature_all_dialogs.ui.viewModels.ViewModelFactory
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.models.Dialog
-import com.koleychik.models.results.dialog.DialogsResult
+import com.koleychik.models.states.DataState
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
@@ -63,25 +63,24 @@ class AllDialogsFragment : Fragment() {
         subscribe()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun subscribe() {
-        viewModel.dialogsResponse.observe(viewLifecycleOwner) {
+        viewModel.dialogState.observe(viewLifecycleOwner) {
             resetViews()
             when (it) {
-                null -> {
-                    adapter.clearList()
-                    loadingDialogs(
-                        binding.switchFavorites.isChecked,
-                        adapter.start,
-                        (adapter.start + adapter.period).toLong()
-                    )
-                }
-                is DialogsResult.Successful -> mapList(it.list)
-                is DialogsResult.Error -> error(it.message)
+                is DataState.WaitingForStart -> loadingDialogs(
+                    binding.switchFavorites.isChecked,
+                    adapter.start,
+                    (adapter.start + adapter.period).toLong()
+                )
+                is DataState.Loading -> loading()
+                is DataState.Error -> error(it.message)
+                is DataState.Result<*> -> handleList(it.body as List<Dialog>)
             }
         }
     }
 
-    private fun mapList(list: List<Dialog>) {
+    private fun handleList(list: List<Dialog>) {
         if (list.isEmpty()) noneDialogs()
         else addDialogs(list)
     }
@@ -100,20 +99,19 @@ class AllDialogsFragment : Fragment() {
     }
 
     private fun loadingDialogs(isOnlyFavorites: Boolean, startAt: Int, end: Long) {
-        loading()
+        adapter.clearList()
         if (isOnlyFavorites) viewModel.getFavoritesDialogs(CurrentUser.user!!.listDialogsId)
         else viewModel.getDialogs(CurrentUser.user!!.listDialogsId, startAt, end)
     }
 
     private fun error(message: String) {
         binding.textInfo.text = message
+        binding.textInfo.visibility = View.VISIBLE
     }
 
     private fun noneDialogs() {
-        binding.textInfo.run {
-            setText(R.string.cannotFindDialogs)
-            visibility = View.VISIBLE
-        }
+        binding.textInfo.setText(R.string.cannotFindDialogs)
+        binding.textInfo.visibility = View.VISIBLE
     }
 
     private fun resetViews() {
@@ -129,7 +127,7 @@ class AllDialogsFragment : Fragment() {
             when (it.id) {
                 binding.searchIcon.id -> navigationApi.fromDialogsFeatureGoToSearchingFeature()
                 binding.userIcon.id -> navigationApi.fromDialogsFeatureGoToUserInfoFeature(Bundle().apply {
-                   putParcelable(NavigationConstants.USER, CurrentUser.user!!)
+                    putParcelable(NavigationConstants.USER, CurrentUser.user!!)
                 })
             }
         }

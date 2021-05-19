@@ -81,11 +81,8 @@ class SpecifyEmailFragment : Fragment() {
         }
         viewModel.checkRes.observe(viewLifecycleOwner) {
             when (it) {
-                null -> {
-                }
                 is CheckResult.Successful -> dialog.show(childFragmentManager, "Specify Email")
-                is CheckResult.DataError -> requireContext().showToast(it.message)
-                is CheckResult.ServerError -> requireContext().showToast(it.message)
+                is CheckResult.Error -> requireContext().showToast(it.message)
             }
         }
     }

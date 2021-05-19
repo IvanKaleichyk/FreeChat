@@ -4,5 +4,5 @@ import com.koleychik.models.results.CheckResult
 
 fun Exception.toCheckResultError(): CheckResult.Error {
     val message = localizedMessage ?: message.toString()
-    return CheckResult.ServerError(message)
+    return CheckResult.Error(message)
 }

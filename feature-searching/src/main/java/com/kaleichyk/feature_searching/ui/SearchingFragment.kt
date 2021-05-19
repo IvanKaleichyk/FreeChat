@@ -18,7 +18,7 @@ import com.kaleichyk.feature_searching.di.SearchingFeatureComponentHolder
 import com.kaleichyk.feature_searching.ui.adapter.SearchingAdapter
 import com.kaleichyk.feature_searching.ui.viewModel.SearchingViewModel
 import com.kaleichyk.feature_searching.ui.viewModel.ViewModelFactory
-import com.koleychik.models.results.user.UsersResult
+import com.koleychik.models.states.DataState
 import com.koleychik.models.users.User
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
@@ -56,19 +56,20 @@ class SearchingFragment : Fragment() {
         subscribe()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun subscribe() {
-        viewModel.serverResponse.observe(viewLifecycleOwner) {
+        viewModel.usersState.observe(viewLifecycleOwner) {
             resetViews()
             when (it) {
-                null -> loading(null)
-                is UsersResult.Successful -> mapData(it.list)
-                is UsersResult.ServerError -> error(it.message)
-                is UsersResult.DataError -> requireContext().getString(it.message)
+                is DataState.WaitingForStart -> getUsers(null)
+                is DataState.Loading -> loading()
+                is DataState.Result<*> -> handleData(it.body as List<User>)
+                is DataState.Error -> error(it.message)
             }
         }
     }
 
-    private fun mapData(list: List<User>) {
+    private fun handleData(list: List<User>) {
         if (list.isEmpty()) noneData()
         else setList(list)
     }
@@ -92,11 +93,14 @@ class SearchingFragment : Fragment() {
         }
     }
 
-    private fun loading(name: CharSequence?) {
+    private fun loading() {
         binding.shimmerFrameLayout.run {
             visibility = View.VISIBLE
             startShimmer()
         }
+    }
+
+    private fun getUsers(name: CharSequence?){
         if (name == null || name.isEmpty()) viewModel.get50LastUsers()
         else viewModel.searchUsersByName(name.toString())
     }
@@ -130,7 +134,7 @@ class SearchingFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                loading(binding.editText.text.toString().trim())
+                getUsers(binding.editText.text.toString().trim())
             }
         }
         binding.editText.addTextChangedListener(textWatcher)
@@ -143,7 +147,6 @@ class SearchingFragment : Fragment() {
         }
 
         with(binding) {
-//            progressBar.visibility = View.GONE
             textInfo.visibility = View.GONE
             rv.visibility = View.INVISIBLE
         }

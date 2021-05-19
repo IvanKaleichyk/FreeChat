@@ -1,4 +1,4 @@
-package com.kaleichyk.data
+package com.kaleichyk.utils
 
 import com.koleychik.models.users.UserRoot
 

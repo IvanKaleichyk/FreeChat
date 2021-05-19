@@ -11,14 +11,12 @@ import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.feature_loading_api.LoadingApi
-import com.koleychik.feature_sign.R
 import com.koleychik.feature_sign.databinding.FragmentSignInBinding
 import com.koleychik.feature_sign.di.SignFeatureComponentHolder
 import com.koleychik.feature_sign.navigation.SignInNavigationApi
 import com.koleychik.feature_sign.ui.viewModels.SignInViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
-import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.user.UserResult
+import com.koleychik.models.states.CheckDataState
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
@@ -64,29 +62,23 @@ class SignInFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            loadingApi.isVisible = it
-            binding.root.isEnabledViews(!it)
-        }
-        viewModel.checkResult.observe(viewLifecycleOwner) {
+        viewModel.loginState.observe(viewLifecycleOwner) {
+            loading(false)
             when (it) {
-                null -> {
-                }
-                is CheckResult.DataError -> requireContext().showToast(it.message)
-                is CheckResult.ServerError -> requireContext().showToast(it.message)
-                else -> requireContext().showToast(R.string.error)
+                is CheckDataState.Checking -> loading(true)
+                is CheckDataState.Error -> error(it.message)
+                is CheckDataState.Successful -> navigationApi.fromSignInFragmentToMainScreen()
             }
         }
-        viewModel.userResult.observe(viewLifecycleOwner) {
-            when (it) {
-                null -> {
-                }
-                is UserResult.Successful -> navigationApi.fromSignInFragmentToMainScreen()
-                is UserResult.DataError -> requireContext().showToast(it.message)
-                is UserResult.ServerError -> requireContext().showToast(it.message)
-                else -> requireContext().showToast(R.string.cannot_create_user)
-            }
-        }
+    }
+
+    private fun loading(start: Boolean = true) {
+        loadingApi.isVisible = start
+        binding.root.isEnabledViews(!start)
+    }
+
+    private fun error(message: String) {
+        requireContext().showToast(message)
     }
 
     private fun checkInformationAndLoginUser() {
@@ -105,7 +97,7 @@ class SignInFragment : Fragment() {
                 when (it.id) {
                     btn.id -> checkInformationAndLoginUser()
                     googleAuth.id -> authRepository.googleSingIn(requireActivity() as AppCompatActivity) {
-                        viewModel.userResult.value = it
+                        viewModel.googleSignInUserResult(it)
                     }
                     textForgotPassword.id -> navigationApi.fromSignInFragmentToPasswordRecovery()
                     textSignUp.id -> navigationApi.fromSignInFragmentToSignUp()

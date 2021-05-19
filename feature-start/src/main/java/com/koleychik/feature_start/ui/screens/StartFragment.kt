@@ -11,7 +11,7 @@ import com.koleychik.feature_start.databinding.FragmentStartBinding
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.feature_start.ui.viewModel.StartViewModel
 import com.koleychik.feature_start.ui.viewModel.StartViewModelFactory
-import com.koleychik.models.results.user.UserResult
+import com.koleychik.models.states.DataState
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
@@ -45,19 +45,13 @@ class StartFragment : Fragment() {
     }
 
     private fun subscribe() {
-//        viewModel.verificationResult.observe(viewLifecycleOwner) {
-//            when (it) {
-//                null -> {
-//                }
-//                is VerificationResult.Successful -> navigation.fromStartFragmentToMainScreen()
-//                else -> navigation.fromStartFragmentToVerifyEmailFragment()
-//            }
-//        }
-        viewModel.userResult.observe(viewLifecycleOwner, {
+        viewModel.userState.observe(viewLifecycleOwner, {
             when (it) {
-                null -> viewModel.checkUser()
-                is UserResult.Successful -> navigation.fromStartFragmentToMainScreen()
-                else -> navigation.fromStartFragmentToAuthorization()
+                is DataState.WaitingForStart -> viewModel.checkUser()
+                is DataState.Result<*> -> navigation.fromStartFragmentToMainScreen()
+                is DataState.Error -> navigation.fromStartFragmentToAuthorization()
+                else -> {
+                }
             }
         })
     }

@@ -11,7 +11,7 @@ dependencies {
     implementation project(':core-cloud-storage')
     implementation project(':core-notifications')
     implementation project(":feature-loading-api")
-    implementation project(":data")
+    implementation project(':utils')
 
     implementation  Dependencies.kotlin_lib
     implementation  Dependencies.coreKtx

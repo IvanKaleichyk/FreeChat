@@ -13,15 +13,15 @@ import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
 import coil.load
 import coil.request.ImageRequest
-import com.kaleichyk.data.CurrentUser
-import com.kaleichyk.data.MimeTypes.MIME_TYPE_IMAGE
-import com.kaleichyk.data.NavigationConstants.DIALOG_ID
-import com.kaleichyk.data.NavigationConstants.USER
 import com.kaleichyk.feature_user_info.*
 import com.kaleichyk.feature_user_info.databinding.FragmentUserInfoBinding
 import com.kaleichyk.feature_user_info.di.UserInfoFeatureComponentHolder
 import com.kaleichyk.feature_user_info.ui.viewModel.UserInfoViewModel
 import com.kaleichyk.feature_user_info.ui.viewModel.ViewModelFactory
+import com.kaleichyk.utils.CurrentUser
+import com.kaleichyk.utils.MimeTypes.MIME_TYPE_IMAGE
+import com.kaleichyk.utils.NavigationConstants.DIALOG_ID
+import com.kaleichyk.utils.NavigationConstants.USER
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.checkEmail
@@ -34,7 +34,8 @@ import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.models.asRoot
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.dialog.DialogResult
+import com.koleychik.models.states.CheckDataState
+import com.koleychik.models.states.DataState
 import com.koleychik.models.users.User
 import com.koleychik.models.users.UserRoot
 import com.koleychik.module_injector.NavigationSystem
@@ -45,6 +46,14 @@ import javax.inject.Inject
 
 
 class UserInfoFragment : Fragment() {
+
+    companion object {
+        const val SET_DATA_FUNCTION = 3
+        const val DELETE_USER_FUNCTION = 1
+        const val CREATE_NEW_DIALOG = 3
+    }
+
+    private var loadingStarter: Int? = null
 
     private var _binding: FragmentUserInfoBinding? = null
     private val binding get() = _binding!!
@@ -127,7 +136,6 @@ class UserInfoFragment : Fragment() {
         object : DialogInfoListener {
             override fun onClick(dialog: DialogInterface) {
                 dialog.dismiss()
-                startLoading()
                 viewModel.deleteUser(user.id)
             }
         }
@@ -178,14 +186,12 @@ class UserInfoFragment : Fragment() {
     private val pickUserIcon: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it == null) return@registerForActivityResult
-            startLoading()
             viewModel.setIcon(user.id, it, MIME_TYPE_IMAGE)
         }
 
     private val pickUserBackground: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it == null) return@registerForActivityResult
-            startLoading()
             viewModel.setBackground(user.id, it, MIME_TYPE_IMAGE)
         }
 
@@ -214,50 +220,57 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.createNewDialogRequest.observe(viewLifecycleOwner) {
+        viewModel.createNewDialogState.observe(viewLifecycleOwner) {
+            stopLoading(CREATE_NEW_DIALOG)
             when (it) {
-                is DialogResult.Successful -> navigationApi.fromUserInfoFeatureToMessagesFeature(
-                    Bundle().apply {
-                        putLong(DIALOG_ID, it.dialog.id)
-                    })
-                is DialogResult.DataError -> error(requireContext().getString(it.message))
-                is DialogResult.ServerError -> error(it.message)
+                is DataState.Loading -> startLoading(CREATE_NEW_DIALOG)
+                is DataState.Result<*> -> goToMessageFeature(it.body as Long)
+                is DataState.Error -> error(it.message)
+                else -> {
+                }
             }
         }
         viewModel.deleteUserRequest.observe(viewLifecycleOwner) {
+            stopLoading(DELETE_USER_FUNCTION)
             when (it) {
-                is CheckResult.Successful -> navigationApi.fromUserInfoFeatureToSignFeature()
-                is CheckResult.DataError -> error(requireContext().getString(it.message))
-                is CheckResult.ServerError -> error(it.message)
+                is CheckDataState.Checking -> startLoading(DELETE_USER_FUNCTION)
+                is CheckDataState.Error -> error(it.message)
+                is CheckDataState.Successful -> navigationApi.fromUserInfoFeatureToSignFeature()
             }
         }
-        viewModel.setDataRequest.observe(viewLifecycleOwner) {
+        viewModel.setDataState.observe(viewLifecycleOwner) {
+            stopLoading(SET_DATA_FUNCTION)
             when (it) {
-                is CheckResult.Successful -> {
-                    stopLoading()
-                    setRootUserInfo(CurrentUser.user!!)
-                }
-                is CheckResult.DataError -> error(requireContext().getString(it.message))
-                is CheckResult.ServerError -> error(it.message)
+                is CheckDataState.Checking -> startLoading(SET_DATA_FUNCTION)
+                is CheckDataState.Error -> error(it.message)
+                is CheckDataState.Successful -> setRootUserInfo(CurrentUser.user!!)
             }
         }
     }
 
-    private fun startLoading() {
+    private fun startLoading(starter: Int) {
+        loadingStarter = starter
         loadingApi.isVisible = true
         binding.root.isEnabledViews(false)
     }
 
-    private fun stopLoading() {
+    private fun stopLoading(starter: Int) {
+        if (loadingStarter != starter) return
         loadingApi.isVisible = false
         binding.root.isEnabledViews(true)
+    }
+
+    private fun goToMessageFeature(dialogId: Long) {
+        navigationApi.fromUserInfoFeatureToMessagesFeature(
+            Bundle().apply {
+                putLong(DIALOG_ID, dialogId)
+            })
     }
 
     private inline fun handleCheckResult(res: CheckResult, onSuccessful: () -> Unit) {
         when (res) {
             is CheckResult.Successful -> onSuccessful()
-            is CheckResult.ServerError -> requireContext().showToast(res.message)
-            is CheckResult.DataError -> requireContext().showToast(res.message)
+            is CheckResult.Error -> requireContext().showToast(res.message)
         }
     }
 
@@ -328,7 +341,6 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun startDialog() {
-        startLoading()
         val listUsers = listOf(CurrentUser.user!!, user)
         viewModel.createNewDialog(createDialog(listUsers))
     }

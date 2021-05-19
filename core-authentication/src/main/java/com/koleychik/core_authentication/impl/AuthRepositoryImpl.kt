@@ -3,7 +3,8 @@ package com.koleychik.core_authentication.impl
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.kaleichyk.data.CurrentUser
+import com.kaleichyk.utils.CurrentUser
+import com.kaleichyk.utils.getUserResultError
 import com.koleychik.core_authentication.R
 import com.koleychik.core_authentication.api.AuthDbDataSource
 import com.koleychik.core_authentication.api.AuthFirebaseDataSource
@@ -54,8 +55,8 @@ internal class AuthRepositoryImpl @Inject constructor(
         activity.loginUsingGoogle {
             when (it) {
                 is GoogleSignInResult.Successful -> loginOrSingUsingGoogleAccount(it, res)
-                is GoogleSignInResult.DataError -> res(UserResult.DataError(it.message))
-                is GoogleSignInResult.ServerError -> res(UserResult.ServerError(it.message))
+                is GoogleSignInResult.DataError -> res(getUserResultError(it.message))
+                is GoogleSignInResult.ServerError -> res(UserResult.Error(it.message))
             }
         }
     }
@@ -75,7 +76,7 @@ internal class AuthRepositoryImpl @Inject constructor(
 
     private suspend fun getUser(): UserResult {
         Log.d(Constants.TAG, "AuthRepositoryImpl start getUser")
-        val uid = auth.currentUser?.uid ?: return UserResult.DataError(R.string.cannot_find_user)
+        val uid = auth.currentUser?.uid ?: return getUserResultError(R.string.cannot_find_user)
         val result = authDbDataSource.getUserByUid(uid)
         if (result is UserResult.Successful) CurrentUser.user = result.user.asRoot()
         return result
@@ -86,7 +87,7 @@ internal class AuthRepositoryImpl @Inject constructor(
         Log.d(Constants.TAG, "AuthRepositoryImpl start addUser")
         val user = getUser(name, email)
 
-        return if (user == null) UserResult.DataError(R.string.cannot_create_user)
+        return if (user == null) getUserResultError(R.string.cannot_create_user)
         else {
             CurrentUser.user = user.asRoot()
             authDbDataSource.addUser(user)
@@ -105,7 +106,7 @@ internal class AuthRepositoryImpl @Inject constructor(
     ) {
         authFirebaseDataSource.loginFirebaseUserByCredential(value.credential) {
             val uid = auth.currentUser?.uid
-            if (uid == null) res(UserResult.DataError(R.string.cannot_get_information_about_user))
+            if (uid == null) res(getUserResultError(R.string.cannot_get_information_about_user))
             else {
                 when (it) {
                     is CheckResult.Successful -> getOrPutUser(value.account.toUser(uid), res)

@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.clear
 import coil.load
-import com.kaleichyk.data.NavigationConstants.USER
 import com.kaleichyk.feature_searching.R
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.databinding.SearchingItemRvBinding
+import com.kaleichyk.utils.NavigationConstants.USER
 import com.koleychik.models.users.User
 import javax.inject.Inject
 

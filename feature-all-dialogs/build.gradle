@@ -8,7 +8,7 @@ dependencies {
     implementation project(":models")
     implementation project(':core-database')
     implementation project(":feature-loading-api")
-    implementation project(":data")
+    implementation project(':utils')
 
     implementation  Dependencies.kotlin_lib
     implementation  Dependencies.coreKtx

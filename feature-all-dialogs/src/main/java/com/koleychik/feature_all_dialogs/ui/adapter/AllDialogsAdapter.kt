@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.clear
 import coil.load
-import com.kaleichyk.data.CurrentUser
-import com.kaleichyk.data.NavigationConstants
+import com.kaleichyk.utils.CurrentUser
+import com.kaleichyk.utils.NavigationConstants
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.ItemRvDialogBinding

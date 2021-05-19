@@ -6,7 +6,7 @@ import com.kaleichyk.core_cloud_storage.framework.results.UploadResult
 import com.kaleichyk.core_cloud_storage.framework.results.toCheckResult
 import com.kaleichyk.core_database.api.DialogsRepository
 import com.kaleichyk.core_database.api.UsersRepository
-import com.kaleichyk.data.CurrentUser
+import com.kaleichyk.utils.CurrentUser
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.models.Dialog
 import com.koleychik.models.results.CheckResult

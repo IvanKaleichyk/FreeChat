@@ -12,6 +12,6 @@ sealed class UploadResult {
 fun UploadResult.toCheckResult(): CheckResult {
     return when (this) {
         is UploadResult.Successful -> CheckResult.Successful
-        is UploadResult.Error -> CheckResult.ServerError(message)
+        is UploadResult.Error -> CheckResult.Error(message)
     }
 }

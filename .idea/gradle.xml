@@ -21,7 +21,6 @@
             <option value="$PROJECT_DIR$/core-database" />
             <option value="$PROJECT_DIR$/core-files" />
             <option value="$PROJECT_DIR$/core-notifications" />
-            <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/dialogs" />
             <option value="$PROJECT_DIR$/feature-all-dialogs" />
             <option value="$PROJECT_DIR$/feature-loading-api" />
@@ -37,10 +36,10 @@
             <option value="$PROJECT_DIR$/models" />
             <option value="$PROJECT_DIR$/module-injector" />
             <option value="$PROJECT_DIR$/pagination" />
+            <option value="$PROJECT_DIR$/utils" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
-        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

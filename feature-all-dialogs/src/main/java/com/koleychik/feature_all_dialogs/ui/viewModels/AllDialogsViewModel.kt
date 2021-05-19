@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaleichyk.core_database.api.DialogsRepository
-import com.koleychik.models.results.dialog.DialogsResult
+import com.koleychik.models.results.dialog.toDataState
+import com.koleychik.models.states.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,26 +16,38 @@ internal class AllDialogsViewModel @Inject constructor(
     private val repository: DialogsRepository
 ) : ViewModel() {
 
-    private val _dialogsResponse = MutableLiveData<DialogsResult>(null)
-    val dialogsResponse: LiveData<DialogsResult> get() = _dialogsResponse
+    private val _dialogsState = MutableLiveData<DataState>(DataState.WaitingForStart)
+    val dialogState: LiveData<DataState> get() = _dialogsState
 
     fun getDialogs(listIds: List<Long>, start: Int, end: Long) =
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.getDialogs(listIds, start, end)
+
             withContext(Dispatchers.Main) {
-                _dialogsResponse.value = result
+                _dialogsState.value = DataState.Loading
+            }
+
+            val result = repository.getDialogs(listIds, start, end).toDataState()
+
+            withContext(Dispatchers.Main) {
+                _dialogsState.value = result
             }
         }
 
     fun getFavoritesDialogs(listIds: List<Long>) = viewModelScope.launch(Dispatchers.IO) {
-        val result = repository.getFavoritesDialogs(listIds)
+
         withContext(Dispatchers.Main) {
-            _dialogsResponse.value = result
+            _dialogsState.value = DataState.Loading
+        }
+
+        val result = repository.getFavoritesDialogs(listIds).toDataState()
+
+        withContext(Dispatchers.Main) {
+            _dialogsState.value = result
         }
     }
 
     fun resetListDialogs() {
-        _dialogsResponse.value = null
+        _dialogsState.value = DataState.WaitingForStart
     }
 
 }

@@ -1,11 +1,12 @@
 package com.koleychik.feature_start.ui.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.koleychik.feature_start.StartManager
-import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.user.UserResult
+import com.koleychik.models.results.user.toDataState
+import com.koleychik.models.states.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -16,14 +17,13 @@ class StartViewModel @Inject constructor(
     private val manager: StartManager,
 ) : ViewModel() {
 
-    val userResult = MutableLiveData<UserResult>(null)
-
-    val verificationResult = MutableLiveData<CheckResult>(null)
+    private val _userState = MutableLiveData<DataState>(DataState.WaitingForStart)
+    val userState: LiveData<DataState> get() = _userState
 
     fun checkUser(): Job = viewModelScope.launch(Dispatchers.IO) {
-        val result = manager.checkUser()
+        val result = manager.checkUser().toDataState()
         withContext(Dispatchers.Main) {
-            userResult.value = result
+            _userState.value = result
         }
     }
 }

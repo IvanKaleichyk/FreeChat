@@ -13,7 +13,7 @@ dependencies {
     implementation project(':core-files')
     implementation project(":feature-loading-api")
     implementation project(":feature-select-image-api")
-    implementation project(":data")
+    implementation project(':utils')
     implementation project(":dialogs")
 
     implementation  Dependencies.kotlin_lib

@@ -1,6 +1,7 @@
 package com.koleychik.freechat
 
 import android.app.Application
+import com.kaleichyk.utils.StringConverter
 import com.koleychik.freechat.di.AppComponent
 import com.koleychik.freechat.di.DaggerAppComponent
 import com.koleychik.freechat.di.modules.AppModule
@@ -17,10 +18,12 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        StringConverter.init(this)
         component =
-            DaggerAppComponent.builder().appModule(AppModule(this.applicationContext)).build().apply {
-                inject(this@App)
-            }
+            DaggerAppComponent.builder().appModule(AppModule(this.applicationContext)).build()
+                .apply {
+                    inject(this@App)
+                }
     }
 
 
