@@ -1,9 +1,9 @@
-package com.koleychik.freechat
+package com.koleychik.freechat.managers
 
 import com.koleychik.core_authentication.api.AccountRepository
 import javax.inject.Inject
 
-class MainDataSource @Inject constructor(private val repository: AccountRepository) {
+class MainManager @Inject constructor(private val repository: AccountRepository) {
 
     fun checkVerification() = repository.isEmailVerified()
 

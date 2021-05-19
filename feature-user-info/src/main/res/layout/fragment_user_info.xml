@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.UserInfoFragment">
 
-    <View
+    <ImageView
         android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/colorMain"
+        android:layout_height="match_parent"
+        android:src="@color/colorMain"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/background"
         app:layout_constraintTop_toTopOf="parent" />
 

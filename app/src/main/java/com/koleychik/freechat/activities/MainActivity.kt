@@ -7,15 +7,15 @@ import androidx.navigation.findNavController
 import com.koleychik.dialogs.DialogInfo
 import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.freechat.App
-import com.koleychik.freechat.MainDataSource
 import com.koleychik.freechat.Navigator
 import com.koleychik.freechat.R
+import com.koleychik.freechat.managers.MainManager
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    internal lateinit var dataSource: MainDataSource
+    internal lateinit var manager: MainManager
 
     @Inject
     internal lateinit var navigator: Navigator
@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
 
         checkVerificationEmail()
     }
-    
+
     private fun checkVerificationEmail() {
-        if (dataSource.checkVerification()) return
+        if (manager.checkVerification()) return
         val dialogListener = object : DialogInfoListener {
             override fun onClick(dialog: DialogInterface) {
                 dialog.dismiss()
@@ -49,14 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        dataSource.subscribeToUserChanges()
-        dataSource.isUserOnline(true)
+        manager.subscribeToUserChanges()
+        manager.isUserOnline(true)
         navigator.controller = navController
     }
 
     override fun onStop() {
         super.onStop()
-        dataSource.unSubscribeToUserChanges()
-        dataSource.isUserOnline(false)
+        manager.unSubscribeToUserChanges()
+        manager.isUserOnline(false)
     }
 }

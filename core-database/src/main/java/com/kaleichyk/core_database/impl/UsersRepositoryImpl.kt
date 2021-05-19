@@ -66,7 +66,7 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
     }
 
     override suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult {
-        val document = store.collection(UserConstants.ROOT_PATH).document(userId)
+        val document = store.collection(UserConstants.ROOT_PATH).document()
             .collection(userId).document(UserConstants.LIST_DIALOGS_IDS)
 
         val listDialogsIds: MutableList<Long> = try {

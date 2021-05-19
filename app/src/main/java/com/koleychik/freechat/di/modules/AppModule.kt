@@ -9,8 +9,8 @@ import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
 import com.koleychik.feature_password_utils.di.PasswordUtilsFeatureApi
 import com.koleychik.feature_sign.di.SignFeatureApi
 import com.koleychik.feature_start.di.StartFeatureApi
-import com.koleychik.freechat.MainDataSource
 import com.koleychik.freechat.Navigator
+import com.koleychik.freechat.managers.MainManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
@@ -21,7 +21,7 @@ class AppModule(val context: Context) {
 
     @Singleton
     @Provides
-    fun provideMainDataSource(repository: AccountRepository) = MainDataSource(repository)
+    fun provideMainDataSource(repository: AccountRepository) = MainManager(repository)
 
     @Singleton
     @Provides

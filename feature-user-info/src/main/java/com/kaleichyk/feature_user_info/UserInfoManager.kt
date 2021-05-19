@@ -12,6 +12,10 @@ import com.koleychik.models.Dialog
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
 import com.koleychik.models.results.toDialogResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import javax.inject.Inject
 
 internal class UserInfoManager @Inject constructor(
@@ -28,23 +32,19 @@ internal class UserInfoManager @Inject constructor(
     }
 
     suspend fun createNewDialog(dialog: Dialog): DialogResult {
-        val addDialogresult = dialogsRepository.addDialog(dialog)
-        if (addDialogresult !is DialogResult.Successful) return addDialogresult
+        val addDialogResult = dialogsRepository.addDialog(dialog)
+        if (addDialogResult !is DialogResult.Successful) return addDialogResult
 
-        // bind dialog id to first user
-        var bindDialogIdToUserResult =
-            usersRepository.bindDialogIdToUser(dialog.users[0].id, dialog.id)
+        val bindDialogIdToUserResult1 = bindDialogToUserAsync(dialog.users[0].id, dialog.id)
+        val bindDialogIdToUserResult2 = bindDialogToUserAsync(dialog.users[1].id, dialog.id)
 
-        if (bindDialogIdToUserResult is CheckResult.Error) return bindDialogIdToUserResult.toDialogResult()
+        val list = awaitAll(bindDialogIdToUserResult1, bindDialogIdToUserResult2)
 
-        // bind dialog id to second user
-        bindDialogIdToUserResult =
-            usersRepository.bindDialogIdToUser(dialog.users[1].id, dialog.id)
-
-        return when (bindDialogIdToUserResult) {
-            is CheckResult.Successful -> DialogResult.Successful(dialog)
-            is CheckResult.Error -> bindDialogIdToUserResult.toDialogResult()
+        checkCheckResultsToErrors(list) {
+            return it.toDialogResult()
         }
+
+        return DialogResult.Successful(dialog)
     }
 
     fun signOut() {
@@ -89,5 +89,19 @@ internal class UserInfoManager @Inject constructor(
         return uploadImageResult.toCheckResult()
     }
 
+    private fun bindDialogToUserAsync(userId: String, dialogId: Long) =
+        CoroutineScope(Dispatchers.IO).async {
+            usersRepository.bindDialogIdToUser(userId, dialogId)
+        }
+
+    private inline fun checkCheckResultsToErrors(
+        list: List<CheckResult>,
+        haveError: (CheckResult.Error) -> Unit
+    ) {
+        for (i in list) if (i is CheckResult.Error) {
+            haveError(i)
+            break
+        }
+    }
 
 }

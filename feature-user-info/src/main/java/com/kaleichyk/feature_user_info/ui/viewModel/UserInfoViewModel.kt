@@ -30,11 +30,24 @@ internal class UserInfoViewModel @Inject constructor(
     val createNewDialogState: LiveData<DataState> get() = _createNewDialogState
 
     fun deleteUser(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
+            _deleteUserState.value = CheckDataState.Checking
+        }
+        val result = manager.deleteUser(id).toCheckDataState()
+        withContext(Dispatchers.Main) {
+            _deleteUserState.value = result
+        }
         _deleteUserState.value = manager.deleteUser(id).toCheckDataState()
     }
 
     fun createNewDialog(dialog: Dialog) = viewModelScope.launch(Dispatchers.IO) {
-        _createNewDialogState.value = manager.createNewDialog(dialog).toDataState()
+        withContext(Dispatchers.Main) {
+            _createNewDialogState.value = DataState.Loading
+        }
+        val result = manager.createNewDialog(dialog).toDataState()
+        withContext(Dispatchers.Main) {
+            _createNewDialogState.value = result
+        }
     }
 
     fun signOut() {
@@ -42,13 +55,22 @@ internal class UserInfoViewModel @Inject constructor(
     }
 
     fun setName(name: String) = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
+            _setDataState.value = CheckDataState.Checking
+        }
+
         val result = manager.setName(name).toCheckDataState()
+
         withContext(Dispatchers.Main) {
             _setDataState.value = result
         }
     }
 
     fun setEmail(email: String) = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
+            _setDataState.value = CheckDataState.Checking
+        }
+
         val result = manager.setEmail(email).toCheckDataState()
         withContext(Dispatchers.Main) {
             _setDataState.value = result
@@ -56,6 +78,10 @@ internal class UserInfoViewModel @Inject constructor(
     }
 
     fun setPassword(password: String) = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
+            _setDataState.value = CheckDataState.Checking
+        }
+
         val result = manager.setPassword(password).toCheckDataState()
         withContext(Dispatchers.Main) {
             _setDataState.value = result
@@ -64,6 +90,10 @@ internal class UserInfoViewModel @Inject constructor(
 
     fun setIcon(userId: String, uri: Uri, contextType: String?) =
         viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                _setDataState.value = CheckDataState.Checking
+            }
+
             val result = manager.setIcon(userId, uri, contextType).toCheckDataState()
             withContext(Dispatchers.Main) {
                 _setDataState.value = result
@@ -72,6 +102,10 @@ internal class UserInfoViewModel @Inject constructor(
 
     fun setBackground(userId: String, uri: Uri, contextType: String?) =
         viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                _setDataState.value = CheckDataState.Checking
+            }
+
             val result = manager.setBackground(userId, uri, contextType).toCheckDataState()
             withContext(Dispatchers.Main) {
                 _setDataState.value = result
