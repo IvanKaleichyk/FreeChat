@@ -1,10 +1,12 @@
 package com.kaleichyk.core_database.impl
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.toObject
 import com.kaleichyk.core_database.*
 import com.kaleichyk.core_database.api.UsersRepository
+import com.kaleichyk.utils.TAG
 import com.koleychik.models.constants.UserConstants
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.user.UserResult
@@ -20,11 +22,13 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
     override suspend fun getUsers(orderBy: String, startAfter: Int, limit: Long): UsersResult {
         val collection = store.collection(UserConstants.ROOT_PATH)
             .orderBy(orderBy)
-            .startAfter(startAfter)
+            .startAt(startAfter)
             .limit(limit)
         return try {
             val result = collection.get().await()
-            UsersResult.Successful(result.getListFromQuerySnapshot(User::class.java))
+            val list = result.getListFromQuerySnapshot(User::class.java)
+            Log.d(TAG, "list users = $list")
+            UsersResult.Successful(list)
         } catch (e: FirebaseFirestoreException) {
             e.toUsersResultError()
         }

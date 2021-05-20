@@ -8,7 +8,7 @@ object UserConstants {
     const val ICON = "icon"
     const val BACKGROUND = "background"
     const val IS_ONLINE = "online"
-    const val CREATED = "created"
+    const val CREATED = "createdAt"
     const val LIST_DIALOGS_IDS = "listDialogsId"
 
 }
