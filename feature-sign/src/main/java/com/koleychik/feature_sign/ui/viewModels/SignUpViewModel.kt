@@ -1,6 +1,5 @@
 package com.koleychik.feature_sign.ui.viewModels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,6 @@ import com.koleychik.models.results.toCheckDataState
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.results.user.toCheckDataState
 import com.koleychik.models.states.CheckDataState
-import com.koleychik.module_injector.Constants.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,9 +51,7 @@ internal class SignUpViewModel @Inject constructor(
             }
         }
 
-
         val result = authRepository.createAccount(name, email, password).toCheckDataState()
-        Log.d(TAG, "authRepository.createAccount result = $result")
 
         withContext(Dispatchers.Main) {
             _createAccountState.value = result

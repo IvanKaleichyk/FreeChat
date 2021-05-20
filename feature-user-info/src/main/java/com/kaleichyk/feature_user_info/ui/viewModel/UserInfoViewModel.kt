@@ -23,7 +23,7 @@ internal class UserInfoViewModel @Inject constructor(
     private val _setDataState = MutableLiveData<CheckDataState>(null)
     val setDataState: LiveData<CheckDataState> get() = _setDataState
 
-    private val _deleteUserState = MutableLiveData<CheckDataState>()
+    private val _deleteUserState = MutableLiveData<CheckDataState>(null)
     val deleteUserRequest: LiveData<CheckDataState> get() = _deleteUserState
 
     private val _createNewDialogState = MutableLiveData<DataState>(null)
@@ -37,7 +37,6 @@ internal class UserInfoViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             _deleteUserState.value = result
         }
-        _deleteUserState.value = manager.deleteUser(id).toCheckDataState()
     }
 
     fun createNewDialog(dialog: Dialog) = viewModelScope.launch(Dispatchers.IO) {

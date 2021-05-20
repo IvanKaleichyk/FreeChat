@@ -49,7 +49,6 @@ internal class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun googleSingIn(activity: AppCompatActivity, res: (UserResult) -> Unit) {
-        Log.d(Constants.TAG, "AuthRepositoryImpl start googleSingIn")
         activity.loginUsingGoogle {
             when (it) {
                 is GoogleSignInResult.Successful -> loginOrSingUsingGoogleAccount(it, res)
@@ -117,7 +116,6 @@ internal class AuthRepositoryImpl @Inject constructor(
     }
 
     private fun getOrPutUser(user: User, res: (UserResult) -> Unit) {
-        Log.d(Constants.TAG, "AuthRepositoryImpl start getOrPutUser")
         CoroutineScope(Dispatchers.IO).launch {
             var result = authDbDataSource.getUserByUid(user.id)
 

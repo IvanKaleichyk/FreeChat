@@ -78,10 +78,9 @@ internal class UserInfoManager @Inject constructor(
         val uploadImageResult = cloudStorageRepository.addImage(userId, uri, contextType)
 
         if (uploadImageResult is UploadResult.Successful) {
-            val uploadUri = uploadImageResult.uri
-            val updateBackgroundResult = accountRepository.updateBackground(uploadUri)
+            val updateBackgroundResult = accountRepository.updateBackground(uploadImageResult.uri)
             return if (updateBackgroundResult is CheckResult.Successful) {
-                CurrentUser.user?.background = uploadUri.toString()
+                CurrentUser.user?.background = uploadImageResult.uri.toString()
                 updateBackgroundResult
             } else updateBackgroundResult
         }

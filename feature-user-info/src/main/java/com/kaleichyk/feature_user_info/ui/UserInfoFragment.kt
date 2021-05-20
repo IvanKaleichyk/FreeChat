@@ -10,9 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import coil.ImageLoader
 import coil.load
-import coil.request.ImageRequest
 import com.kaleichyk.feature_user_info.*
 import com.kaleichyk.feature_user_info.databinding.FragmentUserInfoBinding
 import com.kaleichyk.feature_user_info.di.UserInfoFeatureComponentHolder
@@ -39,9 +37,7 @@ import com.koleychik.models.states.DataState
 import com.koleychik.models.users.User
 import com.koleychik.models.users.UserRoot
 import com.koleychik.module_injector.NavigationSystem
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -80,9 +76,6 @@ class UserInfoFragment : Fragment() {
                     val checkRes = checkName(value)
                     handleCheckResult(checkRes) {
                         dialog.dismiss()
-                        withContext(Dispatchers.Main) {
-                            loadingApi.isVisible = true
-                        }
                         viewModel.setName(value)
                     }
                 }
@@ -97,9 +90,6 @@ class UserInfoFragment : Fragment() {
                     val checkRes = checkEmail(value)
                     handleCheckResult(checkRes) {
                         dialog.dismiss()
-                        withContext(Dispatchers.Main) {
-                            loadingApi.isVisible = true
-                        }
                         viewModel.setEmail(value)
                     }
                 }
@@ -114,9 +104,6 @@ class UserInfoFragment : Fragment() {
                     val checkRes = checkPassword(value, value)
                     handleCheckResult(checkRes) {
                         dialog.dismiss()
-                        withContext(Dispatchers.Main) {
-                            loadingApi.isVisible = true
-                        }
                         viewModel.setPassword(value)
                     }
                 }
@@ -239,9 +226,9 @@ class UserInfoFragment : Fragment() {
             }
         }
         viewModel.setDataState.observe(viewLifecycleOwner) {
-            stopLoading(SET_DATA_FUNCTION)
+            stopLoadingUserInfo()
             when (it) {
-                is CheckDataState.Checking -> startLoading(SET_DATA_FUNCTION)
+                is CheckDataState.Checking -> startLoadingUserInfo()
                 is CheckDataState.Error -> error(it.message)
                 is CheckDataState.Successful -> setRootUserInfo(CurrentUser.user!!)
             }
@@ -254,8 +241,8 @@ class UserInfoFragment : Fragment() {
         binding.root.isEnabledViews(false)
     }
 
-    private fun stopLoading(starter: Int) {
-        if (loadingStarter != starter) return
+    private fun stopLoading(starter: Int?) {
+        if (loadingStarter != starter && starter != null) return
         loadingApi.isVisible = false
         binding.root.isEnabledViews(true)
     }
@@ -281,7 +268,7 @@ class UserInfoFragment : Fragment() {
             email.text = user.email
             name.text = user.name
             user.icon?.let { icon.load(it) }
-            user.background?.let { loadBackground(background, it) }
+            user.background?.let { background.load(it) }
         }
     }
 
@@ -292,7 +279,7 @@ class UserInfoFragment : Fragment() {
             email.text = user.email
             name.text = user.name
             user.icon?.let { icon.load(it) }
-            user.background?.let { loadBackground(background, it) }
+            user.background?.let { background.load(it) }
         }
     }
 
@@ -329,6 +316,7 @@ class UserInfoFragment : Fragment() {
             if (user !is UserRoot) return@OnClickListener
             when (it.id) {
                 R.id.icon -> pickUserIcon.launch(MIME_TYPE_IMAGE)
+                R.id.framework -> return@OnClickListener
                 R.id.background -> pickUserBackground.launch(MIME_TYPE_IMAGE)
             }
         }
@@ -336,6 +324,7 @@ class UserInfoFragment : Fragment() {
         with(binding) {
             icon.setOnClickListener(onCLickListenerForChooseImage)
             background.setOnClickListener(onCLickListenerForChooseImage)
+            framework.setOnClickListener(onCLickListenerForChooseImage)
         }
 
     }
@@ -369,23 +358,27 @@ class UserInfoFragment : Fragment() {
         dialogSetPassword.show(childFragmentManager, "Set Email Dialog")
     }
 
+    private fun startLoadingUserInfo() {
+        binding.shimmerUserInfo.run {
+            startShimmer()
+            visibility = View.VISIBLE
+        }
+    }
+
+    private fun stopLoadingUserInfo() {
+        binding.shimmerUserInfo.run {
+            stopShimmer()
+            visibility = View.GONE
+        }
+    }
+
     private fun setupLoading() {
         loadingApi.create(requireView())
         binding.viewStubLoading.run {
             layoutResource = loadingApi.layoutRes
             inflate()
         }
-    }
-
-    private fun loadBackground(view: View, uri: String) {
-        val imageLoader = ImageLoader(requireContext())
-        val request = ImageRequest.Builder(requireContext())
-            .data(uri)
-            .target {
-                view.background = it
-            }
-            .build()
-        imageLoader.enqueue(request)
+        stopLoading(null)
     }
 
     override fun onStop() {

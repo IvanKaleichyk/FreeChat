@@ -25,7 +25,7 @@ internal class AccountRepositoryImpl @Inject constructor(
     override fun isEmailVerified(): Boolean = auth.currentUser?.isEmailVerified ?: false
 
     override fun setOnlineStatus(isOnline: Boolean) {
-        CurrentUser.user!!.isOnline = isOnline
+        CurrentUser.user?.isOnline = isOnline
         dbDataSource.isUserOnline(isOnline)
     }
 
