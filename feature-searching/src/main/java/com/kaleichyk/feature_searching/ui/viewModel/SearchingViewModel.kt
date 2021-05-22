@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaleichyk.feature_searching.SearchingManager
-import com.koleychik.models.results.user.toDataState
 import com.koleychik.models.states.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

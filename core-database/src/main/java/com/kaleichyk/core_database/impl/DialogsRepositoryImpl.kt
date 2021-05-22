@@ -1,21 +1,20 @@
 package com.kaleichyk.core_database.impl
 
+import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.kaleichyk.core_database.*
 import com.kaleichyk.core_database.api.DialogsRepository
-import com.kaleichyk.core_database.getListFromQuerySnapshot
-import com.kaleichyk.core_database.toCheckResultError
-import com.kaleichyk.core_database.toDialogResultError
-import com.kaleichyk.core_database.toDialogsResultError
-import com.koleychik.models.Dialog
+import com.kaleichyk.utils.TAG
+import com.kaleichyk.utils.getDialogResultError
 import com.koleychik.models.Message
 import com.koleychik.models.constants.DialogConstants
+import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
 import com.koleychik.models.results.dialog.DialogsResult
-import com.koleychik.models.users.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -23,43 +22,42 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
 
     private val store = FirebaseFirestore.getInstance()
 
-    override suspend fun getDialogs(listIds: List<Long>, start: Int, end: Long): DialogsResult {
-        if (listIds.isEmpty()) {
-            return DialogsResult.Successful(listOf())
-        }
-        return try {
-            val result = store.collection(DialogConstants.ROOT_PATH)
-                .whereIn(DialogConstants.ID, listIds)
-                .orderBy(DialogConstants.IS_FAVORITE)
-                .startAfter(start)
-                .limit(end)
-                .get()
-                .await()
+    override suspend fun getAllDialogs(userId: String): DialogsResult {
+        val query = store.collection(DialogConstants.ROOT_PATH)
+            .whereArrayContains(DialogConstants.LIST_USERS_IDS, userId)
 
-            DialogsResult.Successful(result.getListFromQuerySnapshot(Dialog::class.java))
+        return try {
+            val result = query.get().await().getListFromQuerySnapshot(Dialog::class.java)
+
+            DialogsResult.Successful(result)
         } catch (e: FirebaseFirestoreException) {
+            Log.e(TAG, e.message.toString())
             e.toDialogsResultError()
         }
     }
 
-    override suspend fun getFavoritesDialogs(listIds: List<Long>): DialogsResult {
-        if (listIds.isEmpty()) return DialogsResult.Successful(listOf())
+    override suspend fun getFavoritesDialogs(userId: String): DialogsResult {
+        val query = store
+            .collection(DialogConstants.ROOT_PATH)
+            .whereArrayContains(DialogConstants.LIST_USERS_IDS, userId)
+            .whereEqualTo(DialogConstants.IS_FAVORITE, true)
 
         return try {
-            val result = store.collection(DialogConstants.ROOT_PATH)
-                .whereIn(DialogConstants.ID, listIds)
-                .whereEqualTo(DialogConstants.IS_FAVORITE, true)
-                .get()
-                .await()
-
+            val result = query.get().await()
             DialogsResult.Successful(result.getListFromQuerySnapshot(Dialog::class.java))
         } catch (e: FirebaseFirestoreException) {
+            Log.e(TAG, e.message.toString())
             e.toDialogsResultError()
         }
     }
 
     override suspend fun addDialog(dialog: Dialog): DialogResult {
-        val document = store.collection(DialogConstants.ROOT_PATH).document(dialog.id.toString())
+        val collection = store.collection(DialogConstants.ROOT_PATH)
+
+        if (checkIfDialogExists(collection, dialog.listUsersIds))
+            return getDialogResultError(R.string.dialog_exits)
+
+        val document = collection.document(dialog.id.toString())
 
         return try {
             document.set(dialog).await()
@@ -71,10 +69,10 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
 
     private suspend fun checkIfDialogExists(
         collection: CollectionReference,
-        users: List<User>
+        usersIds: List<String>
     ): Boolean {
 
-        val query = collection.whereIn(DialogConstants.USERS, users)
+        val query = collection.whereIn(DialogConstants.USERS, usersIds)
 
         val result: QuerySnapshot
         try {
@@ -84,8 +82,10 @@ internal class DialogsRepositoryImpl @Inject constructor() : DialogsRepository {
             else throw e
         }
 
+        if (result.isEmpty) return false
+
         return try {
-            result.toObjects(Dialog::class.java)
+            for (i in result) i.toObject(Dialog::class.java)
             true
         } catch (e: Exception) {
             false

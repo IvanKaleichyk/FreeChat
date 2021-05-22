@@ -15,7 +15,6 @@ import com.koleychik.core_authentication.extencions.toUser
 import com.koleychik.core_authentication.result.GoogleSignInResult
 import com.koleychik.models.asRoot
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.toUserResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.users.User
 import com.koleychik.module_injector.Constants

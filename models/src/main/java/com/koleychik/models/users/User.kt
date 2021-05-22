@@ -1,6 +1,7 @@
 package com.koleychik.models.users
 
 import android.os.Parcelable
+import com.koleychik.models.dialog.Dialog
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -10,7 +11,6 @@ open class User(
     open val email: String,
     open val createdAt: Long,
     open val isOnline: Boolean,
-    open val listDialogsId: List<Long> = listOf(),
     open val icon: String? = null,
     open val background: String? = null,
 ) : Parcelable {
@@ -21,7 +21,7 @@ open class User(
         email = email,
         createdAt = createdAt,
         isOnline = isOnline,
-        listDialogsId = listOf()
+        icon = null
     )
 
     constructor() : this(
@@ -30,7 +30,7 @@ open class User(
         email = "null",
         createdAt = 0,
         isOnline = false,
-        listDialogsId = listOf()
     )
 
+    fun toDialogMember() = Dialog.Member(id, name, icon)
 }

@@ -1,7 +1,7 @@
 package com.koleychik.feature_all_dialogs.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.koleychik.models.Dialog
+import com.koleychik.models.dialog.Dialog
 
 internal class AllDialogsDiffUtils(
     private val oldList: List<Dialog>,

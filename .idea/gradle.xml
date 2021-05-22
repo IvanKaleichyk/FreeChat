@@ -35,7 +35,6 @@
             <option value="$PROJECT_DIR$/feature-user-info" />
             <option value="$PROJECT_DIR$/models" />
             <option value="$PROJECT_DIR$/module-injector" />
-            <option value="$PROJECT_DIR$/pagination" />
             <option value="$PROJECT_DIR$/utils" />
           </set>
         </option>

@@ -1,6 +1,7 @@
 package com.koleychik.feature_all_dialogs.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import coil.load
 import com.kaleichyk.utils.CurrentUser
 import com.kaleichyk.utils.NavigationConstants
+import com.kaleichyk.utils.TAG
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.FragmentAllDialogsBinding
@@ -16,7 +18,7 @@ import com.koleychik.feature_all_dialogs.ui.adapter.AllDialogsAdapter
 import com.koleychik.feature_all_dialogs.ui.viewModels.AllDialogsViewModel
 import com.koleychik.feature_all_dialogs.ui.viewModels.ViewModelFactory
 import com.koleychik.feature_loading_api.LoadingApi
-import com.koleychik.models.Dialog
+import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.states.DataState
 import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
@@ -69,9 +71,7 @@ class AllDialogsFragment : Fragment() {
             resetViews()
             when (it) {
                 is DataState.WaitingForStart -> loadingDialogs(
-                    binding.switchFavorites.isChecked,
-                    adapter.start,
-                    (adapter.start + adapter.period).toLong()
+                    binding.switchFavorites.isChecked
                 )
                 is DataState.Loading -> loading()
                 is DataState.Error -> error(it.message)
@@ -98,13 +98,14 @@ class AllDialogsFragment : Fragment() {
         }
     }
 
-    private fun loadingDialogs(isOnlyFavorites: Boolean, startAt: Int, end: Long) {
+    private fun loadingDialogs(isOnlyFavorites: Boolean) {
         adapter.clearList()
-        if (isOnlyFavorites) viewModel.getFavoritesDialogs(CurrentUser.user!!.listDialogsId)
-        else viewModel.getDialogs(CurrentUser.user!!.listDialogsId, startAt, end)
+        if (isOnlyFavorites) viewModel.getFavoritesDialogs(CurrentUser.user!!.id)
+        else viewModel.getDialogs(CurrentUser.user!!.id)
     }
 
     private fun error(message: String) {
+        Log.e(TAG, message)
         binding.textInfo.text = message
         binding.textInfo.visibility = View.VISIBLE
     }
@@ -127,7 +128,7 @@ class AllDialogsFragment : Fragment() {
             when (it.id) {
                 binding.searchIcon.id -> navigationApi.fromDialogsFeatureGoToSearchingFeature()
                 binding.userIcon.id -> navigationApi.fromDialogsFeatureGoToUserInfoFeature(Bundle().apply {
-                    putParcelable(NavigationConstants.USER, CurrentUser.user!!)
+                    putString(NavigationConstants.USER_ID, CurrentUser.user!!.id)
                 })
             }
         }
@@ -148,9 +149,6 @@ class AllDialogsFragment : Fragment() {
         with(binding.rv) {
             itemAnimator = DefaultItemAnimator()
             adapter = this@AllDialogsFragment.adapter
-        }
-        adapter.onLoadNewList = { start, end ->
-            loadingDialogs(binding.switchFavorites.isChecked, start, end)
         }
     }
 

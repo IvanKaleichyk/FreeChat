@@ -1,4 +1,3 @@
-include ':pagination'
 include ':feature-messages'
 include ':feature-select-image-impl'
 include ':feature-select-image-api'

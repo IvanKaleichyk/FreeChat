@@ -20,6 +20,5 @@ fun GoogleSignInAccount.toUser(uid: String) =
         email.toString(),
         Date().time,
         false,
-        listOf(),
         if (photoUrl != null) photoUrl.toString() else null
     )

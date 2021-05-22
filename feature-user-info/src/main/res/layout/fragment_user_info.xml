@@ -46,6 +46,7 @@
 
             <TextView
                 android:id="@+id/name"
+                tools:text="Ivan"
                 style="@style/name"
                 android:layout_margin="@dimen/margin_between_same_elements"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -55,6 +56,7 @@
             <TextView
                 android:id="@+id/email"
                 style="@style/email"
+                tools:text="kaleichykivan@gmail.com"
                 android:layout_margin="@dimen/margin_between_same_elements"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +114,7 @@
                 android:id="@+id/group_root_user"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:constraint_referenced_ids="iconSetName, textSetName, nextSetName, iconSetEmail, textSetEmail, nextSetEmail, iconSetPassword, textSetPassword, nextSetPassword, lineDivideActionsAndCarefulAction, iconDeleteAccount, textDeleteAccount, nextDeleteAccount, iconSignOut, textSignOut, nextSignOut" />
 
             <ImageView

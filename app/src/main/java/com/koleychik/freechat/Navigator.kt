@@ -177,7 +177,7 @@ class Navigator(
 
     override fun fromUserInfoFeatureToMessagesFeature(bundle: Bundle) {
         checkController()
-        if (controller!!.currentDestination?.id == R.id.allDialogsFragment) {
+        if (controller!!.currentDestination?.id == R.id.userInfoFragment) {
             controller!!.navigate(R.id.action_userInfoFragment_to_messagesFragment, bundle)
         }
     }

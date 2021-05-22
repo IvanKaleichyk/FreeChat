@@ -11,5 +11,5 @@ interface UsersRepository {
     suspend fun getUserById(id: String): UserResult
     suspend fun searchByName(name: String): UsersResult
     suspend fun deleteUser(id: String): CheckResult
-    suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult
+//    suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult
 }

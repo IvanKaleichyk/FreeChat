@@ -8,14 +8,9 @@ import com.kaleichyk.core_database.api.DialogsRepository
 import com.kaleichyk.core_database.api.UsersRepository
 import com.kaleichyk.utils.CurrentUser
 import com.koleychik.core_authentication.api.AccountRepository
-import com.koleychik.models.Dialog
+import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.results.dialog.DialogResult
-import com.koleychik.models.results.toDialogResult
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import javax.inject.Inject
 
 internal class UserInfoManager @Inject constructor(
@@ -25,6 +20,8 @@ internal class UserInfoManager @Inject constructor(
     private val cloudStorageRepository: CloudStorageRepository,
 ) {
 
+    suspend fun getUserById(userId: String) = usersRepository.getUserById(userId)
+
     suspend fun deleteUser(id: String): CheckResult {
         val result = accountRepository.deleteUser()
         if (result !is CheckResult.Successful) return result
@@ -32,19 +29,20 @@ internal class UserInfoManager @Inject constructor(
     }
 
     suspend fun createNewDialog(dialog: Dialog): DialogResult {
-        val addDialogResult = dialogsRepository.addDialog(dialog)
-        if (addDialogResult !is DialogResult.Successful) return addDialogResult
+        return dialogsRepository.addDialog(dialog)
+//        val addDialogResult = dialogsRepository.addDialog(dialog)
+//        if (addDialogResult !is DialogResult.Successful) return addDialogResult
 
-        val bindDialogIdToUserResult1 = bindDialogToUserAsync(dialog.users[0].id, dialog.id)
-        val bindDialogIdToUserResult2 = bindDialogToUserAsync(dialog.users[1].id, dialog.id)
+//        val bindDialogIdToUserResult1 = bindDialogToUserAsync(dialog.users[0].id, dialog.id)
+//        val bindDialogIdToUserResult2 = bindDialogToUserAsync(dialog.users[1].id, dialog.id)
 
-        val list = awaitAll(bindDialogIdToUserResult1, bindDialogIdToUserResult2)
+//        val list = awaitAll(bindDialogIdToUserResult1, bindDialogIdToUserResult2)
 
-        checkCheckResultsToErrors(list) {
-            return it.toDialogResult()
-        }
-
-        return DialogResult.Successful(dialog)
+//        checkCheckResultsToErrors(list) {
+//            return it.toDialogResult()
+//        }
+//
+//        return DialogResult.Successful(dialog)
     }
 
     fun signOut() {
@@ -88,10 +86,10 @@ internal class UserInfoManager @Inject constructor(
         return uploadImageResult.toCheckResult()
     }
 
-    private fun bindDialogToUserAsync(userId: String, dialogId: Long) =
-        CoroutineScope(Dispatchers.IO).async {
-            usersRepository.bindDialogIdToUser(userId, dialogId)
-        }
+//    private fun bindDialogToUserAsync(userId: String, dialogId: Long) =
+//        CoroutineScope(Dispatchers.IO).async {
+//            usersRepository.bindDialogIdToUser(userId, dialogId)
+//        }
 
     private inline fun checkCheckResultsToErrors(
         list: List<CheckResult>,

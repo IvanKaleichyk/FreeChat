@@ -13,7 +13,7 @@ import com.kaleichyk.utils.NavigationConstants
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.ItemRvDialogBinding
-import com.koleychik.models.Dialog
+import com.koleychik.models.dialog.Dialog
 import javax.inject.Inject
 
 internal class AllDialogsAdapter @Inject constructor(
@@ -28,27 +28,15 @@ internal class AllDialogsAdapter @Inject constructor(
             field = value
         }
 
-    var start = 0
-    private var startLoadNew = 40
-    val period = 50
-
-    lateinit var onLoadNewList: (start: Int, end: Long) -> Unit
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MainViewHolder(
         ItemRvDialogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        if (position == startLoadNew) startLoading()
         holder.bind(list[position])
     }
 
     override fun getItemCount(): Int = list.size
-
-    private fun startLoading() {
-        startLoadNew = start + period - 10
-        onLoadNewList(start, (start + period).toLong())
-    }
 
     fun clearList() {
         list = listOf()
@@ -92,7 +80,7 @@ internal class AllDialogsAdapter @Inject constructor(
             binding.imageView.clear()
         }
 
-        private fun getInterlocutor(dialog: Dialog) =
+        private fun getInterlocutor(dialog: Dialog): Dialog.Member =
             if (CurrentUser.user!!.id == dialog.users[0].id) dialog.users[0]
             else dialog.users[1]
     }

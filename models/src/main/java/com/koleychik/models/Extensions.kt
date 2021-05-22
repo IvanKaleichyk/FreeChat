@@ -9,7 +9,6 @@ fun User.asRoot() = UserRoot(
     email,
     createdAt,
     isOnline,
-    if (listDialogsId.isEmpty()) mutableListOf() else listDialogsId as MutableList ,
     icon,
     background
 )

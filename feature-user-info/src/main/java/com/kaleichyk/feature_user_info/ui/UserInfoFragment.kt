@@ -19,7 +19,7 @@ import com.kaleichyk.feature_user_info.ui.viewModel.ViewModelFactory
 import com.kaleichyk.utils.CurrentUser
 import com.kaleichyk.utils.MimeTypes.MIME_TYPE_IMAGE
 import com.kaleichyk.utils.NavigationConstants.DIALOG_ID
-import com.kaleichyk.utils.NavigationConstants.USER
+import com.kaleichyk.utils.NavigationConstants.USER_ID
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.checkEmail
@@ -31,6 +31,7 @@ import com.koleychik.dialogs.DialogInfo
 import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.models.asRoot
+import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.states.CheckDataState
 import com.koleychik.models.states.DataState
@@ -44,21 +45,24 @@ import javax.inject.Inject
 class UserInfoFragment : Fragment() {
 
     companion object {
-        const val SET_DATA_FUNCTION = 3
-        const val DELETE_USER_FUNCTION = 1
+        const val USER_STATE = 0
+        const val SET_DATA_FUNCTION = 1
+        const val DELETE_USER_FUNCTION = 2
         const val CREATE_NEW_DIALOG = 3
     }
 
     private var loadingStarter: Int? = null
 
+    private var shimmerLoadingStarter: Int? = null
+
     private var _binding: FragmentUserInfoBinding? = null
     private val binding get() = _binding!!
 
-    private val user: User by lazy {
-        val us = requireArguments().getParcelable<User>(USER)!!
-        if (us.id == CurrentUser.user?.id) us.asRoot()
-        else us
+    private val userId: String by lazy {
+        requireArguments().getString(USER_ID)!!
     }
+
+    private lateinit var user: User
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
@@ -123,7 +127,7 @@ class UserInfoFragment : Fragment() {
         object : DialogInfoListener {
             override fun onClick(dialog: DialogInterface) {
                 dialog.dismiss()
-                viewModel.deleteUser(user.id)
+                viewModel.deleteUser(userId)
             }
         }
     }
@@ -173,13 +177,13 @@ class UserInfoFragment : Fragment() {
     private val pickUserIcon: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it == null) return@registerForActivityResult
-            viewModel.setIcon(user.id, it, MIME_TYPE_IMAGE)
+            viewModel.setIcon(userId, it, MIME_TYPE_IMAGE)
         }
 
     private val pickUserBackground: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it == null) return@registerForActivityResult
-            viewModel.setBackground(user.id, it, MIME_TYPE_IMAGE)
+            viewModel.setBackground(userId, it, MIME_TYPE_IMAGE)
         }
 
     private val viewModel by lazy {
@@ -199,19 +203,31 @@ class UserInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (user is UserRoot) setRootUserInfo(user as UserRoot)
-        else setUserInfo(user)
         subscribe()
         createOnCLickListener()
         setupLoading()
     }
 
     private fun subscribe() {
+        viewModel.userState.observe(viewLifecycleOwner) {
+            stopShimmerLoading(USER_STATE)
+            when (it) {
+                is DataState.WaitingForStart -> viewModel.getUserById(userId)
+                is DataState.Loading -> startShimmerLoading(USER_STATE)
+                is DataState.Error -> error(it.message)
+                is DataState.Result<*> -> {
+                    val user = it.body as User
+                    if (user.id == CurrentUser.user?.id) setRootUserInfo(user.asRoot())
+                    else setUserInfo(user)
+                }
+            }
+        }
+
         viewModel.createNewDialogState.observe(viewLifecycleOwner) {
             stopLoading(CREATE_NEW_DIALOG)
             when (it) {
                 is DataState.Loading -> startLoading(CREATE_NEW_DIALOG)
-                is DataState.Result<*> -> goToMessageFeature(it.body as Long)
+                is DataState.Result<*> -> goToMessageFeature((it.body as Dialog).id)
                 is DataState.Error -> error(it.message)
                 else -> {
                 }
@@ -226,12 +242,39 @@ class UserInfoFragment : Fragment() {
             }
         }
         viewModel.setDataState.observe(viewLifecycleOwner) {
-            stopLoadingUserInfo()
+            stopShimmerLoading(SET_DATA_FUNCTION)
             when (it) {
-                is CheckDataState.Checking -> startLoadingUserInfo()
+                is CheckDataState.Checking -> startShimmerLoading(SET_DATA_FUNCTION)
                 is CheckDataState.Error -> error(it.message)
                 is CheckDataState.Successful -> setRootUserInfo(CurrentUser.user!!)
             }
+        }
+    }
+
+    private fun startShimmerLoading(starter: Int) {
+        shimmerLoadingStarter = starter
+        with(binding) {
+            groupRootUser.visibility = View.GONE
+            groupUserInfo.visibility = View.GONE
+
+            shimmerUserInfo.run {
+                startShimmer()
+                visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun stopShimmerLoading(starter: Int) {
+        if (shimmerLoadingStarter != starter) return
+
+        if (::user.isInitialized) {
+            if (user is UserRoot) binding.groupRootUser.visibility = View.VISIBLE
+            else binding.groupUserInfo.visibility = View.VISIBLE
+        }
+
+        binding.shimmerUserInfo.run {
+            stopShimmer()
+            visibility = View.GONE
         }
     }
 
@@ -262,6 +305,7 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun setUserInfo(user: User) {
+        this.user = user
         with(binding) {
             groupRootUser.visibility = View.GONE
             groupUserInfo.visibility = View.VISIBLE
@@ -273,6 +317,7 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun setRootUserInfo(user: UserRoot) {
+        this.user = user
         with(binding) {
             groupRootUser.visibility = View.VISIBLE
             groupUserInfo.visibility = View.GONE
@@ -356,20 +401,6 @@ class UserInfoFragment : Fragment() {
 
     private fun startSetPassword() {
         dialogSetPassword.show(childFragmentManager, "Set Email Dialog")
-    }
-
-    private fun startLoadingUserInfo() {
-        binding.shimmerUserInfo.run {
-            startShimmer()
-            visibility = View.VISIBLE
-        }
-    }
-
-    private fun stopLoadingUserInfo() {
-        binding.shimmerUserInfo.run {
-            stopShimmer()
-            visibility = View.GONE
-        }
     }
 
     private fun setupLoading() {

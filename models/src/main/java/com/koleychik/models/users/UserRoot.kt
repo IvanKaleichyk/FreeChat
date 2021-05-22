@@ -6,7 +6,6 @@ data class UserRoot(
     override var email: String,
     override val createdAt: Long,
     override var isOnline: Boolean,
-    override val listDialogsId: MutableList<Long> = mutableListOf(),
     override var icon: String? = null,
     override var background: String? = null,
 ) : User() {
@@ -17,7 +16,7 @@ data class UserRoot(
         email = email,
         createdAt = createdAt,
         isOnline = isOnline,
-        listDialogsId = mutableListOf()
+        icon = null
     )
 
     constructor() : this(
@@ -26,7 +25,6 @@ data class UserRoot(
         email = "null",
         createdAt = 0,
         isOnline = false,
-        listDialogsId = mutableListOf()
     )
 
 }

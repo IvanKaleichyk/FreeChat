@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.koleychik.feature_start.StartManager
-import com.koleychik.models.results.user.toDataState
 import com.koleychik.models.states.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

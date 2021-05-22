@@ -11,7 +11,7 @@ import coil.load
 import com.kaleichyk.feature_searching.R
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.databinding.SearchingItemRvBinding
-import com.kaleichyk.utils.NavigationConstants.USER
+import com.kaleichyk.utils.NavigationConstants.USER_ID
 import com.koleychik.models.users.User
 import javax.inject.Inject
 
@@ -55,7 +55,7 @@ internal class SearchingAdapter @Inject constructor(
 
         private fun goToUserInfo(user: User) {
             navigationApi.fromSearchingFeatureToUserInfoFeature(Bundle().apply {
-                putParcelable(USER, user)
+                putString(USER_ID, user.id)
             })
         }
 

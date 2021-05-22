@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaleichyk.feature_user_info.UserInfoManager
-import com.koleychik.models.Dialog
-import com.koleychik.models.results.dialog.toDataState
-import com.koleychik.models.results.toCheckDataState
+import com.kaleichyk.utils.CurrentUser
+import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.states.CheckDataState
 import com.koleychik.models.states.DataState
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +27,22 @@ internal class UserInfoViewModel @Inject constructor(
 
     private val _createNewDialogState = MutableLiveData<DataState>(null)
     val createNewDialogState: LiveData<DataState> get() = _createNewDialogState
+
+    private val _userState = MutableLiveData<DataState>(DataState.WaitingForStart)
+    val userState: LiveData<DataState> get() = _userState
+
+    fun getUserById(userId: String) = viewModelScope.launch(Dispatchers.Main) {
+        if (userId == CurrentUser.user?.id) _userState.value = DataState.Result(CurrentUser.user!!)
+
+        _userState.value = DataState.Loading
+
+        val result: DataState
+        withContext(Dispatchers.IO) {
+            result = manager.getUserById(userId).toDataState()
+        }
+
+        _userState.value = result
+    }
 
     fun deleteUser(id: String) = viewModelScope.launch(Dispatchers.IO) {
         withContext(Dispatchers.Main) {

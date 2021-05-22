@@ -3,7 +3,6 @@ package com.kaleichyk.core_database.impl
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ktx.toObject
 import com.kaleichyk.core_database.*
 import com.kaleichyk.core_database.api.UsersRepository
 import com.kaleichyk.utils.TAG
@@ -69,27 +68,26 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
         }
     }
 
-    override suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult {
-        val document = store.collection(UserConstants.ROOT_PATH).document()
-            .collection(userId).document(UserConstants.LIST_DIALOGS_IDS)
-
-        val listDialogsIds: MutableList<Long> = try {
-            document.get().await().toObject<MutableList<Long>>() ?: mutableListOf()
-        } catch (e: NullPointerException) {
-            mutableListOf()
-        } catch (e: FirebaseFirestoreException) {
-            if (e.code != FirebaseFirestoreException.Code.NOT_FOUND) return e.toCheckResultError()
-            else mutableListOf()
-        }
-
-        listDialogsIds.add(dialogId)
-
-        return try {
-            document.update(UserConstants.LIST_DIALOGS_IDS, listDialogsIds).await()
-            CheckResult.Successful
-        } catch (e: FirebaseFirestoreException) {
-            e.toCheckResultError()
-        }
-
-    }
+//    override suspend fun bindDialogIdToUser(userId: String, dialogId: Long): CheckResult {
+//        val document = store.collection(UserConstants.ROOT_PATH).document(userId)
+//
+//        val listDialogsIds: MutableList<Long> = try {
+//            (document.get().await().toObject<User>()?.listDialogsId as MutableList?
+//                ?: mutableListOf())
+//        } catch (e: NullPointerException) {
+//            mutableListOf()
+//        } catch (e: FirebaseFirestoreException) {
+//            if (e.code != FirebaseFirestoreException.Code.NOT_FOUND) return e.toCheckResultError()
+//            else mutableListOf()
+//        }
+//
+//        listDialogsIds.add(dialogId)
+//
+//        return try {
+//            document.update(UserConstants.LIST_DIALOGS_IDS, listDialogsIds).await()
+//            CheckResult.Successful
+//        } catch (e: FirebaseFirestoreException) {
+//            e.toCheckResultError()
+//        }
+//    }
 }

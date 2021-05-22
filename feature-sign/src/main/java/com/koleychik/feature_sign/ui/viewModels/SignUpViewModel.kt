@@ -9,9 +9,7 @@ import com.koleychik.core_authentication.checkEmail
 import com.koleychik.core_authentication.checkName
 import com.koleychik.core_authentication.checkPassword
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.toCheckDataState
 import com.koleychik.models.results.user.UserResult
-import com.koleychik.models.results.user.toCheckDataState
 import com.koleychik.models.states.CheckDataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
