@@ -20,8 +20,19 @@ internal class MessageNotificationRepositoryImpl @Inject constructor(
 
     private val channelId = "FREE CHAT MESSAGE NOTIFICATION CHANNEL ID"
 
-    override suspend fun sendMessageNotification(message: Message, title: String, image: String?) {
-        networkApi.sendMessageNotification(message.toNetworkMessageNotificationModel(title, image))
+    override suspend fun sendMessageNotification(
+        message: Message,
+        title: String,
+        image: String?,
+        topic: String
+    ) {
+        networkApi.sendMessageNotification(
+            message.toNetworkMessageNotificationModel(
+                title,
+                image,
+                topic
+            )
+        )
     }
 
     override fun showMessageNotification(message: MessageNotificationModel) {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/cardPadding">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/message"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="@color/colorMessageAuthor"
+        android:paddingStart="@dimen/message_padding_horizontal"
+        android:paddingTop="@dimen/message_padding_vertical"
+        android:paddingEnd="@dimen/message_padding_horizontal"
+        android:paddingBottom="@dimen/message_padding_vertical"
+        app:cardCornerRadius="@dimen/message_radius">
+
+        <TextView
+            android:id="@+id/messageText"
+            style="text_message_style"
+            android:text="gviggjgjhgjgjkhkhkjkjkvjigv" />
+
+    </androidx.cardview.widget.CardView>
+
+    
+</FrameLayout>

@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MessageManager @Inject constructor(
+class MessagesManager @Inject constructor(
     private val context: Context,
     private val notificationRepository: MessageNotificationRepository,
     private val messagesRepository: MessagesRepository,
@@ -22,28 +22,29 @@ class MessageManager @Inject constructor(
     suspend fun getMessages(dialogId: Long, startAt: Int, endAt: Long): MessagesResult =
         messagesRepository.getMessages(dialogId, startAt, endAt)
 
+    suspend fun getMessages(dialogId: Long, page: Int) =
+        messagesRepository.getMessages(dialogId, page)
 
-    suspend fun sendMessage(message: Message): CheckResult {
+
+    suspend fun sendMessage(message: Message, topic: String): CheckResult {
         var result = messagesRepository.addMessage(message)
         if (result is CheckResult.Successful) {
             result = dialogsRepository.addLastMessage(message.dialogId, message)
-            sendMessageNotification(message)
+            sendMessageNotification(message, topic)
         }
         return result
     }
 
     suspend fun deleteMessage(message: Message): CheckResult = messagesRepository.delete(message)
 
-//    fun editMessage(message: Message): CheckResult {
-//        messagesRepository.editMessage(message, res)
-
-
-    private fun sendMessageNotification(message: Message) = CoroutineScope(Dispatchers.IO).launch {
-        notificationRepository.sendMessageNotification(
-            message,
-            context.getString(R.string.message),
-            null
-        )
-    }
+    private fun sendMessageNotification(message: Message, topic: String) =
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationRepository.sendMessageNotification(
+                message,
+                context.getString(R.string.message),
+                null,
+                topic
+            )
+        }
 
 }

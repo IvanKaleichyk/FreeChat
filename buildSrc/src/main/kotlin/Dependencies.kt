@@ -28,8 +28,10 @@ internal object Versions {
     const val coil = "1.1.1"
     const val navigation = "2.3.4"
     const val coroutines = "1.4.1"
-    const val dagger = "2.28.3"
+    const val dagger = "2.35.1"
     const val room = "2.2.6"
+
+    const val paging = "3.0.0"
 
     const val lifecycleExtension = "2.2.0"
     const val fragment = "1.3.2"
@@ -118,6 +120,9 @@ object Dependencies {
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val coroutinesPlayService =
         "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
+
+//  PAGINATION
+    const val paging = "androidx.paging:paging-runtime:${Versions.paging}"
 
     // lifecycle
     const val lifecycleExtension =

@@ -10,20 +10,23 @@ import com.koleychik.models.Message
 
 const val BASE_URL = "https://feribase-message-test.herokuapp.com/message/"
 
-fun RemoteMessage.Notification.toMessageNotificationModel()= MessageNotificationModel(
+fun RemoteMessage.Notification.toMessageNotificationModel() = MessageNotificationModel(
     title.toString(),
     body.toString(),
     if (imageUrl != null) imageUrl.toString() else null
 )
 
-fun Message.toNetworkMessageNotificationModel(title: String, image: String?) = NetworkMessageNotificationModel(
-    title = title,
-    body = text,
-    image = image,
-    topic = topic
-)
+fun Message.toNetworkMessageNotificationModel(title: String, image: String?, topic: String) =
+    NetworkMessageNotificationModel(
+        title = title,
+        body = text,
+        image = image,
+        topic = topic
+    )
 
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     Log.d("MAIN_APP_TAG", "showToast - $text")
 }
+
+fun createTopic(rootUserId: String, interlocutorId: String) = rootUserId + interlocutorId

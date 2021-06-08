@@ -18,12 +18,31 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
 
     private val store = FirebaseFirestore.getInstance()
 
+    companion object {
+        const val PAGE_SIZE = 30
+    }
+
     override suspend fun getMessages(dialogId: Long, start: Int, end: Long): MessagesResult {
         val collection = store.collection(MessageConstants.ROOT_PATH)
             .document()
             .collection(dialogId.toString())
             .startAfter(start)
             .limit(end)
+
+        return try {
+            val result = collection.get().await()
+            MessagesResult.Successful(result.getListFromQuerySnapshot(Message::class.java))
+        } catch (e: FirebaseFirestoreException) {
+            e.toMessagesResultError()
+        }
+    }
+
+    override suspend fun getMessages(dialogId: Long, page: Int): MessagesResult {
+        val start = (page - 1) * PAGE_SIZE
+
+        val collection = store.collection(MessageConstants.ROOT_PATH)
+            .startAt(start)
+            .limit(PAGE_SIZE.toLong())
 
         return try {
             val result = collection.get().await()

@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"
-        android:name="com.kaleichyk.feature_messages.MessagesFragment"
+        android:name="com.kaleichyk.feature_messages.ui.MessagesFragment"
         android:label="MessagesFragment"
         tools:layout="@layout/fragment_messages"/>
 </navigation>

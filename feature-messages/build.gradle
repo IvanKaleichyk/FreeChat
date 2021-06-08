@@ -11,6 +11,7 @@ dependencies {
     implementation project(':core-cloud-storage')
     implementation project(':core-notifications')
     implementation project(":feature-loading-api")
+    implementation project(':pagination')
     implementation project(':utils')
 
     implementation  Dependencies.kotlin_lib
@@ -22,14 +23,14 @@ dependencies {
     implementation Dependencies.coil
     implementation Dependencies.circleImageView
 
+    implementation Dependencies.paging
+
     // Coroutines
     implementation Dependencies.coroutinesCore
     implementation Dependencies.coroutinesAndroid
 
     // lifecycle
     implementation Dependencies.lifecycleExtension
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt Dependencies.lifecycleCommon
 
     implementation Dependencies.fragment

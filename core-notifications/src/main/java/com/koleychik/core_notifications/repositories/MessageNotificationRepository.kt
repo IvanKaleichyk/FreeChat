@@ -5,7 +5,13 @@ import com.koleychik.models.Message
 
 interface MessageNotificationRepository {
 
-    suspend fun sendMessageNotification(message: Message, title: String, image: String?)
+    suspend fun sendMessageNotification(
+        message: Message,
+        title: String,
+        image: String?,
+        topic: String
+    )
+
     fun showMessageNotification(message: MessageNotificationModel)
 
 }

@@ -1,15 +1,19 @@
 package com.koleychik.models.dialog
 
+import android.os.Parcelable
 import com.koleychik.models.Message
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
+@Parcelize
 data class Dialog(
     val id: Long,
-    val users: List<Member>,
+    val users: @RawValue List<Member>,
     val listUsersIds: List<String>,
-    var lastMessage: Message? = null,
+    var lastMessage: @RawValue Message? = null,
     var hasNewMessage: Boolean = false,
     var isFavorite: Boolean = false
-) {
+) : Parcelable{
 
     constructor() : this(
         0,

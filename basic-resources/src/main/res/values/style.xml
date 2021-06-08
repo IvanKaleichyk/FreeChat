@@ -25,6 +25,11 @@
         <item name="android:textColor">@color/colorMain</item>
     </style>
 
+    <style name="error_text" parent="mainTextView">
+        <item name="fontFamily">@font/rubik_italic</item>
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+
     <style name="sign_text" parent="mainTextView">
         <item name="android:fontFamily">@font/rubik_medium</item>
         <item name="android:textColor">@color/colorMain</item>
