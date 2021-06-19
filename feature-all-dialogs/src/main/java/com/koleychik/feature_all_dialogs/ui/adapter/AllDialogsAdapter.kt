@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.clear
 import coil.load
-import com.kaleichyk.utils.CurrentUser
-import com.kaleichyk.utils.NavigationConstants
+import com.kaleichyk.utils.navigation.NavigationConstants
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.ItemRvDialogBinding
@@ -52,26 +51,25 @@ internal class AllDialogsAdapter @Inject constructor(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(dialog: Dialog) {
-            val interlocutor = getInterlocutor(dialog)
             with(binding) {
-                interlocutor.icon?.let { loadIcon(imageView, it) }
-                title.text = interlocutor.name
+                dialog.receiver.icon?.let { loadIcon(imageView, it) }
+                title.text = dialog.receiver.name
                 dialog.lastMessage?.text?.let { lastMessage -> message.text = lastMessage }
                 if (dialog.lastMessage?.isRead != true) card.setBackgroundResource(R.drawable.card_background_un_read_message)
             }
-            createOnClickListener(dialog.id)
+            createOnClickListener(dialog)
         }
 
-        private fun loadIcon(view: ImageView, uri: String) {
+        private fun loadIcon(view: ImageView, uri: String?) {
             view.load(uri) {
                 placeholder(R.drawable.account_icon_48)
             }
         }
 
-        private fun createOnClickListener(dialogId: Long) {
+        private fun createOnClickListener(dialog: Dialog) {
             binding.card.setOnClickListener {
                 navigationApi.fromDialogsFeatureGoToMessagesFeature(Bundle().apply {
-                    putLong(NavigationConstants.DIALOG_ID, dialogId)
+                    putParcelable(NavigationConstants.DIALOG, dialog)
                 })
             }
         }
@@ -79,10 +77,6 @@ internal class AllDialogsAdapter @Inject constructor(
         fun clear() {
             binding.imageView.clear()
         }
-
-        private fun getInterlocutor(dialog: Dialog): Dialog.Member =
-            if (CurrentUser.user!!.id == dialog.users[0].id) dialog.users[0]
-            else dialog.users[1]
     }
 
 }

@@ -23,7 +23,9 @@ dependencies {
     implementation Dependencies.coil
     implementation Dependencies.circleImageView
 
-    implementation Dependencies.paging
+    implementation Dependencies.progressBar
+
+    implementation Dependencies.swipeToRefresh
 
     // Coroutines
     implementation Dependencies.coroutinesCore

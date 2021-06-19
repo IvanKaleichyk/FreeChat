@@ -26,7 +26,7 @@ class DialogGetData(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         rootView = View.inflate(context,R.layout.get_data_dialog,null)
         edt = rootView.findViewById(R.id.edt)
-        return AlertDialog.Builder(context!!)
+        return AlertDialog.Builder(context!!, R.style.AlertDialogTheme)
             .setTitle(title)
             .apply {
                 if (message != null) setMessage(message)

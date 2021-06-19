@@ -18,9 +18,9 @@ import com.kaleichyk.feature_searching.di.SearchingFeatureComponentHolder
 import com.kaleichyk.feature_searching.ui.adapter.SearchingAdapter
 import com.kaleichyk.feature_searching.ui.viewModel.SearchingViewModel
 import com.kaleichyk.feature_searching.ui.viewModel.ViewModelFactory
+import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.models.states.DataState
 import com.koleychik.models.users.User
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class SearchingFragment : Fragment() {

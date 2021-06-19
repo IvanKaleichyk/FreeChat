@@ -4,9 +4,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.kaleichyk.utils.getDialogResultError
 import com.kaleichyk.utils.getUserResultError
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.MessagesResult
 import com.koleychik.models.results.dialog.DialogResult
 import com.koleychik.models.results.dialog.DialogsResult
+import com.koleychik.models.results.messages.MessagesResult
 import com.koleychik.models.results.user.UserResult
 import com.koleychik.models.results.user.UsersResult
 

@@ -5,8 +5,8 @@ import android.os.Bundle
 interface StartFeatureNavigation {
 
     fun fromStartFragmentToAuthorization(bundle: Bundle? = null)
-    fun fromStartFragmentToMainScreen(bundle: Bundle? = null)
+    fun fromStartFragmentToMainScreen()
     fun fromStartFragmentToVerifyEmailFragment(bundle: Bundle? = null)
-    fun fromVerifyEmailFragmentToMainScreen(bundle: Bundle? = null)
+    fun fromVerifyEmailFragmentToMainScreen()
 
 }

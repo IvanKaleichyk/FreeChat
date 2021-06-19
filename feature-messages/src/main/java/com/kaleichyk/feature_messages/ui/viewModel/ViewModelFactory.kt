@@ -1,4 +1,4 @@
-package com.kaleichyk.feature_messages.ui
+package com.kaleichyk.feature_messages.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,18 +1,19 @@
 package com.kaleichyk.feature_user_info
 
+import com.kaleichyk.utils.CurrentUser
 import com.koleychik.models.dialog.Dialog
-import com.koleychik.models.users.User
+import com.koleychik.models.dialog.DialogDTO
 import java.util.*
 
-fun createDialog(listUsers: List<User>) = Dialog(
-    getDialogId(),
-    getListMembers(listUsers),
-    listOf(listUsers[0].id, listUsers[1].id),
+fun createDialog(receiver: DialogDTO.Member) = Dialog(
+    getDialogId(listOf(CurrentUser.user!!.toDialogMember(), receiver)),
+    CurrentUser.user!!,
+    receiver
 )
 
-private fun getDialogId(): Long = Date().time
-
-private fun getListMembers(listUsers: List<User>): List<Dialog.Member>{
-    return listUsers.map { it.toDialogMember() }
+private fun getDialogId(list: List<DialogDTO.Member>): String {
+    return buildString {
+        append(Date().time)
+        for (i in list) append(i.id)
+    }
 }
-

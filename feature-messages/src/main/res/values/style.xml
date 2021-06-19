@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style name="text_message_style" parent="mainTextView">
         <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="interlocutorName" parent="mainTextView">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textSize">@dimen/bigTextSize</item>
     </style>
 
 </resources>

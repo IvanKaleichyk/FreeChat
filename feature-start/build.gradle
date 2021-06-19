@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation project(":module-injector")
     implementation project(":models")
+    implementation project(":utils")
     implementation project(":basic-resources")
     implementation project(':core-authentication')
 

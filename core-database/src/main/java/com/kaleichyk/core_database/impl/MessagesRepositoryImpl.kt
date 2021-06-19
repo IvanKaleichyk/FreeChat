@@ -2,15 +2,17 @@ package com.kaleichyk.core_database.impl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import com.kaleichyk.core_database.api.MessagesRepository
-import com.kaleichyk.core_database.getListFromQuerySnapshot
+import com.kaleichyk.core_database.messagesUtils.MessagesPaginationResult
+import com.kaleichyk.core_database.messagesUtils.PaginationLastState
+import com.kaleichyk.core_database.messagesUtils.toMessagesPaginationResultError
 import com.kaleichyk.core_database.toCheckResultError
+import com.kaleichyk.core_database.toMessagesPaginationResult
 import com.kaleichyk.core_database.toMessagesResultError
 import com.koleychik.models.Message
-import com.koleychik.models.constants.DialogConstants
 import com.koleychik.models.constants.MessageConstants
 import com.koleychik.models.results.CheckResult
-import com.koleychik.models.results.MessagesResult
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -19,44 +21,32 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
     private val store = FirebaseFirestore.getInstance()
 
     companion object {
-        const val PAGE_SIZE = 30
+        const val PAGE_SIZE = 30L
     }
 
-    override suspend fun getMessages(dialogId: Long, start: Int, end: Long): MessagesResult {
-        val collection = store.collection(MessageConstants.ROOT_PATH)
-            .document()
-            .collection(dialogId.toString())
-            .startAfter(start)
-            .limit(end)
+    override suspend fun getMessages(
+        dialogId: String,
+        lastState: PaginationLastState
+    ): MessagesPaginationResult {
 
-        return try {
-            val result = collection.get().await()
-            MessagesResult.Successful(result.getListFromQuerySnapshot(Message::class.java))
-        } catch (e: FirebaseFirestoreException) {
-            e.toMessagesResultError()
-        }
-    }
+        if (lastState is PaginationLastState.End)
+            return MessagesPaginationResult.Successful(emptyList(), lastState)
 
-    override suspend fun getMessages(dialogId: Long, page: Int): MessagesResult {
-        val start = (page - 1) * PAGE_SIZE
+        val orderBy = store.collection(MessageConstants.getRootPath(dialogId))
+            .orderBy(MessageConstants.CREATED_AT, Query.Direction.DESCENDING)
 
-        val collection = store.collection(MessageConstants.ROOT_PATH)
-            .startAt(start)
-            .limit(PAGE_SIZE.toLong())
 
-        return try {
-            val result = collection.get().await()
-            MessagesResult.Successful(result.getListFromQuerySnapshot(Message::class.java))
-        } catch (e: FirebaseFirestoreException) {
-            e.toMessagesResultError()
+        return when (lastState) {
+            is PaginationLastState.End ->
+                MessagesPaginationResult.Successful(emptyList(), lastState)
+            is PaginationLastState.FirstTime -> getFirstTimeMessages(orderBy)
+            is PaginationLastState.Data -> getMessages(orderBy, lastState)
         }
     }
 
     override suspend fun addMessage(message: Message): CheckResult {
-        val document = store.collection(DialogConstants.ROOT_PATH)
-            .document()
-            .collection(message.dialogId.toString())
-            .document(message.id.toString())
+        val document = store.collection(MessageConstants.getRootPath(message.dialogId))
+            .document(message.id)
 
         return try {
             document.set(message).await()
@@ -67,10 +57,8 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
     }
 
     override suspend fun delete(message: Message): CheckResult {
-        val document = store.collection(DialogConstants.ROOT_PATH)
-            .document()
-            .collection(message.dialogId.toString())
-            .document(message.id.toString())
+        val document = store.collection(MessageConstants.getRootPath(message.dialogId))
+            .document(message.id)
 
         return try {
             document.delete()
@@ -80,24 +68,30 @@ internal class MessagesRepositoryImpl @Inject constructor() : MessagesRepository
         }
     }
 
-//    override suspend fun editMessage(message: Message): CheckResult {
-//        val document = store.collection(DialogConstants.ROOT_PATH)
-//            .document()
-//            .collection(message.dialogId.toString())
-//            .document(message.id.toString())
-//
-//        try {
-//            document.up(message).
-//        }
-//
-//        store.collection("${DialogConstants.ROOT_PATH}/${message.dialogId}/${MessageConstants.ROOT_PATH}/${message.id}")
-//            .add(message)
-//            .addOnSuccessListener {
-//                res(CheckResult.Successful)
-//            }
-//            .addOnFailureListener {
-//                if (it.localizedMessage != null) res(CheckResult.ServerError(it.localizedMessage!!))
-//                else res(CheckResult.ServerError(it.message.toString()))
-//            }
-//    }
+    private suspend fun getMessages(
+        orderBy: Query,
+        paginationLastState: PaginationLastState.Data
+    ): MessagesPaginationResult {
+        return try {
+            val response = orderBy
+                .startAfter(paginationLastState.lastVisible)
+                .limit(PAGE_SIZE)
+                .get().await()
+
+            response.toMessagesPaginationResult()
+        } catch (e: FirebaseFirestoreException) {
+            e.toMessagesResultError().toMessagesPaginationResultError(PaginationLastState.FirstTime)
+        }
+    }
+
+    private suspend fun getFirstTimeMessages(orderBy: Query): MessagesPaginationResult {
+        return try {
+            val response = orderBy
+                .limit(PAGE_SIZE)
+                .get().await()
+            response.toMessagesPaginationResult()
+        } catch (e: FirebaseFirestoreException) {
+            e.toMessagesResultError().toMessagesPaginationResultError(PaginationLastState.FirstTime)
+        }
+    }
 }

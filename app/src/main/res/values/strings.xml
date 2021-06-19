@@ -2,4 +2,6 @@
     <string name="cannot_without_permissions">The application cannot work without this permission</string>
     <string name="verification_email">Verification Email</string>
     <string name="please_verification_email">Please verification email!!!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,14 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MessagesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/carcassInterlocutor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorCarcassInterlocutor"
+        app:cardElevation="16dp"
+        app:contentPadding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/interlocutorIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/account_icon_48"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/interlocutorName"
+                style="@style/interlocutorName"
+                android:layout_marginStart="@dimen/margin_between_same_elements"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@+id/interlocutorIcon"
+                app:layout_constraintStart_toEndOf="@+id/interlocutorIcon"
+                app:layout_constraintTop_toTopOf="@+id/interlocutorIcon"
+                tools:text="Ivan" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/divideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carcassInterlocutor">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:overScrollMode="never" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/textNoMessages"
+        style="@style/info_text"
+        android:visibility="gone"
+        android:text="@string/havent_messages_yet"
+        app:layout_constraintTop_toTopOf="@+id/swipeRefresh"
+        app:layout_constraintBottom_toBottomOf="@+id/swipeRefresh"
+        app:layout_constraintStart_toStartOf="@+id/swipeRefresh"
+        app:layout_constraintEnd_toEndOf="@+id/swipeRefresh" />
+
+    <ImageView
+        android:id="@+id/selectedImage"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginBottom="@dimen/marginDivideLine"
+        android:contentDescription="@string/selected_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/divideLine"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        tools:src="@drawable/old_school" />
+
+    <View
+        android:id="@+id/divideLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/marginDivideLine"
+        android:layout_marginBottom="@dimen/marginDivideLine"
+        android:background="@color/colorDivideLine"
+        app:layout_constraintBottom_toTopOf="@+id/edtMessageText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <EditText
+        android:id="@+id/edtMessageText"
+        style="@style/text_message_style"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/message"
+        android:background="@drawable/null_background"
+        android:hint="@string/message"
+        android:maxHeight="150dp"
+        android:paddingStart="@dimen/message_padding_horizontal"
+        android:paddingTop="@dimen/message_padding_vertical"
+        android:paddingEnd="@dimen/message_padding_horizontal"
+        android:paddingBottom="@dimen/message_padding_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintEnd_toStartOf="@+id/sendIcon"
+        app:layout_constraintStart_toEndOf="@+id/chooseImage"
+        tools:ignore="TextFields">
+
+        <requestFocus />
+    </EditText>
+
+    <ImageView
+        android:id="@+id/chooseImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/send"
+        android:src="@drawable/image_icon_40_black"
+        app:layout_constraintBottom_toBottomOf="@+id/edtMessageText"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/edtMessageText"
+        app:layout_constraintVertical_bias="1" />
+
+
+    <ImageView
+        android:id="@+id/sendIcon"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:contentDescription="@string/send"
+        android:src="@drawable/send_icon_28_black"
+        app:layout_constraintBottom_toBottomOf="@+id/chooseImage"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@+id/chooseImage" />
+
+    <ImageView
+        android:id="@+id/unselectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/unselect_image"
+        android:src="@drawable/close_icon_32_black"
+        app:layout_constraintBottom_toTopOf="@+id/selectedImage"
+        app:layout_constraintEnd_toEndOf="@+id/selectedImage" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/message_feature_guide_line" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/message_feature_guide_line" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/message_feature_guide_line" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

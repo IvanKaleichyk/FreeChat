@@ -164,6 +164,7 @@
     <inspection_tool class="AndroidLintInstantiatable" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIntentReset" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintInvalidAnalyticsName" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintInvalidFragmentVersionForActivityResult" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintInvalidId" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintInvalidImeActionId" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintInvalidNavigation" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -361,6 +362,7 @@
     <inspection_tool class="AndroidLintUseCheckPermission" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUseCompoundDrawables" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUseOfBundledGooglePlayServices" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUseRequireInsteadOfGet" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUseSparseArrays" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUseValueOf" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUselessLeaf" enabled="true" level="WARNING" enabled_by_default="true" />

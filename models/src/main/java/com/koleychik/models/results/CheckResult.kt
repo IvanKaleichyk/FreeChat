@@ -18,5 +18,4 @@ sealed class CheckResult {
             is Error -> CheckDataState.Error(message)
         }
     }
-
 }

@@ -1,5 +1,8 @@
 package com.koleychik.freechat.di.modules
 
+import com.kaleichyk.feature_messages.di.MessagesFeatureApi
+import com.kaleichyk.feature_messages.di.MessagesFeatureComponentHolder
+import com.kaleichyk.feature_messages.di.MessagesFeatureDependencies
 import com.kaleichyk.feature_searching.di.SearchingFeatureApi
 import com.kaleichyk.feature_searching.di.SearchingFeatureComponentHolder
 import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
@@ -35,12 +38,21 @@ import dagger.Provides
 class ApiModule {
 
     @Provides
+    fun provideMessagesFeatureApi(
+        dependencies: MessagesFeatureDependencies,
+        destroyer: BaseDestroyer
+    ): MessagesFeatureApi {
+        MessagesFeatureComponentHolder.init(dependencies, destroyer)
+        return MessagesFeatureComponentHolder.get()
+    }
+
+    @Provides
     fun provideUserInfoFeatureApi(
         dependencies: UserInfoFeatureDependencies,
         destroyer: UserInfoFeatureDestroyer,
     ): UserInfoFeatureApi {
         UserInfoFeatureComponentHolder.init(dependencies, destroyer)
-       return  UserInfoFeatureComponentHolder.get()
+        return UserInfoFeatureComponentHolder.get()
     }
 
     @Provides

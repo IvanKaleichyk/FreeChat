@@ -11,7 +11,8 @@ import com.koleychik.core_notifications.data.MessageNotificationModel
 import com.koleychik.core_notifications.repositories.NotificationRepository
 import javax.inject.Inject
 
-internal class NotificationRepositoryImpl @Inject constructor(private val context: Context) : NotificationRepository {
+internal class NotificationRepositoryImpl @Inject constructor(private val context: Context) :
+    NotificationRepository {
 
     override fun createNotificationChannel(
         notificationManager: NotificationManager,
@@ -28,12 +29,15 @@ internal class NotificationRepositoryImpl @Inject constructor(private val contex
     override fun createMessageNotification(
         model: MessageNotificationModel,
         channelId: String,
-    ): Notification = NotificationCompat.Builder(context, channelId)
-        .setContentTitle(model.title)
-        .setContentText(model.body)
-        .setSmallIcon(R.drawable.message_icon_32)
-        .setStyle(NotificationCompat.BigTextStyle().bigText(model.image))
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .build()
+    ): Notification {
+        val text = if (model.body.isNotBlank()) model.body else context.getString(R.string.photo)
+
+        return NotificationCompat.Builder(context, channelId)
+            .setContentTitle(model.title)
+            .setContentText(text)
+            .setSmallIcon(R.drawable.message_icon)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+    }
 
 }

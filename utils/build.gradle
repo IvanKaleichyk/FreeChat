@@ -5,6 +5,9 @@ plugins {
 dependencies {
     implementation project(":models")
 
+    def fragment_version = "1.3.4"
+
     implementation Dependencies.kotlin_lib
     implementation Dependencies.coreKtx
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 }

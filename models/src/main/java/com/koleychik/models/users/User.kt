@@ -1,7 +1,7 @@
 package com.koleychik.models.users
 
 import android.os.Parcelable
-import com.koleychik.models.dialog.Dialog
+import com.koleychik.models.dialog.DialogDTO
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -32,5 +32,15 @@ open class User(
         isOnline = false,
     )
 
-    fun toDialogMember() = Dialog.Member(id, name, icon)
+    fun toDialogMember() = DialogDTO.Member(id, name, icon)
+
+    fun asRoot() = UserRoot(
+        id,
+        name,
+        email,
+        createdAt,
+        isOnline,
+        icon,
+        background
+    )
 }

@@ -30,6 +30,8 @@ abstract class PagingAdapter<T : PaginationData>(
         const val SHOW_DATA_TYPE = 200
     }
 
+    var reverseLayout = false
+
     private var loadingPosition: Int? = null
 
     @Suppress("UNCHECKED_CAST")
@@ -39,8 +41,8 @@ abstract class PagingAdapter<T : PaginationData>(
             object : SortedListAdapterCallback<PaginationData>(this) {
                 override fun compare(o1: PaginationData, o2: PaginationData): Int {
                     return when {
-                        o1 is PaginationLoading || o2 is PaginationListener -> 1
-                        o2 is PaginationLoading -> -1
+                        o1 is PaginationLoading || o2 is PaginationListener -> if (reverseLayout) -1 else 1
+                        o2 is PaginationLoading -> if (reverseLayout) 1 else -1
                         else -> diffUtil.compare(o1 as T, o2 as T)
                     }
                 }
@@ -67,7 +69,7 @@ abstract class PagingAdapter<T : PaginationData>(
 
     override fun getItemCount(): Int = list.size()
 
-    abstract fun createShowDataViewHolder(parent: ViewGroup): ShowDataViewHolder<T>
+    abstract fun createShowDataViewHolder(parent: ViewGroup, viewType: Int): ShowDataViewHolder<T>
 
     abstract fun createLoadingViewHolder(parent: ViewGroup): LoadingViewHolder
 
@@ -77,7 +79,7 @@ abstract class PagingAdapter<T : PaginationData>(
         return when (viewType) {
             LOADING_TYPE -> createLoadingViewHolder(parent)
             ERROR_TYPE -> createErrorViewHolder(parent)
-            else -> createShowDataViewHolder(parent)
+            else -> createShowDataViewHolder(parent, viewType)
         }
     }
 
@@ -99,6 +101,15 @@ abstract class PagingAdapter<T : PaginationData>(
             else -> SHOW_DATA_TYPE
         }
     }
+
+    fun submitList(newList: List<T>) {
+        list.clear()
+        list.addAll(newList)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun getItem(position: Int): T = list[position] as T?
+        ?: throw NullPointerException("adapter haven't item with position = $position")
 
     private fun subscribe() {
         lifecycle.coroutineScope.launch {
@@ -127,13 +138,12 @@ abstract class PagingAdapter<T : PaginationData>(
         }
     }
 
-    private fun addToList(addList: List<T>) {
+    fun addToList(addList: List<T>) {
         list.addAll(addList)
     }
 
-    fun submitList(newList: List<T>) {
-        list.clear()
-        list.addAll(newList)
+    fun addItem(item: T) {
+        list.add(item)
     }
 
     private fun addLoading() {

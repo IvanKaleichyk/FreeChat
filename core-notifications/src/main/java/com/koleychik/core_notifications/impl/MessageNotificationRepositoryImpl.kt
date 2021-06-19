@@ -51,7 +51,7 @@ internal class MessageNotificationRepositoryImpl @Inject constructor(
 
     private fun getUniqueNotificationId(title: String): Int {
         val dateTime = (Date().time / 2).toInt()
-        return dateTime + title[0].toInt() + title[title.lastIndex].toInt()
+        return dateTime + title[0].code + title[title.lastIndex].code
     }
 
 }

@@ -1,4 +1,4 @@
-package com.kaleichyk.utils
+package com.kaleichyk.utils.navigation
 
 object NavigationConstants {
 

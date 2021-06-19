@@ -6,12 +6,15 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import com.kaleichyk.feature_messages.di.MessagesFeatureApi
+import com.kaleichyk.feature_messages.ui.MessagesFragment
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.di.SearchingFeatureApi
 import com.kaleichyk.feature_searching.ui.SearchingFragment
 import com.kaleichyk.feature_user_info.UserInfoNavigationApi
 import com.kaleichyk.feature_user_info.di.UserInfoFeatureApi
 import com.kaleichyk.feature_user_info.ui.UserInfoFragment
+import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureApi
 import com.koleychik.feature_all_dialogs.ui.AllDialogsFragment
@@ -32,7 +35,6 @@ import com.koleychik.feature_start.ui.screens.StartFragment
 import com.koleychik.feature_start.ui.screens.VerifyEmailFragment
 import com.koleychik.freechat.activities.AuthenticationActivity
 import com.koleychik.freechat.activities.MainActivity
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Provider
 
 class Navigator(
@@ -42,26 +44,24 @@ class Navigator(
     private val passwordUtilsFeatureApi: Provider<PasswordUtilsFeatureApi>,
     private val allDialogsFeatureApi: Provider<AllDialogsFeatureApi>,
     private val searchingFeatureApi: Provider<SearchingFeatureApi>,
-    private val userInfoFeatureApi: Provider<UserInfoFeatureApi>
+    private val userInfoFeatureApi: Provider<UserInfoFeatureApi>,
+    private val messagesFeatureApi: Provider<MessagesFeatureApi>,
 ) : SignInNavigationApi, SignUpNavigationApi, StartFeatureNavigation, SpecifyEmailNavigationApi,
     AllDialogFeatureNavigationApi, SearchingFeatureNavigationApi, UserInfoNavigationApi {
 
     internal var controller: NavController? = null
 
+    private val setSignFeaturesFragments = setOf(R.id.signInFragment, R.id.signUpFragment)
+    private val setAllDialogsFeaturesFragments = setOf(R.id.allDialogsFragment)
+    private val setMessagesFeaturesFragments = setOf(R.id.messagesFragment)
+    private val setPasswordUtilsFeaturesFragments = setOf(R.id.specifyEmailFragment)
+    private val setSearchingFeaturesFragments = setOf(R.id.searchingFragment)
+    private val setStartFeaturesFragments = setOf(R.id.startFragment, R.id.verifyEmailFragment)
+    private val setUserInfoFeaturesFragments = setOf(R.id.userInfoFragment)
+
     init {
         NavigationSystem.onStartFeature = {
             getApiByFragment(it)
-        }
-    }
-
-    private fun getApiByFragment(fragment: Fragment) {
-        when (fragment) {
-            is SpecifyEmailFragment -> passwordUtilsFeatureApi.get()
-            is SignUpFragment, is SignInFragment -> signFeatureApi.get()
-            is StartFragment, is VerifyEmailFragment -> startFeatureApi.get()
-            is AllDialogsFragment -> allDialogsFeatureApi.get()
-            is SearchingFragment -> searchingFeatureApi.get()
-            is UserInfoFragment -> userInfoFeatureApi.get()
         }
     }
 
@@ -73,7 +73,7 @@ class Navigator(
         }
     }
 
-    override fun fromStartFragmentToMainScreen(bundle: Bundle?) {
+    override fun fromStartFragmentToMainScreen() {
         checkController()
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
@@ -87,7 +87,7 @@ class Navigator(
         }
     }
 
-    override fun fromVerifyEmailFragmentToMainScreen(bundle: Bundle?) {
+    override fun fromVerifyEmailFragmentToMainScreen() {
         checkController()
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
@@ -101,14 +101,14 @@ class Navigator(
         }
     }
 
-    override fun fromSignUpToMainScreen(bundle: Bundle?) {
+    override fun fromSignUpToMainScreen() {
         checkController()
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
-    override fun fromSignInFragmentToMainScreen(bundle: Bundle?) {
+    override fun fromSignInFragmentToMainScreen() {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
@@ -137,10 +137,6 @@ class Navigator(
         }
     }
 
-    private fun checkController() {
-        if (controller == null) throw NullPointerException("NavController is not binded")
-    }
-
     override fun fromDialogsFeatureGoToMessagesFeature(bundle: Bundle) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.allDialogsFragment) {
@@ -151,7 +147,7 @@ class Navigator(
     override fun fromDialogsFeatureGoToSearchingFeature(bundle: Bundle?) {
         checkController()
         if (controller!!.currentDestination?.id == R.id.allDialogsFragment) {
-            controller!!.navigate(R.id.action_allDialogsFragment_to_searchingFragment)
+            controller!!.navigate(R.id.action_allDialogsFragment_to_searchingFragment, bundle)
         }
     }
 
@@ -180,6 +176,22 @@ class Navigator(
         if (controller!!.currentDestination?.id == R.id.userInfoFragment) {
             controller!!.navigate(R.id.action_userInfoFragment_to_messagesFragment, bundle)
         }
+    }
+
+    private fun getApiByFragment(fragment: Fragment) {
+        when (fragment) {
+            is SpecifyEmailFragment -> passwordUtilsFeatureApi.get()
+            is SignUpFragment, is SignInFragment -> signFeatureApi.get()
+            is StartFragment, is VerifyEmailFragment -> startFeatureApi.get()
+            is AllDialogsFragment -> allDialogsFeatureApi.get()
+            is SearchingFragment -> searchingFeatureApi.get()
+            is UserInfoFragment -> userInfoFeatureApi.get()
+            is MessagesFragment -> messagesFeatureApi.get()
+        }
+    }
+
+    private fun checkController() {
+        if (controller == null) throw NullPointerException("NavController is not binded")
     }
 
 }

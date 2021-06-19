@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.dialogs.DialogInfo
@@ -19,7 +20,6 @@ import com.koleychik.feature_password_utils.di.PasswordUtilsFeatureComponentHold
 import com.koleychik.feature_password_utils.viewModels.SpecifyEmailViewModel
 import com.koleychik.feature_password_utils.viewModels.ViewModelFactory
 import com.koleychik.models.results.CheckResult
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class SpecifyEmailFragment : Fragment() {
@@ -27,7 +27,7 @@ class SpecifyEmailFragment : Fragment() {
     private var _binding: FragmentSpecifyEmailBinding? = null
     private val binding get() = _binding!!
 
-    private val dialogInfoListener = object : DialogInfoListener{
+    private val dialogInfoListener = object : DialogInfoListener {
         override fun onClick(dialog: DialogInterface) {
             dialog.dismiss()
             navigationApi.fromSpecifyEmailToSignIn()

@@ -19,7 +19,7 @@ fun RemoteMessage.Notification.toMessageNotificationModel() = MessageNotificatio
 fun Message.toNetworkMessageNotificationModel(title: String, image: String?, topic: String) =
     NetworkMessageNotificationModel(
         title = title,
-        body = text,
+        body = text.toString(),
         image = image,
         topic = topic
     )
@@ -28,5 +28,3 @@ fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     Log.d("MAIN_APP_TAG", "showToast - $text")
 }
-
-fun createTopic(rootUserId: String, interlocutorId: String) = rootUserId + interlocutorId

@@ -1,4 +1,4 @@
-package com.koleychik.models.results
+package com.koleychik.models.results.messages
 
 import com.koleychik.models.Message
 import com.koleychik.models.states.DataState

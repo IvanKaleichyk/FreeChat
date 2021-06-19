@@ -39,6 +39,10 @@ abstract class PaginationListener(
         val totalItemCount = layoutManager.itemCount
         val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
+        showLog("visibleItemCount = $visibleItemCount")
+        showLog("totalItemCount = $totalItemCount")
+        showLog("firstVisibleItemPosition = $firstVisibleItemPosition")
+
         if (state.value is PagingState.Loading) return
         if (
             (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0

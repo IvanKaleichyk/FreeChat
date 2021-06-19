@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="@dimen/basicPadding"
     android:paddingBottom="@dimen/basicPadding">
 
@@ -14,7 +14,7 @@
         android:background="@drawable/card_background"
         android:padding="@dimen/cardPadding">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -28,16 +28,16 @@
             android:id="@+id/title"
             style="@style/card_title"
             android:layout_marginStart="@dimen/margin_between_same_elements"
-            tools:text="Ivan Kaleichyk"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Ivan Kaleichyk" />
 
         <TextView
             android:id="@+id/message"
             style="@style/card_text"
-            tools:text="hello hehife ifjfj"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/title" />
+            app:layout_constraintStart_toStartOf="@+id/title"
+            tools:text="hello hehife ifjfj" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

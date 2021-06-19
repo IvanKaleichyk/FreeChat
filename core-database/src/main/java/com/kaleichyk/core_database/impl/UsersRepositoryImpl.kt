@@ -25,7 +25,7 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
             .limit(limit)
         return try {
             val result = collection.get().await()
-            val list = result.getListFromQuerySnapshot(User::class.java)
+            val list = result.toListFromQuerySnapshot(User::class.java)
             Log.d(TAG, "list users = $list")
             UsersResult.Successful(list)
         } catch (e: FirebaseFirestoreException) {
@@ -51,7 +51,7 @@ internal class UsersRepositoryImpl @Inject constructor() : UsersRepository {
 
         return try {
             val result = collection.get().await()
-            UsersResult.Successful(result.getListFromQuerySnapshot(User::class.java))
+            UsersResult.Successful(result.toListFromQuerySnapshot(User::class.java))
         } catch (e: FirebaseFirestoreException) {
             e.toUsersResultError()
         }

@@ -4,8 +4,10 @@ import android.content.Context
 import com.kaleichyk.core_cloud_storage.di.CloudStorageCoreComponent
 import com.kaleichyk.core_cloud_storage.framework.CloudStorageRepository
 import com.kaleichyk.core_database.api.DialogsRepository
+import com.kaleichyk.core_database.api.MessagesRepository
 import com.kaleichyk.core_database.api.UsersRepository
 import com.kaleichyk.core_database.di.DatabaseCoreComponent
+import com.kaleichyk.feature_messages.di.MessagesFeatureDependencies
 import com.kaleichyk.feature_searching.SearchingFeatureNavigationApi
 import com.kaleichyk.feature_searching.di.SearchingFeatureDependencies
 import com.kaleichyk.feature_user_info.UserInfoNavigationApi
@@ -13,6 +15,8 @@ import com.kaleichyk.feature_user_info.di.UserInfoFeatureDependencies
 import com.koleychik.core_authentication.api.AccountRepository
 import com.koleychik.core_authentication.api.AuthRepository
 import com.koleychik.core_authentication.di.AuthenticationCoreComponent
+import com.koleychik.core_notifications.di.NotificationCoreComponent
+import com.koleychik.core_notifications.repositories.MessageNotificationRepository
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.di.AllDialogsFeatureDependencies
 import com.koleychik.feature_loading_api.LoadingApi
@@ -32,6 +36,23 @@ import javax.inject.Singleton
 
 @Module
 class DependenciesModule {
+
+    @Singleton
+    @Provides
+    fun provideMessagesFeatureDependencies(context: Context) =
+        object : MessagesFeatureDependencies {
+            override fun context(): Context = context
+
+            override fun messageNotificationRepository(): MessageNotificationRepository =
+                NotificationCoreComponent.get(context).messageNotificationRepository()
+
+            override fun messagesRepository(): MessagesRepository =
+                DatabaseCoreComponent.get().messagesRepository()
+
+            override fun dialogsRepository(): DialogsRepository =
+                DatabaseCoreComponent.get().dialogsRepository()
+
+        }
 
     @Singleton
     @Provides

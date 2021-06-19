@@ -4,7 +4,7 @@ import android.os.Bundle
 
 interface SignInNavigationApi {
 
-    fun fromSignInFragmentToMainScreen(bundle: Bundle? = null)
+    fun fromSignInFragmentToMainScreen()
     fun fromSignInFragmentToPasswordRecovery(bundle: Bundle? = null)
     fun fromSignInFragmentToSignUp(bundle: Bundle? = null)
 

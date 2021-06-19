@@ -37,8 +37,8 @@
                 android:id="@+id/icon"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                android:contentDescription="@string/user_icon"
                 android:layout_marginTop="10dp"
+                android:contentDescription="@string/user_icon"
                 android:src="@drawable/account_icon_128"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,21 +46,21 @@
 
             <TextView
                 android:id="@+id/name"
-                tools:text="Ivan"
                 style="@style/name"
                 android:layout_margin="@dimen/margin_between_same_elements"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon" />
+                app:layout_constraintTop_toBottomOf="@+id/icon"
+                tools:text="Ivan" />
 
             <TextView
                 android:id="@+id/email"
                 style="@style/email"
-                tools:text="kaleichykivan@gmail.com"
                 android:layout_margin="@dimen/margin_between_same_elements"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                tools:text="kaleichykivan@gmail.com" />
 
             <View
                 android:id="@+id/lineDivideUserInfoAndActions"
@@ -76,139 +76,171 @@
                 android:id="@+id/group_user_info"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="invisible"
-                app:constraint_referenced_ids="iconStartDialog, textStartDialog, nextStartDialog" />
+                android:visibility="gone"
+                app:constraint_referenced_ids="carcassStartDialog" />
 
-            <ImageView
-                android:id="@+id/iconStartDialog"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
+            <LinearLayout
+                android:id="@+id/carcassStartDialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/smallMargin"
-                android:contentDescription="@string/dialog_icon"
-                android:src="@drawable/dialog_icon_32_black"
-                app:layout_constraintStart_toEndOf="@+id/guideLineStart"
-                app:layout_constraintTop_toBottomOf="@id/lineDivideUserInfoAndActions" />
-
-            <TextView
-                android:id="@+id/textStartDialog"
-                style="@style/action_name"
-                android:layout_marginStart="@dimen/margin_between_same_elements"
-                android:text="@string/start_dialog"
-                app:layout_constraintBottom_toBottomOf="@+id/iconStartDialog"
-                app:layout_constraintEnd_toStartOf="@+id/nextStartDialog"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@+id/iconStartDialog"
-                app:layout_constraintTop_toTopOf="@+id/iconStartDialog" />
-
-            <ImageView
-                android:id="@+id/nextStartDialog"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:contentDescription="@string/continue_text"
-                android:src="@drawable/next_icon_32_black"
-                app:layout_constraintBottom_toBottomOf="@+id/iconStartDialog"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconStartDialog" />
+                app:layout_constraintStart_toStartOf="@+id/guideLineStart"
+                app:layout_constraintTop_toBottomOf="@+id/lineDivideUserInfoAndActions">
+
+                <ImageView
+                    android:id="@+id/iconStartDialog"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/dialog_icon"
+                    android:src="@drawable/dialog_icon_32_black" />
+
+                <TextView
+                    android:id="@+id/textStartDialog"
+                    style="@style/action_name"
+                    android:layout_width="0dp"
+                    android:layout_weight="9"
+                    android:text="@string/start_dialog" />
+
+                <ImageView
+                    android:id="@+id/nextStartDialog"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/continue_text"
+                    android:src="@drawable/next_icon_32_black" />
+            </LinearLayout>
+
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_root_user"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                app:constraint_referenced_ids="iconSetName, textSetName, nextSetName, iconSetEmail, textSetEmail, nextSetEmail, iconSetPassword, textSetPassword, nextSetPassword, lineDivideActionsAndCarefulAction, iconDeleteAccount, textDeleteAccount, nextDeleteAccount, iconSignOut, textSignOut, nextSignOut" />
+                app:constraint_referenced_ids="carcassSetName, carcassSetEmail, carcassSetPassword, lineDivideActionsAndCarefulAction, carcassDeleteAccount, carcassSignOut" />
 
-            <ImageView
-                android:id="@+id/iconSetName"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/carcassSetName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/smallMargin"
-                android:contentDescription="@string/dialog_icon"
-                android:src="@drawable/set_name_icon_32_black"
-                app:layout_constraintStart_toEndOf="@+id/guideLineStart"
-                app:layout_constraintTop_toBottomOf="@id/lineDivideUserInfoAndActions" />
-
-            <TextView
-                android:id="@+id/textSetName"
-                style="@style/action_name"
-                android:layout_marginStart="@dimen/margin_between_same_elements"
-                android:text="@string/set_name"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSetName"
-                app:layout_constraintEnd_toStartOf="@+id/nextSetName"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@+id/iconSetName"
-                app:layout_constraintTop_toTopOf="@+id/iconSetName" />
-
-            <ImageView
-                android:id="@+id/nextSetName"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:contentDescription="@string/continue_text"
-                android:src="@drawable/next_icon_32_black"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSetName"
                 app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconSetName" />
+                app:layout_constraintStart_toStartOf="@+id/guideLineStart"
+                app:layout_constraintTop_toBottomOf="@+id/lineDivideUserInfoAndActions">
 
-            <ImageView
-                android:id="@+id/iconSetEmail"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
+                <ImageView
+                    android:id="@+id/iconSetName"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/dialog_icon"
+                    android:src="@drawable/set_name_icon_32_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSetName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSetName" />
+
+                <TextView
+                    android:id="@+id/textSetName"
+                    style="@style/action_name"
+                    android:text="@string/set_name"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/nextSetName"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/iconSetName"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/nextSetName"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/continue_text"
+                    android:src="@drawable/next_icon_32_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSetName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSetName" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/carcassSetEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_between_same_elements"
-                android:contentDescription="@string/dialog_icon"
-                android:src="@drawable/email_icon_32_black"
-                app:layout_constraintStart_toEndOf="@+id/guideLineStart"
-                app:layout_constraintTop_toBottomOf="@id/iconSetName" />
-
-            <TextView
-                android:id="@+id/textSetEmail"
-                style="@style/action_name"
-                android:layout_marginStart="@dimen/margin_between_same_elements"
-                android:text="@string/set_email"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSetEmail"
-                app:layout_constraintEnd_toStartOf="@+id/nextSetEmail"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@+id/iconSetEmail"
-                app:layout_constraintTop_toTopOf="@+id/iconSetEmail" />
-
-            <ImageView
-                android:id="@+id/nextSetEmail"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:contentDescription="@string/continue_text"
-                android:src="@drawable/next_icon_32_black"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSetEmail"
                 app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconSetEmail" />
+                app:layout_constraintStart_toStartOf="@+id/guideLineStart"
+                app:layout_constraintTop_toBottomOf="@+id/carcassSetName">
 
-            <ImageView
-                android:id="@+id/iconSetPassword"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
+                <ImageView
+                    android:id="@+id/iconSetEmail"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/dialog_icon"
+                    android:src="@drawable/email_icon_32_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSetEmail"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSetEmail" />
+
+                <TextView
+                    android:id="@+id/textSetEmail"
+                    style="@style/action_name"
+                    android:text="@string/set_email"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/nextSetEmail"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/iconSetEmail"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/nextSetEmail"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/continue_text"
+                    android:src="@drawable/next_icon_32_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSetEmail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSetEmail" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/carcassSetPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_between_same_elements"
-                android:contentDescription="@string/dialog_icon"
-                android:src="@drawable/set_password_icon_32_black"
-                app:layout_constraintStart_toEndOf="@+id/guideLineStart"
-                app:layout_constraintTop_toBottomOf="@id/iconSetEmail" />
-
-            <TextView
-                android:id="@+id/textSetPassword"
-                style="@style/action_name"
-                android:layout_marginStart="@dimen/margin_between_same_elements"
-                android:text="@string/set_password"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSetPassword"
-                app:layout_constraintEnd_toStartOf="@+id/nextSetPassword"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@+id/iconSetPassword"
-                app:layout_constraintTop_toTopOf="@+id/iconSetPassword" />
-
-            <ImageView
-                android:id="@+id/nextSetPassword"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:contentDescription="@string/continue_text"
-                android:src="@drawable/next_icon_32_black"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSetPassword"
                 app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconSetPassword" />
+                app:layout_constraintStart_toStartOf="@+id/guideLineStart"
+                app:layout_constraintTop_toBottomOf="@+id/carcassSetEmail">
+
+                <ImageView
+                    android:id="@+id/iconSetPassword"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/dialog_icon"
+                    android:src="@drawable/set_password_icon_32_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSetPassword"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSetPassword" />
+
+                <TextView
+                    android:id="@+id/textSetPassword"
+                    style="@style/action_name"
+                    android:text="@string/set_password"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/nextSetPassword"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/iconSetPassword"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/nextSetPassword"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/continue_text"
+                    android:src="@drawable/next_icon_32_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSetPassword"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSetPassword" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/lineDivideActionsAndCarefulAction"
@@ -218,69 +250,88 @@
                 android:background="@color/colorOfLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iconSetPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/carcassSetPassword" />
 
-            <ImageView
-                android:id="@+id/iconDeleteAccount"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:layout_marginTop="@dimen/smallMargin"
-                android:contentDescription="@string/dialog_icon"
-                android:src="@drawable/delete_icon_32_red"
-                app:layout_constraintStart_toEndOf="@+id/guideLineStart"
-                app:layout_constraintTop_toBottomOf="@id/lineDivideActionsAndCarefulAction" />
-
-            <TextView
-                android:id="@+id/textDeleteAccount"
-                style="@style/careful_action_name"
-                android:layout_marginStart="@dimen/margin_between_same_elements"
-                android:text="@string/delete_account"
-                app:layout_constraintBottom_toBottomOf="@+id/iconDeleteAccount"
-                app:layout_constraintEnd_toStartOf="@+id/nextDeleteAccount"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@+id/iconDeleteAccount"
-                app:layout_constraintTop_toTopOf="@+id/iconDeleteAccount" />
-
-            <ImageView
-                android:id="@+id/nextDeleteAccount"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:contentDescription="@string/continue_text"
-                android:src="@drawable/next_icon_32_red"
-                app:layout_constraintBottom_toBottomOf="@+id/iconDeleteAccount"
-                app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconDeleteAccount" />
-
-            <ImageView
-                android:id="@+id/iconSignOut"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/carcassDeleteAccount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_between_same_elements"
-                android:contentDescription="@string/dialog_icon"
-                android:src="@drawable/exit_icon_32_red"
-                app:layout_constraintStart_toEndOf="@+id/guideLineStart"
-                app:layout_constraintTop_toBottomOf="@id/iconDeleteAccount" />
-
-            <TextView
-                android:id="@+id/textSignOut"
-                style="@style/careful_action_name"
-                android:layout_marginStart="@dimen/margin_between_same_elements"
-                android:text="@string/sign_out"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSignOut"
-                app:layout_constraintEnd_toStartOf="@+id/nextDeleteAccount"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@+id/iconSignOut"
-                app:layout_constraintTop_toTopOf="@+id/iconSignOut" />
-
-            <ImageView
-                android:id="@+id/nextSignOut"
-                android:layout_width="@dimen/size_action_icon"
-                android:layout_height="@dimen/size_action_icon"
-                android:contentDescription="@string/continue_text"
-                android:src="@drawable/next_icon_32_red"
-                app:layout_constraintBottom_toBottomOf="@+id/iconSignOut"
                 app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
-                app:layout_constraintTop_toTopOf="@+id/iconSignOut" />
+                app:layout_constraintStart_toStartOf="@+id/guideLineStart"
+                app:layout_constraintTop_toBottomOf="@+id/lineDivideActionsAndCarefulAction">
+
+                <ImageView
+                    android:id="@+id/iconDeleteAccount"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/dialog_icon"
+                    android:src="@drawable/delete_icon_32_red"
+                    app:layout_constraintBottom_toBottomOf="@+id/textDeleteAccount"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textDeleteAccount" />
+
+                <TextView
+                    android:id="@+id/textDeleteAccount"
+                    style="@style/careful_action_name"
+                    android:layout_marginStart="@dimen/margin_between_same_elements"
+                    android:text="@string/delete_account"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/nextDeleteAccount"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/iconDeleteAccount"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/nextDeleteAccount"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/continue_text"
+                    android:src="@drawable/next_icon_32_red"
+                    app:layout_constraintBottom_toBottomOf="@+id/textDeleteAccount"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textDeleteAccount" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/carcassSignOut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_between_same_elements"
+                app:layout_constraintEnd_toStartOf="@+id/guideLineEnd"
+                app:layout_constraintStart_toStartOf="@+id/guideLineStart"
+                app:layout_constraintTop_toBottomOf="@+id/carcassDeleteAccount">
+
+                <ImageView
+                    android:id="@+id/iconSignOut"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/dialog_icon"
+                    android:src="@drawable/exit_icon_32_red"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSignOut"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSignOut" />
+
+                <TextView
+                    android:id="@+id/textSignOut"
+                    style="@style/careful_action_name"
+                    android:text="@string/sign_out"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/nextSignOut"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toEndOf="@+id/iconSignOut"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/nextSignOut"
+                    android:layout_width="@dimen/size_action_icon"
+                    android:layout_height="@dimen/size_action_icon"
+                    android:contentDescription="@string/continue_text"
+                    android:src="@drawable/next_icon_32_red"
+                    app:layout_constraintBottom_toBottomOf="@+id/textSignOut"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textSignOut" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ViewStub
                 android:id="@+id/viewStubLoading"
@@ -307,8 +358,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="@dimen/basicPadding">
+                android:padding="@dimen/basicPadding"
+                android:visibility="gone">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -338,8 +389,8 @@
                         android:id="@+id/shimmerEmail"
                         style="@style/email"
                         android:layout_width="120dp"
-                        android:background="@color/colorShimmer"
                         android:layout_margin="@dimen/margin_between_same_elements"
+                        android:background="@color/colorShimmer"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/shimmerName" />

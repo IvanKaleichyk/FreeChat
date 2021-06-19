@@ -4,4 +4,4 @@ abstract class PaginationData
 
 object PaginationLoading : PaginationData()
 
-data class PaginationError(val message: String, val code: Int) : PaginationData()
+data class PaginationError(val message: String) : PaginationData()

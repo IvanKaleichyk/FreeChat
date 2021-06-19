@@ -3,5 +3,10 @@
     <dimen name="message_padding_vertical">5dp</dimen>
     <dimen name="message_padding_horizontal">10dp</dimen>
 
-    <dimen name="message_radius">10dp</dimen>
+    <dimen name="margin_message_end">100dp</dimen>
+
+    <dimen name="message_radius">16dp</dimen>
+
+    <dimen name="message_feature_guide_line">10dp</dimen>
+    <dimen name="carcassMessagePadding">6dp</dimen>
 </resources>

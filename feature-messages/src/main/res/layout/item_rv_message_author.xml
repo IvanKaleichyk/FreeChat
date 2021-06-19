@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/messageCarcass"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginTop="@dimen/carcassMessagePadding"
+        android:layout_marginBottom="@dimen/carcassMessagePadding"
+        android:layout_marginEnd="@dimen/carcassMessagePadding"
+        android:layout_marginStart="@dimen/margin_message_end"
+        app:cardBackgroundColor="@color/colorMessageAuthor"
+        app:cardCornerRadius="@dimen/message_radius"
+        app:contentPaddingBottom="@dimen/message_padding_vertical"
+        app:contentPaddingLeft="@dimen/message_padding_horizontal"
+        app:contentPaddingRight="@dimen/message_padding_horizontal"
+        app:contentPaddingTop="@dimen/message_padding_vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/messageLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/messageText"
+                style="@style/text_message_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Hello User, how are you? maybe i can help you" />
+
+            <ImageView
+                android:id="@+id/messageImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_between_same_elements"
+                android:contentDescription="@string/image"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/messageText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</FrameLayout>

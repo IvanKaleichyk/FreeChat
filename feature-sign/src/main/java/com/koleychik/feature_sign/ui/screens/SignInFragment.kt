@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.api.AuthRepository
@@ -17,7 +18,6 @@ import com.koleychik.feature_sign.navigation.SignInNavigationApi
 import com.koleychik.feature_sign.ui.viewModels.SignInViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
 import com.koleychik.models.states.CheckDataState
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class SignInFragment : Fragment() {

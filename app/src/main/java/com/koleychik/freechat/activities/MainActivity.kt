@@ -2,6 +2,7 @@ package com.koleychik.freechat.activities
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.koleychik.dialogs.DialogInfo
@@ -24,12 +25,14 @@ class MainActivity : AppCompatActivity() {
         findNavController(R.id.navController)
     }
 
+    private var dialogVerificationEmail: DialogInfo? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         App.component.inject(this)
-
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         checkVerificationEmail()
     }
 
@@ -40,10 +43,10 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         }
-        DialogInfo(dialogListener, getString(R.string.please_verification_email), null).show(
-            supportFragmentManager,
-            "VerificationEmailDialogTAG"
-        )
+        dialogVerificationEmail =
+            DialogInfo(dialogListener, getString(R.string.please_verification_email), null).apply {
+                show(supportFragmentManager, "VerificationEmailDialogTAG")
+            }
     }
 
 
@@ -55,8 +58,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
+        dialogVerificationEmail?.dismiss()
         super.onStop()
         manager.unSubscribeToUserChanges()
         manager.isUserOnline(false)
     }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id != R.id.allDialogsFragment) super.onBackPressed()
+    }
+
 }

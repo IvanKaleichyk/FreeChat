@@ -26,7 +26,7 @@
     <dimen name="card_shadow">12dp</dimen>
 
     <!--  Width  -->
-    <dimen name="edt_width">300dp</dimen>
+    <dimen name="edt_width">250dp</dimen>
     <dimen name="min_btn_width">100dp</dimen>
 
     <dimen name="loading_icon">110dp</dimen>
@@ -34,5 +34,8 @@
 
     <dimen name="guide_line">20dp</dimen>
     <dimen name="margin_between_same_elements">8dp</dimen>
+
+    <!--  divide line  -->
+    <dimen name="marginDivideLine">8dp</dimen>
 
 </resources>

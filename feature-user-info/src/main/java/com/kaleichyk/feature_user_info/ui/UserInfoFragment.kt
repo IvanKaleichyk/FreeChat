@@ -18,8 +18,9 @@ import com.kaleichyk.feature_user_info.ui.viewModel.UserInfoViewModel
 import com.kaleichyk.feature_user_info.ui.viewModel.ViewModelFactory
 import com.kaleichyk.utils.CurrentUser
 import com.kaleichyk.utils.MimeTypes.MIME_TYPE_IMAGE
-import com.kaleichyk.utils.NavigationConstants.DIALOG_ID
-import com.kaleichyk.utils.NavigationConstants.USER_ID
+import com.kaleichyk.utils.navigation.NavigationConstants.DIALOG
+import com.kaleichyk.utils.navigation.NavigationConstants.USER_ID
+import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.checkEmail
@@ -30,14 +31,12 @@ import com.koleychik.dialogs.DialogGetDataListener
 import com.koleychik.dialogs.DialogInfo
 import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.feature_loading_api.LoadingApi
-import com.koleychik.models.asRoot
 import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.results.CheckResult
 import com.koleychik.models.states.CheckDataState
 import com.koleychik.models.states.DataState
 import com.koleychik.models.users.User
 import com.koleychik.models.users.UserRoot
-import com.koleychik.module_injector.NavigationSystem
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,6 +50,15 @@ class UserInfoFragment : Fragment() {
         const val CREATE_NEW_DIALOG = 3
     }
 
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelFactory
+
+    @Inject
+    internal lateinit var loadingApi: LoadingApi
+
+    @Inject
+    internal lateinit var navigationApi: UserInfoNavigationApi
+
     private var loadingStarter: Int? = null
 
     private var shimmerLoadingStarter: Int? = null
@@ -63,15 +71,6 @@ class UserInfoFragment : Fragment() {
     }
 
     private lateinit var user: User
-
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    internal lateinit var loadingApi: LoadingApi
-
-    @Inject
-    internal lateinit var navigationApi: UserInfoNavigationApi
 
     private val dialogGetNameListener by lazy {
         object : DialogGetDataListener {
@@ -227,7 +226,7 @@ class UserInfoFragment : Fragment() {
             stopLoading(CREATE_NEW_DIALOG)
             when (it) {
                 is DataState.Loading -> startLoading(CREATE_NEW_DIALOG)
-                is DataState.Result<*> -> goToMessageFeature((it.body as Dialog).id)
+                is DataState.Result<*> -> goToMessageFeature((it.body as Dialog))
                 is DataState.Error -> error(it.message)
                 else -> {
                 }
@@ -290,18 +289,11 @@ class UserInfoFragment : Fragment() {
         binding.root.isEnabledViews(true)
     }
 
-    private fun goToMessageFeature(dialogId: Long) {
+    private fun goToMessageFeature(dialog: Dialog) {
         navigationApi.fromUserInfoFeatureToMessagesFeature(
             Bundle().apply {
-                putLong(DIALOG_ID, dialogId)
+                putParcelable(DIALOG, dialog)
             })
-    }
-
-    private inline fun handleCheckResult(res: CheckResult, onSuccessful: () -> Unit) {
-        when (res) {
-            is CheckResult.Successful -> onSuccessful()
-            is CheckResult.Error -> requireContext().showToast(res.message)
-        }
     }
 
     private fun setUserInfo(user: User) {
@@ -339,22 +331,22 @@ class UserInfoFragment : Fragment() {
     private fun createOnCLickListener() {
         val onClickListener = View.OnClickListener {
             when (it.id) {
-                R.id.textStartDialog -> startDialog()
-                R.id.textSetName -> startSetName()
-                R.id.textSetEmail -> startSetEmail()
-                R.id.textSetPassword -> startSetPassword()
-                R.id.textDeleteAccount -> deleteAccount()
-                R.id.textSignOut -> signOut()
+                R.id.carcassStartDialog -> startDialog()
+                R.id.carcassSetName -> startSetName()
+                R.id.carcassSetEmail -> startSetEmail()
+                R.id.carcassSetPassword -> startSetPassword()
+                R.id.carcassDeleteAccount -> deleteAccount()
+                R.id.carcassSignOut -> signOut()
             }
         }
 
         with(binding) {
-            textStartDialog.setOnClickListener(onClickListener)
-            textSetName.setOnClickListener(onClickListener)
-            textSetEmail.setOnClickListener(onClickListener)
-            textSetPassword.setOnClickListener(onClickListener)
-            textDeleteAccount.setOnClickListener(onClickListener)
-            textSignOut.setOnClickListener(onClickListener)
+            carcassStartDialog.setOnClickListener(onClickListener)
+            carcassSetName.setOnClickListener(onClickListener)
+            carcassSetEmail.setOnClickListener(onClickListener)
+            carcassSetPassword.setOnClickListener(onClickListener)
+            carcassDeleteAccount.setOnClickListener(onClickListener)
+            carcassSignOut.setOnClickListener(onClickListener)
         }
 
         val onCLickListenerForChooseImage = View.OnClickListener {
@@ -362,21 +354,20 @@ class UserInfoFragment : Fragment() {
             when (it.id) {
                 R.id.icon -> pickUserIcon.launch(MIME_TYPE_IMAGE)
                 R.id.framework -> return@OnClickListener
-                R.id.background -> pickUserBackground.launch(MIME_TYPE_IMAGE)
+//                R.id.background -> pickUserBackground.launch(MIME_TYPE_IMAGE)
             }
         }
 
         with(binding) {
             icon.setOnClickListener(onCLickListenerForChooseImage)
-            background.setOnClickListener(onCLickListenerForChooseImage)
+//            background.setOnClickListener(onCLickListenerForChooseImage)
             framework.setOnClickListener(onCLickListenerForChooseImage)
         }
 
     }
 
     private fun startDialog() {
-        val listUsers = listOf(CurrentUser.user!!, user)
-        viewModel.createNewDialog(createDialog(listUsers))
+        viewModel.createNewDialog(createDialog(user.toDialogMember()))
     }
 
     private fun deleteAccount() {
@@ -410,6 +401,13 @@ class UserInfoFragment : Fragment() {
             inflate()
         }
         stopLoading(null)
+    }
+
+    private inline fun handleCheckResult(res: CheckResult, onSuccessful: () -> Unit) {
+        when (res) {
+            is CheckResult.Successful -> onSuccessful()
+            is CheckResult.Error -> requireContext().showToast(res.message)
+        }
     }
 
     override fun onStop() {

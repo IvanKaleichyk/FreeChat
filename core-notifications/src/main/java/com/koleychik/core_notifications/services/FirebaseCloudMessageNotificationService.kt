@@ -17,12 +17,13 @@ class FirebaseCloudMessageNotificationService : FirebaseMessagingService() {
 
     private val api = RetrofitInstance.api
 
-    private val repository: MessageNotificationRepository =
+    private val repository: MessageNotificationRepository by lazy {
         MessageNotificationRepositoryImpl(
             applicationContext,
             NotificationRepositoryImpl(applicationContext),
             api
         )
+    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.let {

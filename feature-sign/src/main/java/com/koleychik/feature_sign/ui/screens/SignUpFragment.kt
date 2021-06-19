@@ -18,7 +18,6 @@ import com.koleychik.feature_sign.ui.viewModels.SignUpViewModel
 import com.koleychik.feature_sign.ui.viewModels.SignViewModelFactory
 import com.koleychik.feature_sign.underlineText
 import com.koleychik.models.states.CheckDataState
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class SignUpFragment : Fragment() {
@@ -49,7 +48,7 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        NavigationSystem.onStartFeature?.let { start -> start(this) }
+        com.kaleichyk.utils.navigation.NavigationSystem.onStartFeature?.let { start -> start(this) }
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
         SignFeatureComponentHolder.getComponent().inject(this)
         return binding.root

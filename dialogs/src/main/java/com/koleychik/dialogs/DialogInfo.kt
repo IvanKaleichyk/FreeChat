@@ -13,7 +13,7 @@ class DialogInfo(
 ) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(context).setTitle(title).apply {
+        return AlertDialog.Builder(context, R.style.AlertDialogTheme).setTitle(title).apply {
             if (message != null) setMessage(message)
         }.setPositiveButton(btnText) { dialog, _ ->
             listener.onClick(dialog)

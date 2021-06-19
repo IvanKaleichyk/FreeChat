@@ -12,9 +12,17 @@ class CloudMessagingRepositoryImpl @Inject constructor() : CloudMessagingReposit
     private val firebaseMessaging = FirebaseMessaging.getInstance()
 
     override suspend fun subscribeToTopic(topic: String): CheckResult {
-
         return try {
             firebaseMessaging.subscribeToTopic(topic).await()
+            CheckResult.Successful
+        } catch (e: Exception) {
+            e.toCheckResultError()
+        }
+    }
+
+    override suspend fun unsubscribeFromTopic(topic: String): CheckResult {
+        return try {
+            firebaseMessaging.unsubscribeFromTopic(topic).await()
             CheckResult.Successful
         } catch (e: Exception) {
             e.toCheckResultError()

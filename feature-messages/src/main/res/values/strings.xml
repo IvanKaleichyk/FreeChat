@@ -1,4 +1,10 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selected_image">Selected image</string>
+    <string name="image_is_selected">image is already selected</string>
+    <string name="unselect_image">unselect image</string>
+
+    <string name="havent_messages_yet">You have not messages yet</string>
+    <string name="write_some_message">Please, write some message</string>
 </resources>

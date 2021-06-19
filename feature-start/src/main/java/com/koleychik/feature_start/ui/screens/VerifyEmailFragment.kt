@@ -10,7 +10,6 @@ import com.koleychik.feature_start.R
 import com.koleychik.feature_start.StartFeatureNavigation
 import com.koleychik.feature_start.StartManager
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class VerifyEmailFragment : Fragment() {
@@ -25,7 +24,7 @@ class VerifyEmailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        NavigationSystem.onStartFeature?.let { start -> start(this) }
+        com.kaleichyk.utils.navigation.NavigationSystem.onStartFeature?.let { start -> start(this) }
         val root = inflater.inflate(R.layout.fragment_verify_email, container, false)
         StartFeatureComponentHolder.getComponent().inject(this)
         root.findViewById<Button>(R.id.btn).setOnClickListener {

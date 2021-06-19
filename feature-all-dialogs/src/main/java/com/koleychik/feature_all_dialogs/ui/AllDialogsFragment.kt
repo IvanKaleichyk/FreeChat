@@ -8,8 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import coil.load
 import com.kaleichyk.utils.CurrentUser
-import com.kaleichyk.utils.NavigationConstants
 import com.kaleichyk.utils.TAG
+import com.kaleichyk.utils.navigation.NavigationConstants
+import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.feature_all_dialogs.AllDialogFeatureNavigationApi
 import com.koleychik.feature_all_dialogs.R
 import com.koleychik.feature_all_dialogs.databinding.FragmentAllDialogsBinding
@@ -20,7 +21,6 @@ import com.koleychik.feature_all_dialogs.ui.viewModels.ViewModelFactory
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.states.DataState
-import com.koleychik.module_injector.NavigationSystem
 import javax.inject.Inject
 
 class AllDialogsFragment : Fragment() {
@@ -176,5 +176,4 @@ class AllDialogsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

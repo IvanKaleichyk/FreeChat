@@ -3,10 +3,11 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorRed">#FF0000</color>
-    <color name="colorMain">#0072FF</color>
-    <color name="colorMainLight">#4788D8</color>
-    <color name="colorMainLight50">#804788D8</color>
-    <color name="colorMain50">#800072FF</color>
+    <color name="colorMain">#21B2D1</color>
+    <color name="colorMainDark">#1C889F</color>
+    <color name="colorMainLight">#6FDAF1</color>
+    <color name="colorMainLight50">#806FDAF1</color>
+    <color name="colorMain50">#8021B2D1</color>
 
     <color name="colorShadow">#7F000000</color>
 
@@ -14,4 +15,6 @@
     <color name="colorGrayLight">#FCF8F8</color>
     <color name="colorOfLine">#C1B9B9</color>
     <color name="colorShimmer">#dddddd</color>
+
+    <color name="colorDivideLine">#BFBFBF</color>
 </resources>

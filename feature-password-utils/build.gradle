@@ -22,6 +22,7 @@ dependencies {
 
     // lifecycle
     implementation Dependencies.lifecycleExtension
+    implementation project(path: ':utils')
     kapt Dependencies.lifecycleCommon
     implementation Dependencies.fragment
 

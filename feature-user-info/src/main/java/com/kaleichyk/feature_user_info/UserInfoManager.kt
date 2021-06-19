@@ -29,20 +29,7 @@ internal class UserInfoManager @Inject constructor(
     }
 
     suspend fun createNewDialog(dialog: Dialog): DialogResult {
-        return dialogsRepository.addDialog(dialog)
-//        val addDialogResult = dialogsRepository.addDialog(dialog)
-//        if (addDialogResult !is DialogResult.Successful) return addDialogResult
-
-//        val bindDialogIdToUserResult1 = bindDialogToUserAsync(dialog.users[0].id, dialog.id)
-//        val bindDialogIdToUserResult2 = bindDialogToUserAsync(dialog.users[1].id, dialog.id)
-
-//        val list = awaitAll(bindDialogIdToUserResult1, bindDialogIdToUserResult2)
-
-//        checkCheckResultsToErrors(list) {
-//            return it.toDialogResult()
-//        }
-//
-//        return DialogResult.Successful(dialog)
+        return dialogsRepository.addDialog(dialog.toDialogDTO())
     }
 
     fun signOut() {
@@ -85,20 +72,4 @@ internal class UserInfoManager @Inject constructor(
 
         return uploadImageResult.toCheckResult()
     }
-
-//    private fun bindDialogToUserAsync(userId: String, dialogId: Long) =
-//        CoroutineScope(Dispatchers.IO).async {
-//            usersRepository.bindDialogIdToUser(userId, dialogId)
-//        }
-
-    private inline fun checkCheckResultsToErrors(
-        list: List<CheckResult>,
-        haveError: (CheckResult.Error) -> Unit
-    ) {
-        for (i in list) if (i is CheckResult.Error) {
-            haveError(i)
-            break
-        }
-    }
-
 }

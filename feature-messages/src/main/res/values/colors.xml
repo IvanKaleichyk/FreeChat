@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorMessageAuthor">#0072FF</color>
-    <color name="colorMessageReceiver">#4788D8</color>
+<!--    <color name="colorMessageAuthor">#8DBEFA</color>-->
+    <color name="colorMessageAuthor">#8DDBEC</color>
+    <color name="colorMessageReceiver">#D8D8D8</color>
+
+    <color name="colorCarcassInterlocutor">#F4F4F4</color>
 </resources>
