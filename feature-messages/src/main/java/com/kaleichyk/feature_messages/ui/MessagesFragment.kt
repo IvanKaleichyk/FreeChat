@@ -27,6 +27,7 @@ import com.kaleichyk.utils.navigation.NavigationConstants.DIALOG
 import com.kaleichyk.utils.navigation.NavigationSystem
 import com.kaleichyk.utils.showLog
 import com.koleychik.basic_resource.showToast
+import com.koleychik.models.Message
 import com.koleychik.models.dialog.Dialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -34,7 +35,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-class MessagesFragment : Fragment() {
+class MessagesFragment : Fragment(),
+    DialogDeleteMessageConfirmation.DialogDeleteMessageConfirmationListener {
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
@@ -47,6 +49,10 @@ class MessagesFragment : Fragment() {
 
     private val dialog: Dialog by lazy {
         requireArguments().getParcelable(DIALOG) ?: Dialog()
+    }
+
+    private val dialogToDeleteMessage by lazy {
+        DialogDeleteMessageConfirmation()
     }
 
     private val selectImage: ActivityResultLauncher<String> =
@@ -131,6 +137,10 @@ class MessagesFragment : Fragment() {
             this.layoutManager = layoutManager
             adapter = this@MessagesFragment.adapter
         }
+        adapter.onItemLongClick = { data ->
+            viewModel.messageToDelete = data
+            dialogToDeleteMessage.show(childFragmentManager, "Dialog To Delete Message")
+        }
     }
 
     private fun setupSelectedImage() {
@@ -168,6 +178,22 @@ class MessagesFragment : Fragment() {
             sendIcon.setOnClickListener(onClickListener)
             chooseImage.setOnClickListener(onClickListener)
             unselectImage.setOnClickListener(onClickListener)
+        }
+    }
+
+    private fun deleteMessage() {
+        viewModel.messageToDelete?.let {  messageData ->
+            adapter.delete(messageData)
+            viewModel.deleteMessage(getNewLastMessage(messageData))
+        }
+    }
+
+    private fun getNewLastMessage(messageToDelete: MessageData): Message? {
+        if (dialog.lastMessage?.id != messageToDelete.id) return null
+        return try {
+            viewModel.fullMessagesList!![1].toMessage()
+        } catch (e: Exception) {
+            null
         }
     }
 
@@ -222,6 +248,10 @@ class MessagesFragment : Fragment() {
         text,
         viewModel.selectedImageUri
     )
+
+    override fun dialogDeleteMessageConfirmationSuccessful() {
+        deleteMessage()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

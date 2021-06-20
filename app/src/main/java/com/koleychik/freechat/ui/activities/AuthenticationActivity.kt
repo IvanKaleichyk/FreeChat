@@ -1,4 +1,4 @@
-package com.koleychik.freechat.activities
+package com.koleychik.freechat.ui.activities
 
 import android.Manifest
 import android.os.Bundle

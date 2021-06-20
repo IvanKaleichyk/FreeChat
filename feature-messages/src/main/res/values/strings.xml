@@ -7,4 +7,5 @@
 
     <string name="havent_messages_yet">You have not messages yet</string>
     <string name="write_some_message">Please, write some message</string>
+    <string name="are_you_sure_you_want_to_delete_the_message">Are you sure you want to delete the message?</string>
 </resources>

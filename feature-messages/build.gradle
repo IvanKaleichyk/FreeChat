@@ -33,6 +33,7 @@ dependencies {
 
     // lifecycle
     implementation Dependencies.lifecycleExtension
+    implementation project(path: ':dialogs')
     kapt Dependencies.lifecycleCommon
 
     implementation Dependencies.fragment

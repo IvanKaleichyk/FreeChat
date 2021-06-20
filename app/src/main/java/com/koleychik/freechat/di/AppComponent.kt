@@ -1,12 +1,12 @@
 package com.koleychik.freechat.di
 
 import com.koleychik.freechat.App
-import com.koleychik.freechat.activities.AuthenticationActivity
-import com.koleychik.freechat.activities.MainActivity
 import com.koleychik.freechat.di.modules.ApiModule
 import com.koleychik.freechat.di.modules.AppModule
 import com.koleychik.freechat.di.modules.DependenciesModule
 import com.koleychik.freechat.di.modules.DestroyersModule
+import com.koleychik.freechat.ui.activities.AuthenticationActivity
+import com.koleychik.freechat.ui.activities.MainActivity
 import dagger.Component
 import javax.inject.Singleton
 

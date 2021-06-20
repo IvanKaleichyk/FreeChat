@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
@@ -19,6 +20,8 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MainViewHolder>() {
         const val ITEM_AUTHOR = 100
         const val ITEM_INTERLOCUTOR = 200
     }
+
+    var onItemLongClick: ((message: MessageData) -> Unit)? = null
 
     private var list = SortedList(
         MessageData::class.java,
@@ -63,7 +66,11 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MainViewHolder>() {
 
     override fun getItemCount(): Int = list.size()
 
-    fun addItem(item: MessageData){
+    fun delete(item: MessageData){
+        list.remove(item)
+    }
+
+    fun addItem(item: MessageData) {
         list.add(item)
     }
 
@@ -71,7 +78,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MainViewHolder>() {
         list.addAll(newList)
     }
 
-    class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val messageText: TextView by lazy {
             itemView.findViewById(R.id.messageText)
@@ -81,11 +88,20 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.MainViewHolder>() {
             itemView.findViewById(R.id.messageImage)
         }
 
+        private val message: CardView by lazy {
+            itemView.findViewById(R.id.message)
+        }
+
         fun bind(data: MessageData) {
             messageText.text = data.text
 
             if (data.image == null) messageImage.visibility = View.GONE
             else messageImage.load(data.image)
+
+            message.setOnLongClickListener {
+                onItemLongClick?.let { onLongClick -> onLongClick(data) }
+                true
+            }
         }
     }
 }

@@ -1,16 +1,15 @@
-package com.koleychik.freechat.activities
+package com.koleychik.freechat.ui.activities
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.koleychik.dialogs.DialogInfo
-import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.freechat.App
 import com.koleychik.freechat.Navigator
 import com.koleychik.freechat.R
 import com.koleychik.freechat.managers.MainManager
+import com.koleychik.freechat.ui.DialogEmailVerification
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -38,15 +37,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkVerificationEmail() {
         if (manager.checkVerification()) return
-        val dialogListener = object : DialogInfoListener {
-            override fun onClick(dialog: DialogInterface) {
-                dialog.dismiss()
-            }
+        dialogVerificationEmail = DialogEmailVerification().apply {
+            show(supportFragmentManager, "VerificationEmailDialogTAG")
         }
-        dialogVerificationEmail =
-            DialogInfo(dialogListener, getString(R.string.please_verification_email), null).apply {
-                show(supportFragmentManager, "VerificationEmailDialogTAG")
-            }
     }
 
 
@@ -58,7 +51,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        dialogVerificationEmail?.dismiss()
         super.onStop()
         manager.unSubscribeToUserChanges()
         manager.isUserOnline(false)
@@ -67,5 +59,4 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (navController.currentDestination?.id != R.id.allDialogsFragment) super.onBackPressed()
     }
-
 }

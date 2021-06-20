@@ -30,7 +30,9 @@ class MessagesViewModel @Inject constructor(
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     var lastState: PaginationLastState = PaginationLastState.FirstTime
-    private set
+        private set
+
+    var messageToDelete: MessageData? = null
 
     fun getMessages(dialogId: String) = flow<List<MessageData>> {
         _isLoading.value = true
@@ -59,9 +61,15 @@ class MessagesViewModel @Inject constructor(
         manager.sendMessage(message, topic)
     }
 
-    fun deleteMessage(message: Message) = CoroutineScope(Dispatchers.Main).launch {
-        manager.deleteMessage(message)
-    }
+    fun deleteMessage(newLastMessage: Message?) =
+        CoroutineScope(Dispatchers.Main).launch {
+            _fullMessagesList?.remove(messageToDelete)
+            try {
+                manager.deleteMessage(messageToDelete!!.toMessage(), newLastMessage)
+            } catch (e: Exception) {
+
+            }
+        }
 
     fun subscribeToNewMessages(
         dialogId: String,

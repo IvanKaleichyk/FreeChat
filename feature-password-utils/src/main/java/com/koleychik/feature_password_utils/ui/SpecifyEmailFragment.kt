@@ -1,6 +1,5 @@
 package com.koleychik.feature_password_utils.ui
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.kaleichyk.utils.navigation.NavigationSystem
 import com.koleychik.basic_resource.isEnabledViews
 import com.koleychik.basic_resource.showToast
-import com.koleychik.dialogs.DialogInfo
-import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.feature_loading_api.LoadingApi
-import com.koleychik.feature_password_utils.R
 import com.koleychik.feature_password_utils.SpecifyEmailNavigationApi
 import com.koleychik.feature_password_utils.databinding.FragmentSpecifyEmailBinding
 import com.koleychik.feature_password_utils.di.PasswordUtilsFeatureComponentHolder
@@ -27,22 +23,22 @@ class SpecifyEmailFragment : Fragment() {
     private var _binding: FragmentSpecifyEmailBinding? = null
     private val binding get() = _binding!!
 
-    private val dialogInfoListener = object : DialogInfoListener {
-        override fun onClick(dialog: DialogInterface) {
-            dialog.dismiss()
-            navigationApi.fromSpecifyEmailToSignIn()
-        }
+//    private val dialogInfoListener = object : DialogInfoListener {
+//        override fun onClick(dialog: DialogInterface) {
+//            dialog.dismiss()
+//            navigationApi.fromSpecifyEmailToSignIn()
+//        }
+//
+//    }
 
-    }
-
-    private val dialog by lazy {
-        DialogInfo(
-            dialogInfoListener,
-            requireContext().getString(R.string.reset_password),
-            requireContext().getString(R.string.text_about_email_message),
-            R.string.ok
-        )
-    }
+//    private val dialog by lazy {
+//        DialogInfo(
+//            dialogInfoListener,
+//            requireContext().getString(R.string.reset_password),
+//            requireContext().getString(R.string.text_about_email_message),
+//            R.string.ok
+//        )
+//    }
 
     @Inject
     internal lateinit var loadingApi: LoadingApi
@@ -81,7 +77,7 @@ class SpecifyEmailFragment : Fragment() {
         }
         viewModel.checkRes.observe(viewLifecycleOwner) {
             when (it) {
-                is CheckResult.Successful -> dialog.show(childFragmentManager, "Specify Email")
+//                is CheckResult.Successful -> dialog.show(childFragmentManager, "Specify Email")
                 is CheckResult.Error -> requireContext().showToast(it.message)
             }
         }

@@ -1,6 +1,5 @@
 package com.kaleichyk.feature_user_info.ui
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,10 @@ import coil.load
 import com.kaleichyk.feature_user_info.*
 import com.kaleichyk.feature_user_info.databinding.FragmentUserInfoBinding
 import com.kaleichyk.feature_user_info.di.UserInfoFeatureComponentHolder
+import com.kaleichyk.feature_user_info.ui.dialogs.DialogDeleteUser
+import com.kaleichyk.feature_user_info.ui.dialogs.DialogSetEmail
+import com.kaleichyk.feature_user_info.ui.dialogs.DialogSetName
+import com.kaleichyk.feature_user_info.ui.dialogs.DialogSetPassword
 import com.kaleichyk.feature_user_info.ui.viewModel.UserInfoViewModel
 import com.kaleichyk.feature_user_info.ui.viewModel.ViewModelFactory
 import com.kaleichyk.utils.CurrentUser
@@ -26,10 +29,6 @@ import com.koleychik.basic_resource.showToast
 import com.koleychik.core_authentication.checkEmail
 import com.koleychik.core_authentication.checkName
 import com.koleychik.core_authentication.checkPassword
-import com.koleychik.dialogs.DialogGetData
-import com.koleychik.dialogs.DialogGetDataListener
-import com.koleychik.dialogs.DialogInfo
-import com.koleychik.dialogs.DialogInfoListener
 import com.koleychik.feature_loading_api.LoadingApi
 import com.koleychik.models.dialog.Dialog
 import com.koleychik.models.results.CheckResult
@@ -41,7 +40,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class UserInfoFragment : Fragment() {
+class UserInfoFragment : Fragment(), DialogDeleteUser.DialogDeleteUserListener,
+    DialogSetEmail.DialogSetEmailListener, DialogSetName.DialogSetNameListener,
+    DialogSetPassword.DialogSetPasswordListener {
 
     companion object {
         const val USER_STATE = 0
@@ -72,105 +73,20 @@ class UserInfoFragment : Fragment() {
 
     private lateinit var user: User
 
-    private val dialogGetNameListener by lazy {
-        object : DialogGetDataListener {
-            override fun onPositiveClick(dialog: DialogInterface, value: String) {
-                lifecycleScope.launch {
-                    val checkRes = checkName(value)
-                    handleCheckResult(checkRes) {
-                        dialog.dismiss()
-                        viewModel.setName(value)
-                    }
-                }
-            }
-        }
-    }
-
-    private val dialogGetEmailListener by lazy {
-        object : DialogGetDataListener {
-            override fun onPositiveClick(dialog: DialogInterface, value: String) {
-                lifecycleScope.launch {
-                    val checkRes = checkEmail(value)
-                    handleCheckResult(checkRes) {
-                        dialog.dismiss()
-                        viewModel.setEmail(value)
-                    }
-                }
-            }
-        }
-    }
-
-    private val dialogGetPasswordListener by lazy {
-        object : DialogGetDataListener {
-            override fun onPositiveClick(dialog: DialogInterface, value: String) {
-                lifecycleScope.launch {
-                    val checkRes = checkPassword(value, value)
-                    handleCheckResult(checkRes) {
-                        dialog.dismiss()
-                        viewModel.setPassword(value)
-                    }
-                }
-            }
-        }
-    }
-
-    private val dialogInfoListener by lazy {
-        object : DialogInfoListener {
-            override fun onClick(dialog: DialogInterface) {
-                dialog.cancel()
-            }
-        }
-    }
-
-    private val dialogDeleteUserListener by lazy {
-        object : DialogInfoListener {
-            override fun onClick(dialog: DialogInterface) {
-                dialog.dismiss()
-                viewModel.deleteUser(userId)
-            }
-        }
-    }
-
     private val dialogSetName by lazy {
-        DialogGetData(
-            R.string.set_name,
-            null,
-            R.string.name,
-            dialogGetNameListener,
-            R.string.set,
-            R.string.cancel,
-        )
+        DialogSetName()
     }
 
     private val dialogSetEmail by lazy {
-        DialogGetData(
-            R.string.set_email,
-            null,
-            R.string.email,
-            dialogGetEmailListener,
-            R.string.set,
-            R.string.cancel,
-        )
+        DialogSetEmail()
     }
 
     private val dialogSetPassword by lazy {
-        DialogGetData(
-            R.string.set_password,
-            null,
-            R.string.password,
-            dialogGetPasswordListener,
-            R.string.set,
-            R.string.cancel,
-        )
+        DialogSetPassword()
     }
 
-    private val dialogDelete by lazy {
-        DialogInfo(
-            dialogDeleteUserListener,
-            requireContext().getString(R.string.want_to_delete_account),
-            null,
-            R.string.yes
-        )
+    private val dialogDeleteUser by lazy {
+        DialogDeleteUser()
     }
 
     private val pickUserIcon: ActivityResultLauncher<String> =
@@ -321,11 +237,7 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun error(message: String) {
-        DialogInfo(
-            dialogInfoListener,
-            requireContext().getString(R.string.error),
-            message,
-        ).show(childFragmentManager, "Dialog UserInfo error")
+        requireContext().showToast(message)
     }
 
     private fun createOnCLickListener() {
@@ -371,7 +283,7 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun deleteAccount() {
-        dialogDelete.show(
+        dialogDeleteUser.show(
             childFragmentManager,
             "Dialog to Delete account"
         )
@@ -410,14 +322,43 @@ class UserInfoFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        UserInfoFeatureComponentHolder.reset()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    override fun deleteUser() {
+        viewModel.deleteUser(userId)
+        dialogDeleteUser.dismiss()
+    }
+
+    override fun setEmail(value: String) {
+        lifecycleScope.launch {
+            val checkRes = checkEmail(value)
+            handleCheckResult(checkRes) {
+                dialogSetEmail.dismiss()
+                viewModel.setEmail(value)
+            }
+        }
+    }
+
+    override fun setName(value: String) {
+        lifecycleScope.launch {
+            val checkRes = checkName(value)
+            handleCheckResult(checkRes) {
+                dialogSetName.dismiss()
+                viewModel.setName(value)
+            }
+        }
+    }
+
+    override fun setPassword(value: String) {
+        lifecycleScope.launch {
+            val checkRes = checkPassword(value, value)
+            handleCheckResult(checkRes) {
+                dialogSetPassword.dismiss()
+                viewModel.setPassword(value)
+            }
+        }
+    }
 }

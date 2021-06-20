@@ -65,7 +65,7 @@
         android:id="@+id/textNoMessages"
         style="@style/info_text"
         android:visibility="gone"
-        android:text="@string/havent_messages_yet"
+        tools:text="@string/havent_messages_yet"
         app:layout_constraintTop_toTopOf="@+id/swipeRefresh"
         app:layout_constraintBottom_toBottomOf="@+id/swipeRefresh"
         app:layout_constraintStart_toStartOf="@+id/swipeRefresh"

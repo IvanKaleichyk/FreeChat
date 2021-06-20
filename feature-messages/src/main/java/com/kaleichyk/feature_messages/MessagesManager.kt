@@ -32,7 +32,11 @@ class MessagesManager @Inject constructor(
         return result
     }
 
-    suspend fun deleteMessage(message: Message): CheckResult = messagesRepository.delete(message)
+    suspend fun deleteMessage(message: Message, newLastMessage: Message?): CheckResult {
+        val result = messagesRepository.delete(message)
+        if (result !is CheckResult.Successful || newLastMessage == null) return result
+        return dialogsRepository.addLastMessage(newLastMessage.dialogId, newLastMessage)
+    }
 
     fun subscribeToNewMessages(
         dialogId: String,

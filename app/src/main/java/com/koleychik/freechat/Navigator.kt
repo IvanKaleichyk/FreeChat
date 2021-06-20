@@ -33,8 +33,8 @@ import com.koleychik.feature_start.di.StartFeatureApi
 import com.koleychik.feature_start.di.StartFeatureComponentHolder
 import com.koleychik.feature_start.ui.screens.StartFragment
 import com.koleychik.feature_start.ui.screens.VerifyEmailFragment
-import com.koleychik.freechat.activities.AuthenticationActivity
-import com.koleychik.freechat.activities.MainActivity
+import com.koleychik.freechat.ui.activities.AuthenticationActivity
+import com.koleychik.freechat.ui.activities.MainActivity
 import javax.inject.Provider
 
 class Navigator(
@@ -50,14 +50,6 @@ class Navigator(
     AllDialogFeatureNavigationApi, SearchingFeatureNavigationApi, UserInfoNavigationApi {
 
     internal var controller: NavController? = null
-
-    private val setSignFeaturesFragments = setOf(R.id.signInFragment, R.id.signUpFragment)
-    private val setAllDialogsFeaturesFragments = setOf(R.id.allDialogsFragment)
-    private val setMessagesFeaturesFragments = setOf(R.id.messagesFragment)
-    private val setPasswordUtilsFeaturesFragments = setOf(R.id.specifyEmailFragment)
-    private val setSearchingFeaturesFragments = setOf(R.id.searchingFragment)
-    private val setStartFeaturesFragments = setOf(R.id.startFragment, R.id.verifyEmailFragment)
-    private val setUserInfoFeaturesFragments = setOf(R.id.userInfoFragment)
 
     init {
         NavigationSystem.onStartFeature = {
